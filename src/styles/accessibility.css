@@ -1,0 +1,140 @@
+// src/styles/accessibility.css
+/**
+ * Manus AI Open Badges Component Library - Accessibility Styles
+ * 
+ * This file provides additional CSS to enhance accessibility across components.
+ */
+
+/* Visually hidden content (for screen readers) */
+.manus-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus styles */
+.manus-focus-visible:focus-visible {
+  outline: 2px solid var(--manus-border-color-focus, #3182ce);
+  outline-offset: 2px;
+}
+
+/* Ensure all interactive elements have visible focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--manus-border-color-focus, #3182ce);
+  outline-offset: 2px;
+}
+
+/* Skip link for keyboard users */
+.manus-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--manus-primary, #3182ce);
+  color: white;
+  padding: 8px;
+  z-index: var(--manus-z-index-modal, 1300);
+  transition: top 0.2s;
+}
+
+.manus-skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .manus-badge-display,
+  .manus-badge-list-item,
+  .manus-profile-viewer,
+  .manus-badge-issuer-form,
+  .manus-issuer-dashboard {
+    border: 1px solid CanvasText;
+  }
+  
+  .manus-button {
+    border: 1px solid CanvasText;
+  }
+  
+  .manus-tab-button.active {
+    border-bottom: 3px solid CanvasText;
+  }
+}
+
+/* Improve text readability */
+.manus-badge-description,
+.manus-profile-description,
+.manus-form-label,
+.manus-form-help {
+  max-width: 65ch; /* Optimal line length for readability */
+}
+
+/* Ensure sufficient color contrast */
+.manus-form-error {
+  color: var(--manus-error, #e53e3e);
+  font-weight: var(--manus-font-weight-medium, 500);
+}
+
+.manus-form-success {
+  color: var(--manus-success, #38a169);
+  font-weight: var(--manus-font-weight-medium, 500);
+}
+
+/* Ensure form fields have sufficient spacing for touch targets */
+.manus-form-input,
+.manus-form-textarea,
+.manus-button,
+.manus-tab-button {
+  min-height: 44px; /* Minimum touch target size */
+}
+
+/* Improve focus visibility for form elements */
+.manus-form-input:focus,
+.manus-form-textarea:focus {
+  outline: none;
+  border-color: var(--manus-form-input-focus, #3182ce);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
+}
+
+/* Status messages for screen readers */
+.manus-status {
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 16px;
+}
+
+.manus-status[aria-live="polite"] {
+  background-color: var(--manus-info-light, #bee3f8);
+  color: var(--manus-text-primary, #1a202c);
+}
+
+.manus-status[role="alert"] {
+  background-color: var(--manus-error-light, #fed7d7);
+  color: var(--manus-text-primary, #1a202c);
+}
+
+.manus-status[role="status"] {
+  background-color: var(--manus-success-light, #c6f6d5);
+  color: var(--manus-text-primary, #1a202c);
+}

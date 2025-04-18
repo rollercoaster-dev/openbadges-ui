@@ -1,0 +1,69 @@
+{
+  "name": "manus-ai-components",
+  "version": "0.1.0",
+  "description": "Vue 3 component library for implementing Open Badges functionality with accessibility and customization",
+  "main": "dist/manus-ai-components.umd.js",
+  "module": "dist/manus-ai-components.es.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "format": "prettier --write \"src/**/*.{js,ts,vue}\"",
+    "test": "echo \"No tests specified\" && exit 0",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "component",
+    "open-badges",
+    "badges",
+    "accessibility",
+    "a11y",
+    "theming"
+  ],
+  "author": "Manus AI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manus-ai/manus-ai-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/manus-ai/manus-ai-components/issues"
+  },
+  "homepage": "https://github.com/manus-ai/manus-ai-components#readme",
+  "peerDependencies": {
+    "primevue": "^3.0.0",
+    "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "openbadges-types": "^3.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-links": "^8.6.12",
+    "@storybook/vue3": "^8.6.12",
+    "@types/uuid": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "prettier": "^2.0.0",
+    "primeicons": "^6.0.0",
+    "primevue": "^3.0.0",
+    "terser": "^5.39.0",
+    "typescript": "^4.0.0",
+    "vite": "^4.0.0",
+    "vue": "^3.0.0"
+  }
+}

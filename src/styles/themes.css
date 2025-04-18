@@ -1,0 +1,310 @@
+// src/styles/themes.css
+/**
+ * Manus AI Open Badges Component Library - Theme Variables
+ * 
+ * This file defines CSS custom properties (variables) for theming the component library.
+ * Applications can override these variables to customize the appearance of components.
+ */
+
+:root {
+  /* Color Palette */
+  --manus-primary: #3182ce;
+  --manus-primary-dark: #2c5282;
+  --manus-primary-light: #4299e1;
+  --manus-secondary: #718096;
+  --manus-secondary-dark: #4a5568;
+  --manus-secondary-light: #a0aec0;
+  --manus-success: #38a169;
+  --manus-success-light: #c6f6d5;
+  --manus-error: #e53e3e;
+  --manus-error-light: #fed7d7;
+  --manus-warning: #d69e2e;
+  --manus-warning-light: #feebc8;
+  --manus-info: #3182ce;
+  --manus-info-light: #bee3f8;
+  
+  /* Neutral Colors */
+  --manus-gray-50: #f7fafc;
+  --manus-gray-100: #edf2f7;
+  --manus-gray-200: #e2e8f0;
+  --manus-gray-300: #cbd5e0;
+  --manus-gray-400: #a0aec0;
+  --manus-gray-500: #718096;
+  --manus-gray-600: #4a5568;
+  --manus-gray-700: #2d3748;
+  --manus-gray-800: #1a202c;
+  --manus-gray-900: #171923;
+  
+  /* Text Colors */
+  --manus-text-primary: var(--manus-gray-800);
+  --manus-text-secondary: var(--manus-gray-600);
+  --manus-text-disabled: var(--manus-gray-400);
+  --manus-text-inverse: white;
+  
+  /* Background Colors */
+  --manus-bg-primary: white;
+  --manus-bg-secondary: var(--manus-gray-50);
+  --manus-bg-disabled: var(--manus-gray-100);
+  
+  /* Border Colors */
+  --manus-border-color: var(--manus-gray-200);
+  --manus-border-color-focus: var(--manus-primary);
+  
+  /* Spacing */
+  --manus-space-1: 0.25rem;
+  --manus-space-2: 0.5rem;
+  --manus-space-3: 0.75rem;
+  --manus-space-4: 1rem;
+  --manus-space-5: 1.25rem;
+  --manus-space-6: 1.5rem;
+  --manus-space-8: 2rem;
+  --manus-space-10: 2.5rem;
+  --manus-space-12: 3rem;
+  --manus-space-16: 4rem;
+  
+  /* Typography */
+  --manus-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --manus-font-size-xs: 0.75rem;
+  --manus-font-size-sm: 0.875rem;
+  --manus-font-size-md: 1rem;
+  --manus-font-size-lg: 1.125rem;
+  --manus-font-size-xl: 1.25rem;
+  --manus-font-size-2xl: 1.5rem;
+  --manus-font-weight-normal: 400;
+  --manus-font-weight-medium: 500;
+  --manus-font-weight-semibold: 600;
+  --manus-font-weight-bold: 700;
+  --manus-line-height-tight: 1.25;
+  --manus-line-height-normal: 1.5;
+  --manus-line-height-relaxed: 1.75;
+  
+  /* Borders */
+  --manus-border-width: 1px;
+  --manus-border-radius-sm: 0.125rem;
+  --manus-border-radius-md: 0.25rem;
+  --manus-border-radius-lg: 0.5rem;
+  --manus-border-radius-xl: 0.75rem;
+  
+  /* Shadows */
+  --manus-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --manus-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --manus-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --manus-shadow-focus: 0 0 0 3px rgba(49, 130, 206, 0.3);
+  
+  /* Transitions */
+  --manus-transition-fast: 150ms;
+  --manus-transition-normal: 300ms;
+  --manus-transition-slow: 500ms;
+  
+  /* Z-index */
+  --manus-z-index-dropdown: 1000;
+  --manus-z-index-sticky: 1100;
+  --manus-z-index-modal: 1300;
+  --manus-z-index-tooltip: 1400;
+  
+  /* Component-specific variables */
+  
+  /* Badge Display */
+  --manus-badge-border-color: var(--manus-border-color);
+  --manus-badge-border-radius: var(--manus-border-radius-lg);
+  --manus-badge-padding: var(--manus-space-4);
+  --manus-badge-background: var(--manus-bg-primary);
+  --manus-badge-shadow: var(--manus-shadow-sm);
+  --manus-badge-title-color: var(--manus-text-primary);
+  --manus-badge-text-color: var(--manus-text-secondary);
+  --manus-badge-hover-shadow: var(--manus-shadow-md);
+  --manus-badge-focus-outline-color: var(--manus-primary);
+  
+  /* Badge List */
+  --manus-badge-list-gap: var(--manus-space-4);
+  --manus-badge-list-empty-color: var(--manus-text-secondary);
+  --manus-badge-list-pagination-gap: var(--manus-space-2);
+  --manus-badge-list-button-bg: var(--manus-gray-200);
+  --manus-badge-list-button-color: var(--manus-text-secondary);
+  --manus-badge-list-button-hover-bg: var(--manus-gray-300);
+  --manus-badge-list-button-disabled-bg: var(--manus-gray-100);
+  --manus-badge-list-button-disabled-color: var(--manus-text-disabled);
+  
+  /* Profile Viewer */
+  --manus-profile-padding: var(--manus-space-6);
+  --manus-profile-gap: var(--manus-space-8);
+  --manus-profile-border-color: var(--manus-border-color);
+  --manus-profile-background: var(--manus-bg-primary);
+  --manus-profile-shadow: var(--manus-shadow-sm);
+  --manus-profile-title-color: var(--manus-text-primary);
+  --manus-profile-text-color: var(--manus-text-secondary);
+  --manus-profile-link-color: var(--manus-primary);
+  
+  /* Badge Issuer Form */
+  --manus-form-border-color: var(--manus-border-color);
+  --manus-form-background: var(--manus-bg-primary);
+  --manus-form-text-color: var(--manus-text-primary);
+  --manus-form-label-color: var(--manus-text-secondary);
+  --manus-form-input-border: var(--manus-gray-300);
+  --manus-form-input-focus: var(--manus-primary);
+  --manus-form-error-color: var(--manus-error);
+  --manus-form-success-color: var(--manus-success);
+  --manus-form-help-color: var(--manus-text-secondary);
+  --manus-form-button-primary-bg: var(--manus-primary);
+  --manus-form-button-primary-color: var(--manus-text-inverse);
+  --manus-form-button-secondary-bg: var(--manus-gray-200);
+  --manus-form-button-secondary-color: var(--manus-text-secondary);
+  --manus-form-button-disabled-bg: var(--manus-bg-disabled);
+  --manus-form-button-disabled-color: var(--manus-text-disabled);
+  
+  /* Issuer Dashboard */
+  --manus-dashboard-border-color: var(--manus-border-color);
+  --manus-dashboard-background: var(--manus-bg-primary);
+  --manus-dashboard-text-color: var(--manus-text-primary);
+  --manus-dashboard-secondary-color: var(--manus-text-secondary);
+  --manus-dashboard-accent-color: var(--manus-primary);
+  --manus-dashboard-tab-active-border: var(--manus-primary);
+  --manus-dashboard-tab-hover-bg: var(--manus-gray-50);
+  --manus-dashboard-empty-color: var(--manus-text-secondary);
+}
+
+/* Dark Theme */
+.manus-dark-theme {
+  /* Color Palette */
+  --manus-primary: #63b3ed;
+  --manus-primary-dark: #4299e1;
+  --manus-primary-light: #90cdf4;
+  --manus-secondary: #a0aec0;
+  --manus-secondary-dark: #718096;
+  --manus-secondary-light: #cbd5e0;
+  --manus-success: #68d391;
+  --manus-success-light: #9ae6b4;
+  --manus-error: #fc8181;
+  --manus-error-light: #feb2b2;
+  --manus-warning: #f6ad55;
+  --manus-warning-light: #fbd38d;
+  --manus-info: #63b3ed;
+  --manus-info-light: #90cdf4;
+  
+  /* Neutral Colors */
+  --manus-gray-50: #2d3748;
+  --manus-gray-100: #2d3748;
+  --manus-gray-200: #4a5568;
+  --manus-gray-300: #718096;
+  --manus-gray-400: #a0aec0;
+  --manus-gray-500: #cbd5e0;
+  --manus-gray-600: #e2e8f0;
+  --manus-gray-700: #edf2f7;
+  --manus-gray-800: #f7fafc;
+  --manus-gray-900: #ffffff;
+  
+  /* Text Colors */
+  --manus-text-primary: var(--manus-gray-800);
+  --manus-text-secondary: var(--manus-gray-600);
+  --manus-text-disabled: var(--manus-gray-400);
+  --manus-text-inverse: #1a202c;
+  
+  /* Background Colors */
+  --manus-bg-primary: #1a202c;
+  --manus-bg-secondary: #2d3748;
+  --manus-bg-disabled: #4a5568;
+  
+  /* Border Colors */
+  --manus-border-color: #4a5568;
+  --manus-border-color-focus: var(--manus-primary);
+  
+  /* Shadows */
+  --manus-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  --manus-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26);
+  --manus-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  --manus-shadow-focus: 0 0 0 3px rgba(99, 179, 237, 0.4);
+}
+
+/* High Contrast Theme */
+.manus-high-contrast-theme {
+  /* Color Palette */
+  --manus-primary: #0000ff;
+  --manus-primary-dark: #0000cc;
+  --manus-primary-light: #3333ff;
+  --manus-secondary: #606060;
+  --manus-secondary-dark: #404040;
+  --manus-secondary-light: #808080;
+  --manus-success: #008000;
+  --manus-success-light: #ccffcc;
+  --manus-error: #ff0000;
+  --manus-error-light: #ffcccc;
+  --manus-warning: #ff8000;
+  --manus-warning-light: #ffe0cc;
+  --manus-info: #0000ff;
+  --manus-info-light: #ccccff;
+  
+  /* Text Colors */
+  --manus-text-primary: #000000;
+  --manus-text-secondary: #000000;
+  --manus-text-disabled: #606060;
+  --manus-text-inverse: #ffffff;
+  
+  /* Background Colors */
+  --manus-bg-primary: #ffffff;
+  --manus-bg-secondary: #f0f0f0;
+  --manus-bg-disabled: #d0d0d0;
+  
+  /* Border Colors */
+  --manus-border-color: #000000;
+  --manus-border-color-focus: #0000ff;
+  
+  /* Shadows */
+  --manus-shadow-sm: none;
+  --manus-shadow-md: none;
+  --manus-shadow-lg: none;
+  --manus-shadow-focus: 0 0 0 3px rgba(0, 0, 255, 0.5);
+  
+  /* Component-specific overrides */
+  --manus-badge-border-color: #000000;
+  --manus-badge-border-width: 2px;
+  --manus-badge-shadow: none;
+  --manus-badge-hover-shadow: none;
+  --manus-badge-focus-outline-color: #0000ff;
+  --manus-badge-focus-outline-width: 3px;
+  
+  --manus-form-input-border: #000000;
+  --manus-form-input-border-width: 2px;
+  --manus-form-error-color: #ff0000;
+  --manus-form-success-color: #008000;
+  
+  --manus-dashboard-border-color: #000000;
+  --manus-dashboard-tab-active-border: #0000ff;
+  --manus-dashboard-tab-active-border-width: 3px;
+}
+
+/* Reduced Motion Theme */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --manus-transition-fast: 0ms;
+    --manus-transition-normal: 0ms;
+    --manus-transition-slow: 0ms;
+  }
+}
+
+/* Large Text Theme for improved readability */
+.manus-large-text-theme {
+  --manus-font-size-xs: 0.875rem;
+  --manus-font-size-sm: 1rem;
+  --manus-font-size-md: 1.125rem;
+  --manus-font-size-lg: 1.25rem;
+  --manus-font-size-xl: 1.5rem;
+  --manus-font-size-2xl: 1.75rem;
+  --manus-line-height-tight: 1.4;
+  --manus-line-height-normal: 1.6;
+  --manus-line-height-relaxed: 1.8;
+  --manus-space-between-paragraphs: 1.5em;
+}
+
+/* Dyslexia-friendly Theme */
+.manus-dyslexia-friendly-theme {
+  --manus-font-family: "Open Sans", "Verdana", "Arial", sans-serif;
+  --manus-font-size-md: 1.125rem;
+  --manus-line-height-normal: 1.7;
+  --manus-space-between-paragraphs: 1.5em;
+  --manus-letter-spacing: 0.05em;
+  --manus-bg-primary: #f8f8f8;
+  --manus-text-primary: #333333;
+  --manus-badge-background: #f8f8f8;
+  --manus-form-background: #f8f8f8;
+  --manus-dashboard-background: #f8f8f8;
+}
