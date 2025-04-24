@@ -1,4 +1,4 @@
-# Manus AI Open Badges Component Library - Release Checklist
+# Open Badges Component Library - Release Checklist
 
 This checklist helps ensure the library is ready for release.
 

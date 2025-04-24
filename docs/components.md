@@ -62,7 +62,7 @@ const myBadge = ref({
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Manus AI Academy'
+      name: 'Academy'
     }
   },
   issuedOn: '2025-01-15T12:00:00Z',
@@ -239,7 +239,7 @@ const initialBadge = ref({
   issuer: {
     id: 'https://example.org/issuer',
     type: 'Profile',
-    name: 'Manus AI Academy'
+    name: 'Academy'
   }
 });
 
@@ -288,7 +288,7 @@ import { mockProfiles, mockAssertions } from './mockData';
 
 const issuerProfile = ref({
   id: 'https://example.org/issuer',
-  name: 'Manus AI Academy',
+  name: 'Academy',
   url: 'https://example.org',
   email: 'badges@example.org',
   image: 'https://example.org/logo.png'

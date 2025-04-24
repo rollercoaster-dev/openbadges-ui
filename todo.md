@@ -1,4 +1,4 @@
-# Manus AI Open Badges Component Library - Todo List
+# Rollercoaster.dev Open Badges Component Library - Todo List
 
 ## Project Setup
 - [x] Create base project directory

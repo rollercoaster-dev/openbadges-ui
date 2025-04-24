@@ -10,7 +10,7 @@ export const mockIssuer: OB2.Profile = {
   '@context': 'https://w3id.org/openbadges/v2',
   id: 'https://example.org/issuer' as Shared.IRI,
   type: 'Profile',
-  name: 'Manus AI Academy',
+  name: 'Rollercoaster.dev',
   url: 'https://example.org' as Shared.IRI,
   email: 'badges@example.org',
   description: 'An organization dedicated to advancing AI education and certification.',
@@ -147,7 +147,7 @@ export const mockOB3Credential: OB3.VerifiableCredential = {
   issuer: {
     id: 'https://example.org/issuers/manus' as Shared.IRI,
     type: ['Profile'],
-    name: 'Manus AI Academy',
+    name: 'Rollercoaster.dev',
     url: 'https://example.org' as Shared.IRI,
     image: {
       id: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff' as Shared.IRI,
@@ -192,7 +192,7 @@ export const mockProfiles: Record<string, {
   },
   'manus': {
     id: 'https://example.org/issuer',
-    name: 'Manus AI Academy',
+    name: 'Rollercoaster.dev',
     image: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff',
     description: 'An organization dedicated to advancing AI education and certification.',
     url: 'https://example.org',

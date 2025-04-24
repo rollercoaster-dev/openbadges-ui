@@ -1,6 +1,6 @@
 # Usage Examples
 
-This document provides practical examples of how to use the Manus AI Open Badges Component Library in various scenarios.
+This document provides practical examples of how to use the Open Badges Component Library in various scenarios.
 
 ## Basic Badge Display
 
@@ -41,7 +41,7 @@ const exampleBadge = ref({
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Manus AI Academy'
+      name: 'Academy'
     }
   },
   issuedOn: '2025-01-15T12:00:00Z',
@@ -358,7 +358,7 @@ import { ref, onMounted } from 'vue';
 
 const issuerProfile = ref({
   id: 'issuer-123',
-  name: 'Manus AI Academy',
+  name: 'Academy',
   image: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff',
   description: 'An organization dedicated to advancing AI education and certification.',
   url: 'https://example.org',
@@ -487,7 +487,7 @@ const exampleBadge = ref({
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Manus AI Academy'
+      name: 'Academy'
     }
   },
   issuedOn: '2025-04-15T12:00:00Z',
@@ -645,4 +645,4 @@ onMounted(() => {
 </style>
 ```
 
-These examples demonstrate how to use the Manus AI Open Badges Component Library in various common scenarios. You can adapt them to your specific needs and integrate them into your Vue 3 applications.
+These examples demonstrate how to use the Open Badges Component Library in various common scenarios. You can adapt them to your specific needs and integrate them into your Vue 3 applications.

@@ -1,4 +1,4 @@
-# Manus AI Open Badges Component Library
+# Open Badges Component Library
 
 A Vue 3 component library for implementing Open Badges functionality, with a focus on accessibility and customization.
 
