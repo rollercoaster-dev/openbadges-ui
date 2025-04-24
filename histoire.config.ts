@@ -5,8 +5,20 @@ export default defineConfig({
   // Set the base URL for GitHub Pages
   // This should match the repository name
   base: '/openbadges-ui/',
-  // Use relative paths for assets
+  // Use hash router mode for better compatibility with GitHub Pages
   routerMode: 'hash',
+  // Use a custom index.html template
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: 'assets/[name].[ext]',
+          chunkFileNames: 'assets/[name].js',
+          entryFileNames: 'assets/[name].js',
+        },
+      },
+    },
+  },
   plugins: [
     HstVue(),
   ],
