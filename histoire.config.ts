@@ -5,6 +5,8 @@ export default defineConfig({
   // Set the base URL for GitHub Pages
   // This should match the repository name
   base: '/openbadges-ui/',
+  // Use relative paths for assets
+  routerMode: 'hash',
   plugins: [
     HstVue(),
   ],
