@@ -9,7 +9,7 @@ A Vue 3 component library for implementing Open Badges functionality, with a foc
 - **Accessibility First**: Follows WCAG guidelines with support for various accessibility needs
 - **Themeable**: Uses CSS variables for easy customization
 - **PrimeVue Integration**: Built on PrimeVue in unstyled mode for maximum flexibility
-- **Storybook Integration**: Includes Storybook for component development and documentation
+- **Histoire Integration**: Includes Histoire for component development and documentation
 
 ## Installation
 
@@ -63,6 +63,8 @@ The library includes several built-in themes:
 - High contrast theme
 - Large text theme
 - Dyslexia-friendly theme
+- ADHD-friendly theme
+- Autism-friendly theme
 
 To apply a theme:
 
@@ -76,7 +78,7 @@ AccessibilityService.applyTheme('dark')
 Or use CSS classes directly:
 
 ```html
-<body class="manus-dark-theme">
+<body class="ob-dark-theme">
   <!-- Your app content -->
 </body>
 ```
@@ -91,16 +93,23 @@ This library prioritizes accessibility with:
 - High contrast mode
 - Support for neurodivergent users
 
-## Storybook
+## Component Documentation
 
-The library includes Storybook integration for component development and documentation:
+The library includes Histoire integration for component development and documentation:
 
 ```bash
-# Run Storybook development server
-npm run storybook
+# Run Histoire development server
+npm run story:dev
 
-# Build static Storybook site
-npm run build-storybook
+# Build static Histoire site
+npm run story:build
+
+# Preview the built Histoire site
+npm run story:preview
 ```
 
-Storybook provides interactive examples of all components with different configurations and themes. See the [Storybook documentation](./docs/storybook.md) for more details.
+Histoire provides interactive examples of all components with different configurations and themes. See the [Histoire documentation](./docs/histoire.md) for more details.
+
+### Live Component Documentation
+
+You can view the live component documentation at [https://rollercoaster-dev.github.io/openbadges-ui/](https://rollercoaster-dev.github.io/openbadges-ui/)

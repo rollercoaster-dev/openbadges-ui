@@ -2,6 +2,7 @@
   "name": "rd-ob-ai-components",
   "version": "0.1.0",
   "description": "Vue 3 component library for implementing Open Badges functionality with accessibility and customization",
+  "homepage": "https://rollercoaster-dev.github.io/openbadges-ui/",
   "main": "dist/manus-ai-components.umd.js",
   "module": "dist/manus-ai-components.es.js",
   "types": "dist/types/index.d.ts",

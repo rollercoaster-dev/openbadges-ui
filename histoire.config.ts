@@ -2,6 +2,9 @@ import { defineConfig } from 'histoire'
 import { HstVue } from '@histoire/plugin-vue'
 
 export default defineConfig({
+  // Set the base URL for GitHub Pages
+  // This should match the repository name
+  base: '/openbadges-ui/',
   plugins: [
     HstVue(),
   ],
