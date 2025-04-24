@@ -7,11 +7,7 @@ export default defineConfig({
   ],
   theme: {
     title: 'OpenBadges UI',
-    logo: {
-      square: './src/assets/logo.svg',
-      light: './src/assets/logo.svg',
-      dark: './src/assets/logo.svg'
-    },
+    // Removed logo configuration as the file doesn't exist
     colors: {
       primary: {
         50: '#eef2ff',
