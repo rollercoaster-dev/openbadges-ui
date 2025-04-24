@@ -1,6 +1,7 @@
 // src/services/AccessibilityService.ts
 /**
  * Utility service for accessibility-related functionality
+ * with enhanced support for neurodiversity considerations
  */
 export class AccessibilityService {
   /**
@@ -67,10 +68,10 @@ export class AccessibilityService {
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
     const b = parseInt(hexColor.slice(5, 7), 16);
-    
+
     // Calculate relative luminance
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    
+
     // Return true if the color is likely to have good contrast
     return luminance > 128;
   }
@@ -79,18 +80,20 @@ export class AccessibilityService {
    * Applies a theme to the document by adding a class to the body
    * @param themeName Name of the theme to apply
    */
-  static applyTheme(themeName: 'default' | 'dark' | 'high-contrast' | 'large-text' | 'dyslexia-friendly'): void {
+  static applyTheme(themeName: 'default' | 'dark' | 'high-contrast' | 'large-text' | 'dyslexia-friendly' | 'adhd-friendly' | 'autism-friendly'): void {
     // Remove any existing theme classes
     document.body.classList.remove(
-      'manus-dark-theme',
-      'manus-high-contrast-theme',
-      'manus-large-text-theme',
-      'manus-dyslexia-friendly-theme'
+      'ob-dark-theme',
+      'ob-high-contrast-theme',
+      'ob-large-text-theme',
+      'ob-dyslexia-friendly-theme',
+      'ob-adhd-friendly-theme',
+      'ob-autism-friendly-theme'
     );
-    
+
     // Add the new theme class if not default
     if (themeName !== 'default') {
-      document.body.classList.add(`manus-${themeName}-theme`);
+      document.body.classList.add(`ob-${themeName}-theme`);
     }
   }
 
@@ -100,5 +103,167 @@ export class AccessibilityService {
    */
   static prefersReducedMotion(): boolean {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /**
+   * Simplifies text for better readability
+   * Useful for users with cognitive disabilities, dyslexia, or ADHD
+   * @param text The text to simplify
+   * @param level The level of simplification (1-3, where 3 is most simplified)
+   * @returns Simplified text
+   */
+  static simplifyText(text: string, level: 1 | 2 | 3 = 1): string {
+    // Basic implementation - in a real app, this would use more sophisticated NLP
+    if (level === 1) {
+      // Light simplification - replace complex words and shorten sentences
+      return text
+        .replace(/\b(utilize|utilise)\b/g, 'use')
+        .replace(/\b(implement|implementation)\b/g, 'use')
+        .replace(/\b(additional)\b/g, 'more')
+        .replace(/\b(sufficient)\b/g, 'enough')
+        .replace(/\b(approximately)\b/g, 'about')
+        .replace(/\b(subsequently)\b/g, 'later')
+        .replace(/\b(nevertheless|nonetheless)\b/g, 'however');
+    } else if (level === 2) {
+      // Medium simplification - also break up longer sentences
+      const simplified = text
+        .replace(/\b(utilize|utilise)\b/g, 'use')
+        .replace(/\b(implement|implementation)\b/g, 'use')
+        .replace(/\b(additional)\b/g, 'more')
+        .replace(/\b(sufficient)\b/g, 'enough')
+        .replace(/\b(approximately)\b/g, 'about')
+        .replace(/\b(subsequently)\b/g, 'later')
+        .replace(/\b(nevertheless|nonetheless)\b/g, 'however');
+
+      // Break up longer sentences (simple approach)
+      return simplified.replace(/([.!?])\s+([A-Z])/g, '$1<br>$2');
+    } else {
+      // High simplification - also add visual breaks and simplify further
+      const simplified = text
+        .replace(/\b(utilize|utilise)\b/g, 'use')
+        .replace(/\b(implement|implementation)\b/g, 'use')
+        .replace(/\b(additional)\b/g, 'more')
+        .replace(/\b(sufficient)\b/g, 'enough')
+        .replace(/\b(approximately)\b/g, 'about')
+        .replace(/\b(subsequently)\b/g, 'later')
+        .replace(/\b(nevertheless|nonetheless)\b/g, 'however')
+        .replace(/\b(therefore)\b/g, 'so')
+        .replace(/\b(regarding)\b/g, 'about')
+        .replace(/\b(concerning)\b/g, 'about')
+        .replace(/\b(accordingly)\b/g, 'so');
+
+      // Break up sentences and add more visual spacing
+      return simplified.replace(/([.!?])\s+([A-Z])/g, '$1<br><br>$2');
+    }
+  }
+
+  /**
+   * Sets content density preference
+   * Useful for users with ADHD, autism, or cognitive processing differences
+   * @param density The content density preference
+   */
+  static setContentDensity(density: 'compact' | 'normal' | 'spacious'): void {
+    // Remove any existing density classes
+    document.body.classList.remove(
+      'ob-density-compact',
+      'ob-density-normal',
+      'ob-density-spacious'
+    );
+
+    // Add the new density class
+    document.body.classList.add(`ob-density-${density}`);
+  }
+
+  /**
+   * Enables focus mode to reduce distractions
+   * Particularly helpful for users with ADHD
+   * @param enabled Whether focus mode is enabled
+   */
+  static setFocusMode(enabled: boolean): void {
+    if (enabled) {
+      document.body.classList.add('ob-focus-mode');
+    } else {
+      document.body.classList.remove('ob-focus-mode');
+    }
+  }
+
+  /**
+   * Controls animation and motion settings
+   * Important for users with vestibular disorders, autism, ADHD
+   * @param level The level of animation (none, minimal, full)
+   */
+  static setAnimationLevel(level: 'none' | 'minimal' | 'full'): void {
+    // Remove any existing animation classes
+    document.body.classList.remove(
+      'ob-animations-none',
+      'ob-animations-minimal',
+      'ob-animations-full'
+    );
+
+    // Add the new animation class
+    document.body.classList.add(`ob-animations-${level}`);
+  }
+
+  /**
+   * Sets reading mode for improved text readability
+   * Helpful for users with dyslexia, visual processing issues
+   * @param mode The reading mode to apply
+   */
+  static setReadingMode(mode: 'default' | 'bionic' | 'ruler' | 'paragraph-focus'): void {
+    // Remove any existing reading mode classes
+    document.body.classList.remove(
+      'ob-reading-bionic',
+      'ob-reading-ruler',
+      'ob-reading-paragraph-focus'
+    );
+
+    // Add the new reading mode class if not default
+    if (mode !== 'default') {
+      document.body.classList.add(`ob-reading-${mode}`);
+    }
+  }
+
+  /**
+   * Formats numbers in a way that's easier to read for people with dyscalculia
+   * @param value The number to format
+   * @param options Formatting options
+   * @returns Formatted number string
+   */
+  static formatNumber(value: number, options: {
+    useGrouping?: boolean;
+    addVisualSeparators?: boolean;
+    highlightDigits?: boolean;
+  } = {}): string {
+    const {
+      useGrouping = true,
+      addVisualSeparators = false,
+      highlightDigits = false
+    } = options;
+
+    // Format with locale and grouping
+    let formatted = value.toLocaleString(undefined, {
+      useGrouping
+    });
+
+    // Add visual separators if requested
+    if (addVisualSeparators) {
+      formatted = formatted.replace(/,/g, '<span class="ob-number-separator">,</span>');
+    }
+
+    // Highlight alternating digits if requested
+    if (highlightDigits) {
+      let result = '';
+      for (let i = 0; i < formatted.length; i++) {
+        const char = formatted[i];
+        if (/\d/.test(char) && i % 2 === 0) {
+          result += `<span class="ob-number-highlight">${char}</span>`;
+        } else {
+          result += char;
+        }
+      }
+      formatted = result;
+    }
+
+    return formatted;
   }
 }

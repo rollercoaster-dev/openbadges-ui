@@ -1,12 +1,12 @@
-// src/styles/accessibility.css
+
 /**
- * Manus AI Open Badges Component Library - Accessibility Styles
- * 
+ * Rollercoaster.dev Open Badges Component Library - Accessibility Styles
+ *
  * This file provides additional CSS to enhance accessibility across components.
  */
 
 /* Visually hidden content (for screen readers) */
-.manus-visually-hidden {
+.ob-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -19,8 +19,8 @@
 }
 
 /* Focus styles */
-.manus-focus-visible:focus-visible {
-  outline: 2px solid var(--manus-border-color-focus, #3182ce);
+.ob-focus-visible:focus-visible {
+  outline: 2px solid var(--ob-border-color-focus, #3182ce);
   outline-offset: 2px;
 }
 
@@ -31,23 +31,23 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--manus-border-color-focus, #3182ce);
+  outline: 2px solid var(--ob-border-color-focus, #3182ce);
   outline-offset: 2px;
 }
 
 /* Skip link for keyboard users */
-.manus-skip-link {
+.ob-skip-link {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--manus-primary, #3182ce);
+  background: var(--ob-primary, #3182ce);
   color: white;
   padding: 8px;
-  z-index: var(--manus-z-index-modal, 1300);
+  z-index: var(--ob-z-index-modal, 1300);
   transition: top 0.2s;
 }
 
-.manus-skip-link:focus {
+.ob-skip-link:focus {
   top: 0;
 }
 
@@ -65,76 +65,193 @@ textarea:focus-visible,
 
 /* High contrast mode support */
 @media (forced-colors: active) {
-  .manus-badge-display,
-  .manus-badge-list-item,
-  .manus-profile-viewer,
-  .manus-badge-issuer-form,
-  .manus-issuer-dashboard {
+  .ob-badge-display,
+  .ob-badge-list-item,
+  .ob-profile-viewer,
+  .ob-badge-issuer-form,
+  .ob-issuer-dashboard {
     border: 1px solid CanvasText;
   }
-  
-  .manus-button {
+
+  .ob-button {
     border: 1px solid CanvasText;
   }
-  
-  .manus-tab-button.active {
+
+  .ob-tab-button.active {
     border-bottom: 3px solid CanvasText;
   }
 }
 
 /* Improve text readability */
-.manus-badge-description,
-.manus-profile-description,
-.manus-form-label,
-.manus-form-help {
+.ob-badge-description,
+.ob-profile-description,
+.ob-form-label,
+.ob-form-help {
   max-width: 65ch; /* Optimal line length for readability */
 }
 
 /* Ensure sufficient color contrast */
-.manus-form-error {
-  color: var(--manus-error, #e53e3e);
-  font-weight: var(--manus-font-weight-medium, 500);
+.ob-form-error {
+  color: var(--ob-error, #e53e3e);
+  font-weight: var(--ob-font-weight-medium, 500);
 }
 
-.manus-form-success {
-  color: var(--manus-success, #38a169);
-  font-weight: var(--manus-font-weight-medium, 500);
+.ob-form-success {
+  color: var(--ob-success, #38a169);
+  font-weight: var(--ob-font-weight-medium, 500);
 }
 
 /* Ensure form fields have sufficient spacing for touch targets */
-.manus-form-input,
-.manus-form-textarea,
-.manus-button,
-.manus-tab-button {
+.ob-form-input,
+.ob-form-textarea,
+.ob-button,
+.ob-tab-button {
   min-height: 44px; /* Minimum touch target size */
 }
 
 /* Improve focus visibility for form elements */
-.manus-form-input:focus,
-.manus-form-textarea:focus {
+.ob-form-input:focus,
+.ob-form-textarea:focus {
   outline: none;
-  border-color: var(--manus-form-input-focus, #3182ce);
+  border-color: var(--ob-form-input-focus, #3182ce);
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
 }
 
 /* Status messages for screen readers */
-.manus-status {
+.ob-status {
   border-radius: 4px;
   padding: 8px 12px;
   margin-top: 16px;
 }
 
-.manus-status[aria-live="polite"] {
-  background-color: var(--manus-info-light, #bee3f8);
-  color: var(--manus-text-primary, #1a202c);
+.ob-status[aria-live="polite"] {
+  background-color: var(--ob-info-light, #bee3f8);
+  color: var(--ob-text-primary, #1a202c);
 }
 
-.manus-status[role="alert"] {
-  background-color: var(--manus-error-light, #fed7d7);
-  color: var(--manus-text-primary, #1a202c);
+.ob-status[role="alert"] {
+  background-color: var(--ob-error-light, #fed7d7);
+  color: var(--ob-text-primary, #1a202c);
 }
 
-.manus-status[role="status"] {
-  background-color: var(--manus-success-light, #c6f6d5);
-  color: var(--manus-text-primary, #1a202c);
+.ob-status[role="status"] {
+  background-color: var(--ob-success-light, #c6f6d5);
+  color: var(--ob-text-primary, #1a202c);
+}
+
+/* Neurodiversity-specific styles */
+
+/* Content density adjustments */
+.ob-density-compact {
+  --ob-space-1: 0.125rem;
+  --ob-space-2: 0.25rem;
+  --ob-space-3: 0.5rem;
+  --ob-space-4: 0.75rem;
+  --ob-space-5: 1rem;
+  --ob-space-6: 1.25rem;
+  --ob-space-8: 1.5rem;
+  --ob-space-10: 2rem;
+  --ob-space-12: 2.5rem;
+  --ob-space-16: 3rem;
+}
+
+.ob-density-spacious {
+  --ob-space-1: 0.5rem;
+  --ob-space-2: 0.75rem;
+  --ob-space-3: 1rem;
+  --ob-space-4: 1.5rem;
+  --ob-space-5: 2rem;
+  --ob-space-6: 2.5rem;
+  --ob-space-8: 3rem;
+  --ob-space-10: 3.5rem;
+  --ob-space-12: 4rem;
+  --ob-space-16: 5rem;
+  --ob-line-height-normal: 1.8;
+  --ob-line-height-relaxed: 2;
+}
+
+/* Focus mode to reduce distractions */
+.ob-focus-mode {
+  /* Dim non-focused content */
+  --ob-focus-mode-opacity: 0.7;
+  --ob-focus-mode-transition: opacity 0.3s ease;
+}
+
+.ob-focus-mode .ob-badge-list-item:not(:hover):not(:focus-within),
+.ob-focus-mode .ob-form-group:not(:focus-within) {
+  opacity: var(--ob-focus-mode-opacity);
+  transition: var(--ob-focus-mode-transition);
+}
+
+.ob-focus-mode .ob-badge-list-item:hover,
+.ob-focus-mode .ob-badge-list-item:focus-within,
+.ob-focus-mode .ob-form-group:focus-within {
+  opacity: 1;
+  transition: var(--ob-focus-mode-transition);
+  box-shadow: 0 0 0 2px var(--ob-primary);
+}
+
+/* Animation control for vestibular disorders and sensory sensitivities */
+.ob-animations-none * {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+.ob-animations-minimal * {
+  animation-duration: 0.3s !important;
+  transition-duration: 0.3s !important;
+}
+
+/* Reading modes for dyslexia and visual processing */
+
+/* Bionic reading - highlight first part of words to aid reading flow */
+.ob-reading-bionic p,
+.ob-reading-bionic li,
+.ob-reading-bionic h1,
+.ob-reading-bionic h2,
+.ob-reading-bionic h3,
+.ob-reading-bionic h4,
+.ob-reading-bionic h5,
+.ob-reading-bionic h6 {
+  font-weight: 400;
+}
+
+.ob-reading-bionic p span.ob-bionic-highlight,
+.ob-reading-bionic li span.ob-bionic-highlight,
+.ob-reading-bionic h1 span.ob-bionic-highlight,
+.ob-reading-bionic h2 span.ob-bionic-highlight,
+.ob-reading-bionic h3 span.ob-bionic-highlight,
+.ob-reading-bionic h4 span.ob-bionic-highlight,
+.ob-reading-bionic h5 span.ob-bionic-highlight,
+.ob-reading-bionic h6 span.ob-bionic-highlight {
+  font-weight: 700;
+}
+
+/* Reading ruler - helps track lines of text */
+.ob-reading-ruler {
+  --ob-ruler-height: 2.5em;
+  --ob-ruler-color: rgba(255, 255, 0, 0.1);
+  --ob-ruler-border: rgba(0, 0, 0, 0.1);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect x="0" y="14" width="32" height="4" fill="yellow" opacity="0.3"/></svg>'), auto;
+}
+
+/* Paragraph focus - highlights the paragraph being read */
+.ob-reading-paragraph-focus p:hover,
+.ob-reading-paragraph-focus li:hover {
+  background-color: rgba(255, 255, 0, 0.1);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* Number formatting for dyscalculia */
+.ob-number-separator {
+  color: var(--ob-secondary);
+  margin: 0 0.1em;
+  font-weight: normal;
+}
+
+.ob-number-highlight {
+  font-weight: bold;
+  color: var(--ob-primary);
 }
