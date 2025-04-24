@@ -1,5 +1,5 @@
 {
-  "name": "manus-ai-components",
+  "name": "rd-ob-ai-components",
   "version": "0.1.0",
   "description": "Vue 3 component library for implementing Open Badges functionality with accessibility and customization",
   "main": "dist/manus-ai-components.umd.js",
@@ -16,8 +16,9 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
     "format": "prettier --write \"src/**/*.{js,ts,vue}\"",
     "test": "echo \"No tests specified\" && exit 0",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview"
   },
   "keywords": [
     "vue",
@@ -48,10 +49,8 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^8.6.12",
-    "@storybook/addon-essentials": "^8.6.12",
-    "@storybook/addon-links": "^8.6.12",
-    "@storybook/vue3": "^8.6.12",
+    "histoire": "^0.17.6",
+    "@histoire/plugin-vue": "^0.17.6",
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
