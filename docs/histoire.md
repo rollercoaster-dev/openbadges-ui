@@ -107,6 +107,7 @@ The following components have Histoire stories:
 - **Badges**
   - BadgeDisplay
   - BadgeList
+  - ProfileViewer
 - **Issuing**
   - BadgeIssuerForm
   - IssuerDashboard
