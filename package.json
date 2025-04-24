@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Vue 3 component library for implementing Open Badges functionality with accessibility and customization",
   "homepage": "https://rollercoaster-dev.github.io/openbadges-ui/",
-  "main": "dist/manus-ai-components.umd.js",
-  "module": "dist/manus-ai-components.es.js",
+  "main": "dist/openbadges-ui.umd.js",
+  "module": "dist/openbadges-ui.es.js",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist",
@@ -35,12 +35,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/manus-ai/manus-ai-components.git"
+    "url": "https://github.com/rollercoaster-dev/openbadges-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/manus-ai/manus-ai-components/issues"
+    "url": "https://github.com/rollercoaster-dev/openbadges-ui/issues"
   },
-  "homepage": "https://github.com/manus-ai/manus-ai-components#readme",
+
   "peerDependencies": {
     "primevue": "^3.0.0",
     "vue": "^3.0.0"
