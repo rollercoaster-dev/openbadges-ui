@@ -34,6 +34,7 @@ const tagsInput = ref('');
 const criteriaText = ref('');
 const issuerName = ref('');
 const issuerUrl = ref('');
+const badgeImageUrl = ref('');
 
 // Initialize from badge class if available
 if (state.badgeClass.tags && state.badgeClass.tags.length > 0) {
@@ -48,6 +49,15 @@ if (typeof state.badgeClass.issuer === 'object') {
 } else if (typeof state.badgeClass.issuer === 'string') {
   // If issuer is a string (URL), we'll need to fetch it or allow user to enter details
   issuerName.value = 'Unknown Issuer';
+}
+
+// Handle badge image which could be a string or an object with an id field
+if (state.badgeClass.image) {
+  if (typeof state.badgeClass.image === 'string') {
+    badgeImageUrl.value = state.badgeClass.image;
+  } else if (typeof state.badgeClass.image === 'object' && 'id' in state.badgeClass.image) {
+    badgeImageUrl.value = state.badgeClass.image.id as string;
+  }
 }
 
 // Watch for changes in the form fields and update the badge class
@@ -74,16 +84,29 @@ watch([issuerName, issuerUrl], ([newName, newUrl]) => {
       name: ''
     };
   }
-  
+
   state.badgeClass.issuer.name = newName;
   if (newUrl) {
     state.badgeClass.issuer.url = newUrl;
   }
 });
 
+// Watch for changes in the badge image URL and update the badge class
+watch(badgeImageUrl, (newValue) => {
+  if (newValue) {
+    // Create an Image object with the URL as the id
+    state.badgeClass.image = {
+      id: newValue,
+      type: 'Image'
+    };
+  } else {
+    state.badgeClass.image = undefined;
+  }
+});
+
 // Check if a specific field has an error
 const hasError = (field: string): boolean => {
-  return state.errors.some(error => 
+  return state.errors.some(error =>
     error.toLowerCase().includes(field.toLowerCase())
   );
 };
@@ -103,6 +126,7 @@ const resetForm = () => {
   criteriaText.value = '';
   issuerName.value = '';
   issuerUrl.value = '';
+  badgeImageUrl.value = '';
   emit('reset');
 };
 </script>
@@ -117,7 +141,7 @@ const resetForm = () => {
         <legend class="manus-form-section-title">
           Badge Information
         </legend>
-        
+
         <!-- Badge Name -->
         <div class="manus-form-field">
           <label
@@ -133,16 +157,16 @@ const resetForm = () => {
             required
             aria-describedby="badge-name-error"
           >
-          <div 
-            v-if="hasError('name')" 
-            id="badge-name-error" 
-            class="manus-form-error" 
+          <div
+            v-if="hasError('name')"
+            id="badge-name-error"
+            class="manus-form-error"
             role="alert"
           >
             Badge name is required
           </div>
         </div>
-        
+
         <!-- Badge Description -->
         <div class="manus-form-field">
           <label
@@ -158,16 +182,16 @@ const resetForm = () => {
             required
             aria-describedby="badge-description-error"
           />
-          <div 
-            v-if="hasError('description')" 
-            id="badge-description-error" 
-            class="manus-form-error" 
+          <div
+            v-if="hasError('description')"
+            id="badge-description-error"
+            class="manus-form-error"
             role="alert"
           >
             Badge description is required
           </div>
         </div>
-        
+
         <!-- Badge Image URL -->
         <div class="manus-form-field">
           <label
@@ -176,7 +200,7 @@ const resetForm = () => {
           >Image URL *</label>
           <input
             id="badge-image"
-            v-model="state.badgeClass.image"
+            v-model="badgeImageUrl"
             type="url"
             class="manus-form-input"
             :class="{ 'manus-form-input-error': hasError('image') }"
@@ -184,10 +208,10 @@ const resetForm = () => {
             required
             aria-describedby="badge-image-error badge-image-help"
           >
-          <div 
-            v-if="hasError('image')" 
-            id="badge-image-error" 
-            class="manus-form-error" 
+          <div
+            v-if="hasError('image')"
+            id="badge-image-error"
+            class="manus-form-error"
             role="alert"
           >
             Valid badge image URL is required
@@ -199,7 +223,7 @@ const resetForm = () => {
             Provide a URL to an image for this badge (PNG, SVG, or JPEG recommended)
           </div>
         </div>
-        
+
         <!-- Badge Criteria -->
         <div class="manus-form-field">
           <label
@@ -214,7 +238,7 @@ const resetForm = () => {
             placeholder="Describe what someone must do to earn this badge"
           />
         </div>
-        
+
         <!-- Badge Tags -->
         <div class="manus-form-field">
           <label
@@ -237,12 +261,12 @@ const resetForm = () => {
           </div>
         </div>
       </fieldset>
-      
+
       <fieldset class="manus-form-section">
         <legend class="manus-form-section-title">
           Issuer Information
         </legend>
-        
+
         <!-- Issuer Name -->
         <div class="manus-form-field">
           <label
@@ -258,16 +282,16 @@ const resetForm = () => {
             required
             aria-describedby="issuer-name-error"
           >
-          <div 
-            v-if="hasError('issuer')" 
-            id="issuer-name-error" 
-            class="manus-form-error" 
+          <div
+            v-if="hasError('issuer')"
+            id="issuer-name-error"
+            class="manus-form-error"
             role="alert"
           >
             Issuer name is required
           </div>
         </div>
-        
+
         <!-- Issuer URL -->
         <div class="manus-form-field">
           <label
@@ -283,12 +307,12 @@ const resetForm = () => {
           >
         </div>
       </fieldset>
-      
+
       <fieldset class="manus-form-section">
         <legend class="manus-form-section-title">
           Recipient Information
         </legend>
-        
+
         <!-- Recipient Email -->
         <div class="manus-form-field">
           <label
@@ -304,37 +328,37 @@ const resetForm = () => {
             required
             aria-describedby="recipient-email-error"
           >
-          <div 
-            v-if="hasError('recipient')" 
-            id="recipient-email-error" 
-            class="manus-form-error" 
+          <div
+            v-if="hasError('recipient')"
+            id="recipient-email-error"
+            class="manus-form-error"
             role="alert"
           >
             Valid recipient email is required
           </div>
         </div>
       </fieldset>
-      
+
       <!-- Form Actions -->
       <div class="manus-form-actions">
-        <button 
-          type="button" 
-          class="manus-button manus-button-secondary" 
+        <button
+          type="button"
+          class="manus-button manus-button-secondary"
           :disabled="state.isSubmitting"
           @click="resetForm"
         >
           Reset
         </button>
-        <button 
-          type="submit" 
-          class="manus-button manus-button-primary" 
+        <button
+          type="submit"
+          class="manus-button manus-button-primary"
           :disabled="state.isSubmitting"
         >
           <span v-if="state.isSubmitting">Issuing...</span>
           <span v-else>Issue Badge</span>
         </button>
       </div>
-      
+
       <!-- Form Errors -->
       <div
         v-if="state.errors.length > 0"
@@ -352,7 +376,7 @@ const resetForm = () => {
           </li>
         </ul>
       </div>
-      
+
       <!-- Success Message -->
       <div
         v-if="state.success"
@@ -383,7 +407,7 @@ const resetForm = () => {
   --form-button-secondary-color: #4a5568;
   --form-button-disabled-bg: #edf2f7;
   --form-button-disabled-color: #a0aec0;
-  
+
   max-width: 600px;
   margin: 0 auto;
   padding: 24px;
@@ -523,11 +547,11 @@ const resetForm = () => {
   .manus-badge-issuer-form {
     padding: 16px;
   }
-  
+
   .manus-form-actions {
     flex-direction: column;
   }
-  
+
   .manus-button {
     width: 100%;
   }
