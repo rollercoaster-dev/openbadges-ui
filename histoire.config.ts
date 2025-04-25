@@ -1,14 +1,16 @@
 import { defineConfig } from 'histoire'
 import { HstVue } from '@histoire/plugin-vue'
 
+import type { HstConfig } from '@histoire/shared'
+
 export default defineConfig({
-  // Set the base URL for GitHub Pages
-  // This should match the repository name
-  base: '/openbadges-ui/',
+  // Configuration for GitHub Pages deployment
+
   // Use hash router mode for better compatibility with GitHub Pages
   routerMode: 'hash',
   // Use a custom index.html template
   vite: {
+    base: '/openbadges-ui/',
     build: {
       rollupOptions: {
         output: {
@@ -59,5 +61,5 @@ export default defineConfig({
     ],
   },
   setupFile: './histoire.setup.ts',
-  outDir: 'histoire-dist',
+  outDir: 'histoire-dist'
 })
