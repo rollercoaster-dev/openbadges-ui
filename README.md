@@ -1,6 +1,6 @@
-# Open Badges Component Library
+# OpenBadges UI
 
-A Vue 3 component library for implementing Open Badges functionality, with a focus on accessibility and customization.
+A Vue 3 component library for implementing Open Badges functionality, with a focus on accessibility and customization. This library supports both Open Badges 2.0 and 3.0 specifications.
 
 ## Features
 
@@ -14,7 +14,7 @@ A Vue 3 component library for implementing Open Badges functionality, with a foc
 ## Installation
 
 ```bash
-npm install manus-ai-components
+npm install openbadges-ui
 ```
 
 ## Quick Start
@@ -22,15 +22,15 @@ npm install manus-ai-components
 ```javascript
 import { createApp } from 'vue'
 import App from './App.vue'
-import { ManusAIPlugin } from 'manus-ai-components'
+import { OpenBadgesUIPlugin } from 'openbadges-ui'
 
 // Import styles
-import 'manus-ai-components/dist/style.css'
+import 'openbadges-ui/dist/style.css'
 
 const app = createApp(App)
 
 // Use the plugin (configures PrimeVue in unstyled mode)
-app.use(ManusAIPlugin)
+app.use(OpenBadgesUIPlugin)
 
 app.mount('#app')
 ```
@@ -69,7 +69,7 @@ The library includes several built-in themes:
 To apply a theme:
 
 ```javascript
-import { AccessibilityService } from 'manus-ai-components'
+import { AccessibilityService } from 'openbadges-ui'
 
 // Apply dark theme
 AccessibilityService.applyTheme('dark')
@@ -113,3 +113,22 @@ Histoire provides interactive examples of all components with different configur
 ### Live Component Documentation
 
 You can view the live component documentation at [https://rollercoaster-dev.github.io/openbadges-ui/](https://rollercoaster-dev.github.io/openbadges-ui/)
+
+## Testing
+
+The library includes unit tests for components and services. To run the tests:
+
+```bash
+# Run tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## Examples
+
+Check out the [examples directory](./examples) for sample applications demonstrating how to use the OpenBadges UI components.
