@@ -9,6 +9,8 @@ const state = ref({
   showIssuedDate: true,
   showExpiryDate: false,
   interactive: false,
+  showVerification: false,
+  autoVerify: false
 })
 
 const badgeWithExpiry = {
@@ -19,6 +21,10 @@ const badgeWithExpiry = {
 function onBadgeClick(badge) {
   console.log('Badge clicked:', badge)
 }
+
+function onVerified(isValid) {
+  console.log('Badge verified:', isValid)
+}
 </script>
 
 <template>
@@ -28,6 +34,8 @@ function onBadgeClick(badge) {
       <HstCheckbox v-model="state.showIssuedDate" title="Show Issued Date" />
       <HstCheckbox v-model="state.showExpiryDate" title="Show Expiry Date" />
       <HstCheckbox v-model="state.interactive" title="Interactive" />
+      <HstCheckbox v-model="state.showVerification" title="Show Verification" />
+      <HstCheckbox v-model="state.autoVerify" title="Auto Verify" />
     </template>
 
     <Variant title="Default">
@@ -37,7 +45,10 @@ function onBadgeClick(badge) {
         :show-issued-date="state.showIssuedDate"
         :show-expiry-date="state.showExpiryDate"
         :interactive="state.interactive"
+        :show-verification="state.showVerification"
+        :auto-verify="state.autoVerify"
         @click="onBadgeClick"
+        @verified="onVerified"
       />
     </Variant>
 
@@ -48,7 +59,10 @@ function onBadgeClick(badge) {
         :show-issued-date="state.showIssuedDate"
         :show-expiry-date="state.showExpiryDate"
         interactive
+        :show-verification="state.showVerification"
+        :auto-verify="state.autoVerify"
         @click="onBadgeClick"
+        @verified="onVerified"
       />
     </Variant>
 
@@ -59,7 +73,10 @@ function onBadgeClick(badge) {
         :show-issued-date="state.showIssuedDate"
         :show-expiry-date="state.showExpiryDate"
         :interactive="state.interactive"
+        :show-verification="state.showVerification"
+        :auto-verify="state.autoVerify"
         @click="onBadgeClick"
+        @verified="onVerified"
       />
     </Variant>
 
@@ -70,7 +87,10 @@ function onBadgeClick(badge) {
         :show-issued-date="state.showIssuedDate"
         show-expiry-date
         :interactive="state.interactive"
+        :show-verification="state.showVerification"
+        :auto-verify="state.autoVerify"
         @click="onBadgeClick"
+        @verified="onVerified"
       />
     </Variant>
 
@@ -81,7 +101,10 @@ function onBadgeClick(badge) {
         :show-issued-date="state.showIssuedDate"
         :show-expiry-date="state.showExpiryDate"
         :interactive="state.interactive"
+        :show-verification="state.showVerification"
+        :auto-verify="state.autoVerify"
         @click="onBadgeClick"
+        @verified="onVerified"
       />
     </Variant>
   </Story>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { OB2, OB3 } from 'openbadges-types';
 import { BadgeService } from '../../services/BadgeService';
+import BadgeVerification from './BadgeVerification.vue';
 
 interface Props {
   badge: OB2.Assertion | OB3.VerifiableCredential;
@@ -9,17 +10,22 @@ interface Props {
   showIssuedDate?: boolean;
   showExpiryDate?: boolean;
   interactive?: boolean;
+  showVerification?: boolean;
+  autoVerify?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showDescription: true,
   showIssuedDate: true,
   showExpiryDate: false,
-  interactive: false
+  interactive: false,
+  showVerification: false,
+  autoVerify: false
 });
 
 const emit = defineEmits<{
   (e: 'click', badge: OB2.Assertion | OB3.VerifiableCredential): void;
+  (e: 'verified', isValid: boolean): void;
 }>();
 
 // Normalize the badge for display
@@ -52,10 +58,23 @@ const handleClick = () => {
     emit('click', props.badge);
   }
 };
+
+// Handle verification events
+const handleVerified = (isValid: boolean) => {
+  emit('verified', isValid);
+};
+
+// Control whether to show verification details
+const showVerificationDetails = ref(false);
+
+// Toggle verification details
+const toggleVerificationDetails = () => {
+  showVerificationDetails.value = !showVerificationDetails.value;
+};
 </script>
 
 <template>
-  <div 
+  <div
     class="manus-badge-display"
     :class="{ 'is-interactive': interactive }"
     :tabindex="interactive ? 0 : undefined"
@@ -63,8 +82,8 @@ const handleClick = () => {
     @keydown.enter="handleClick"
   >
     <div class="manus-badge-image">
-      <img 
-        :src="normalizedBadge.image" 
+      <img
+        :src="normalizedBadge.image"
         :alt="generateAltText(normalizedBadge.name)"
         class="manus-badge-img"
       >
@@ -94,6 +113,24 @@ const handleClick = () => {
       >
         <span>Expires: {{ formatDate(normalizedBadge.expires) }}</span>
       </div>
+      <div v-if="showVerification" class="manus-badge-verification-toggle">
+        <button
+          class="manus-badge-verification-toggle-button"
+          @click="toggleVerificationDetails"
+          type="button"
+        >
+          {{ showVerificationDetails ? 'Hide Verification Details' : 'Show Verification Details' }}
+        </button>
+      </div>
+
+      <div v-if="showVerification && showVerificationDetails" class="manus-badge-verification-container">
+        <BadgeVerification
+          :badge="badge"
+          :auto-verify="autoVerify"
+          @verified="handleVerified"
+        />
+      </div>
+
       <slot name="badge-actions" />
     </div>
   </div>
@@ -110,7 +147,7 @@ const handleClick = () => {
   --badge-text-color: #4a5568;
   --badge-hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   --badge-focus-outline-color: #3182ce;
-  
+
   display: flex;
   flex-direction: column;
   border: 1px solid var(--badge-border-color);
@@ -170,9 +207,30 @@ const handleClick = () => {
 
 .manus-badge-issuer,
 .manus-badge-date,
-.manus-badge-expiry {
+.manus-badge-expiry,
+.manus-badge-verification-toggle {
   font-size: 0.75rem;
   color: var(--badge-text-color);
+}
+
+.manus-badge-verification-toggle-button {
+  background: none;
+  border: none;
+  color: #3182ce;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.manus-badge-verification-toggle-button:hover {
+  color: #2c5282;
+}
+
+.manus-badge-verification-container {
+  margin-top: 12px;
+  border-top: 1px solid var(--badge-border-color);
+  padding-top: 12px;
 }
 
 /* Responsive adjustments */
@@ -181,13 +239,13 @@ const handleClick = () => {
     flex-direction: row;
     max-width: 500px;
   }
-  
+
   .manus-badge-image {
     flex: 0 0 120px;
     margin-right: 16px;
     margin-bottom: 0;
   }
-  
+
   .manus-badge-content {
     flex: 1;
   }

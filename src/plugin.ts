@@ -7,6 +7,7 @@ import PrimeVue from 'primevue/config';
 import BadgeDisplay from './components/badges/BadgeDisplay.vue';
 import BadgeList from './components/badges/BadgeList.vue';
 import ProfileViewer from './components/badges/ProfileViewer.vue';
+import BadgeVerification from './components/badges/BadgeVerification.vue';
 import BadgeIssuerForm from './components/issuing/BadgeIssuerForm.vue';
 import IssuerDashboard from './components/issuing/IssuerDashboard.vue';
 
@@ -22,6 +23,7 @@ export default {
     app.component('BadgeDisplay', BadgeDisplay);
     app.component('BadgeList', BadgeList);
     app.component('ProfileViewer', ProfileViewer);
+    app.component('BadgeVerification', BadgeVerification);
     app.component('BadgeIssuerForm', BadgeIssuerForm);
     app.component('IssuerDashboard', IssuerDashboard);
   }

@@ -4,7 +4,7 @@ A Vue 3 component library for implementing Open Badges functionality, with a foc
 
 ## Features
 
-- **Open Badges Compliant**: Supports both Open Badges 2.0 and 3.0 specifications
+- **Open Badges Compliant**: Supports both Open Badges 2.0 and 3.0 specifications, including verification
 - **Framework-Agnostic Core Logic**: Business logic is decoupled from UI components
 - **Accessibility First**: Follows WCAG guidelines with support for various accessibility needs
 - **Themeable**: Uses CSS variables for easy customization
@@ -42,6 +42,7 @@ app.mount('#app')
 - **BadgeDisplay**: Renders a single badge with its image, name, description, and issuer information
 - **BadgeList**: Displays a collection of badges with filtering and sorting capabilities
 - **ProfileViewer**: Shows a profile (issuer or recipient) along with their badges
+- **BadgeVerification**: Displays verification status and details for a badge
 
 ### Badge Issuing Components
 
@@ -53,6 +54,7 @@ app.mount('#app')
 - **useBadgeIssuer**: Manages badge creation and issuance logic
 - **useBadges**: Provides functionality for filtering, sorting, and displaying badges
 - **useProfile**: Handles profile data for issuers and recipients
+- **useBadgeVerification**: Provides functionality for verifying badge authenticity
 
 ## Theming
 

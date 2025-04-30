@@ -15,12 +15,15 @@ The `BadgeDisplay` component renders a single badge with its image, name, descri
 | showIssuedDate | `boolean` | `true` | Whether to show the badge issue date |
 | showExpiryDate | `boolean` | `false` | Whether to show the badge expiry date |
 | interactive | `boolean` | `false` | Whether the badge is clickable |
+| showVerification | `boolean` | `false` | Whether to show badge verification controls |
+| autoVerify | `boolean` | `false` | Whether to automatically verify the badge when displayed |
 
 #### Events
 
 | Name | Payload | Description |
 |------|---------|-------------|
 | click | `OB2.Assertion \| OB3.VerifiableCredential` | Emitted when the badge is clicked (if interactive) |
+| verified | `boolean` | Emitted when a badge has been verified, with the verification result |
 
 #### Slots
 
@@ -32,8 +35,8 @@ The `BadgeDisplay` component renders a single badge with its image, name, descri
 
 ```vue
 <template>
-  <BadgeDisplay 
-    :badge="myBadge" 
+  <BadgeDisplay
+    :badge="myBadge"
     :interactive="true"
     @click="handleBadgeClick"
   />
@@ -112,8 +115,8 @@ The `BadgeList` component displays a collection of badges with support for grid/
 
 ```vue
 <template>
-  <BadgeList 
-    :badges="badges" 
+  <BadgeList
+    :badges="badges"
     layout="grid"
     :show-pagination="true"
     :page-size="6"
@@ -176,8 +179,8 @@ The `ProfileViewer` component displays a user or issuer profile along with their
 
 ```vue
 <template>
-  <ProfileViewer 
-    :profile="profile" 
+  <ProfileViewer
+    :profile="profile"
     :badges="badges"
     badges-layout="grid"
     :show-pagination="true"
@@ -223,8 +226,8 @@ The `BadgeIssuerForm` component provides a form for creating and issuing badges.
 
 ```vue
 <template>
-  <BadgeIssuerForm 
-    :initial-badge-class="initialBadge" 
+  <BadgeIssuerForm
+    :initial-badge-class="initialBadge"
     @badge-issued="handleBadgeIssued"
   />
 </template>
@@ -273,8 +276,8 @@ The `IssuerDashboard` component provides a complete dashboard for badge issuers.
 
 ```vue
 <template>
-  <IssuerDashboard 
-    :issuer-profile="issuerProfile" 
+  <IssuerDashboard
+    :issuer-profile="issuerProfile"
     :initial-badges="issuedBadges"
     @badge-issued="handleBadgeIssued"
     @badge-click="handleBadgeClick"
@@ -308,7 +311,142 @@ const handleBadgeClick = (badge) => {
 </script>
 ```
 
+### BadgeVerification
+
+The `BadgeVerification` component displays verification status and details for a badge, including verification method, expiration status, and revocation status.
+
+#### Props
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| badge | `OB2.Assertion \| OB3.VerifiableCredential` | Required | The badge to verify |
+| showStatus | `boolean` | `true` | Whether to show verification status |
+| showDetails | `boolean` | `true` | Whether to show verification details |
+| showLastVerified | `boolean` | `true` | Whether to show when the badge was last verified |
+| autoVerify | `boolean` | `false` | Whether to automatically verify the badge when mounted |
+
+#### Events
+
+| Name | Payload | Description |
+|------|---------|-------------|
+| verified | `boolean` | Emitted when verification is complete, with the verification result |
+
+#### Example
+
+```vue
+<template>
+  <BadgeVerification
+    :badge="myBadge"
+    :auto-verify="true"
+    @verified="handleVerified"
+  />
+</template>
+
+<script setup>
+import { BadgeVerification } from 'manus-ai-components';
+import { ref } from 'vue';
+
+// Example badge (OB2 format)
+const myBadge = ref({
+  '@context': 'https://w3id.org/openbadges/v2',
+  id: 'https://example.org/assertions/123',
+  type: 'Assertion',
+  recipient: {
+    identity: 'alice@example.org',
+    type: 'email',
+    hashed: false
+  },
+  badge: {
+    id: 'https://example.org/badges/1',
+    type: 'BadgeClass',
+    name: 'AI Ethics Fundamentals',
+    description: 'Awarded for demonstrating understanding of core AI ethics principles.',
+    image: 'https://example.org/badges/ai-ethics.png',
+    issuer: {
+      id: 'https://example.org/issuer',
+      type: 'Profile',
+      name: 'Academy'
+    }
+  },
+  issuedOn: '2025-01-15T12:00:00Z',
+  verification: {
+    type: 'hosted'
+  }
+});
+
+const handleVerified = (isValid) => {
+  console.log('Badge verification result:', isValid);
+};
+</script>
+```
+
 ## Composables
+
+### useBadgeVerification
+
+The `useBadgeVerification` composable provides functionality for verifying badges.
+
+#### Returns
+
+| Name | Type | Description |
+|------|------|-------------|
+| state | `BadgeVerificationState` | Reactive state object containing verification data and status |
+| isValid | `ComputedRef<boolean>` | Whether the badge is valid |
+| errors | `ComputedRef<string[]>` | Array of verification errors |
+| warnings | `ComputedRef<string[]>` | Array of verification warnings |
+| verificationMethod | `ComputedRef<'hosted' \| 'signed' \| undefined>` | Method used for verification |
+| expirationStatus | `ComputedRef<'valid' \| 'expired' \| 'not-applicable' \| undefined>` | Badge expiration status |
+| revocationStatus | `ComputedRef<'valid' \| 'revoked' \| 'unknown' \| undefined>` | Badge revocation status |
+| hasBeenVerified | `ComputedRef<boolean>` | Whether the badge has been verified |
+| verifyBadge | `(badge: OB2.Assertion \| OB3.VerifiableCredential) => Promise<VerificationResult>` | Function to verify a badge |
+| clearVerification | `() => void` | Function to clear verification state |
+
+#### Example
+
+```vue
+<template>
+  <div>
+    <button @click="handleVerify" :disabled="state.isVerifying">
+      {{ state.isVerifying ? 'Verifying...' : 'Verify Badge' }}
+    </button>
+
+    <div v-if="hasBeenVerified">
+      <p>Valid: {{ isValid ? 'Yes' : 'No' }}</p>
+      <p v-if="verificationMethod">Method: {{ verificationMethod }}</p>
+
+      <div v-if="errors.length > 0">
+        <h4>Errors:</h4>
+        <ul>
+          <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { useBadgeVerification } from 'manus-ai-components';
+import { ref } from 'vue';
+
+const badge = ref({
+  // Badge data
+});
+
+const {
+  state,
+  isValid,
+  errors,
+  warnings,
+  verificationMethod,
+  hasBeenVerified,
+  verifyBadge
+} = useBadgeVerification();
+
+const handleVerify = async () => {
+  await verifyBadge(badge.value);
+};
+</script>
+```
 
 ### useBadgeIssuer
 
@@ -392,7 +530,7 @@ The `useBadges` composable provides functionality for managing a collection of b
       <option value="asc">Ascending</option>
       <option value="desc">Descending</option>
     </select>
-    
+
     <div v-for="badge in normalizedBadges" :key="badge.id">
       {{ badge.name }} - {{ badge.issuer.name }}
     </div>
@@ -403,12 +541,12 @@ The `useBadges` composable provides functionality for managing a collection of b
 import { useBadges } from 'manus-ai-components';
 import { mockAssertions } from './mockData';
 
-const { 
-  filterText, 
-  sortBy, 
-  sortDirection, 
+const {
+  filterText,
+  sortBy,
+  sortDirection,
   normalizedBadges,
-  setBadges 
+  setBadges
 } = useBadges();
 
 // Initialize with mock data
@@ -456,13 +594,13 @@ The `useProfile` composable provides functionality for managing profile data.
 import { useProfile } from 'manus-ai-components';
 import { onMounted } from 'vue';
 
-const { 
-  profile, 
-  isLoading, 
-  error, 
-  isIssuer, 
+const {
+  profile,
+  isLoading,
+  error,
+  isIssuer,
   displayName,
-  loadProfile 
+  loadProfile
 } = useProfile();
 
 onMounted(async () => {

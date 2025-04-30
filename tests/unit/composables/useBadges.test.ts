@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { OB2 } from 'openbadges-types';
+import type { OB2, Shared } from 'openbadges-types';
 import { useBadges } from '../../../src/composables/useBadges';
 import { BadgeService } from '../../../src/services/BadgeService';
 
@@ -21,7 +21,7 @@ describe('useBadges', () => {
     const assertion = BadgeService.createAssertionTemplate(BadgeService.createBadgeClassTemplate(), 'test@example.com');
     addBadge(assertion);
     expect(badges.value).toHaveLength(1);
-    expect(badges.value[0]).toStrictEqual(assertion);
+    expect(badges.value?.[0]).toStrictEqual(assertion);
     removeBadge(assertion.id as string);
     expect(badges.value).toHaveLength(0);
   });
@@ -69,8 +69,8 @@ describe('useBadges', () => {
   });
 
   it('badgesByIssuer groups correctly', () => {
-    const bc1 = BadgeService.createBadgeClassTemplate(); bc1.name = 'X'; bc1.issuer = { id: '', type: 'Profile', name: 'IssuerX' };
-    const bc2 = BadgeService.createBadgeClassTemplate(); bc2.name = 'Y'; bc2.issuer = { id: '', type: 'Profile', name: 'IssuerY' };
+    const bc1 = BadgeService.createBadgeClassTemplate(); bc1.name = 'X'; bc1.issuer = { id: 'urn:issuer:x' as Shared.IRI, type: 'Profile', name: 'IssuerX' };
+    const bc2 = BadgeService.createBadgeClassTemplate(); bc2.name = 'Y'; bc2.issuer = { id: 'urn:issuer:y' as Shared.IRI, type: 'Profile', name: 'IssuerY' };
     const b1 = BadgeService.createAssertionTemplate(bc1, '1@1.com');
     const b2 = BadgeService.createAssertionTemplate(bc2, '2@2.com');
     const { badgesByIssuer } = useBadges([b1, b2]);

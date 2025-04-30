@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
+import BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
 import type { OB2 } from 'openbadges-types';
 
 describe('BadgeDisplay.vue', () => {
@@ -41,16 +42,16 @@ describe('BadgeDisplay.vue', () => {
 
     // Check if badge name is displayed
     expect(wrapper.find('.manus-badge-title').text()).toBe('Test Badge');
-    
+
     // Check if badge description is displayed
     expect(wrapper.find('.manus-badge-description').text()).toBe('A test badge description');
-    
+
     // Check if issuer name is displayed
     expect(wrapper.find('.manus-badge-issuer').text()).toContain('Test Issuer');
-    
+
     // Check if issue date is displayed
     expect(wrapper.find('.manus-badge-date').text()).toContain('Jan 1, 2023');
-    
+
     // Check if image is displayed with correct src
     const img = wrapper.find('.manus-badge-img');
     expect(img.attributes('src')).toBe('http://example.org/badge.png');
@@ -110,7 +111,7 @@ describe('BadgeDisplay.vue', () => {
     });
 
     await wrapper.trigger('click');
-    
+
     // Check if click event was emitted with the badge
     expect(wrapper.emitted('click')).toBeTruthy();
     expect(wrapper.emitted('click')![0][0]).toEqual(mockBadge);
@@ -125,7 +126,7 @@ describe('BadgeDisplay.vue', () => {
     });
 
     await wrapper.trigger('click');
-    
+
     // Check that no click event was emitted
     expect(wrapper.emitted('click')).toBeFalsy();
   });
@@ -154,5 +155,57 @@ describe('BadgeDisplay.vue', () => {
     const badgeElement = wrapper.find('.manus-badge-display');
     expect(badgeElement.attributes('tabindex')).toBeUndefined();
     expect(badgeElement.classes()).not.toContain('is-interactive');
+  });
+
+  it('shows verification component when showVerification is true', async () => {
+    const wrapper = mount(BadgeDisplay, {
+      props: {
+        badge: mockBadge,
+        showVerification: true
+      },
+      global: {
+        stubs: {
+          BadgeVerification: true
+        }
+      }
+    });
+
+    // Initially, the toggle button should be visible but not the verification component
+    expect(wrapper.find('.manus-badge-verification-toggle').exists()).toBe(true);
+    expect(wrapper.find('.manus-badge-verification-container').exists()).toBe(false);
+
+    // Click the toggle button
+    await wrapper.find('.manus-badge-verification-toggle-button').trigger('click');
+
+    // Now the verification component should be visible
+    expect(wrapper.find('.manus-badge-verification-container').exists()).toBe(true);
+  });
+
+  it('emits verified event when verification is complete', async () => {
+    // Mock the BadgeVerification component
+    const wrapper = mount(BadgeDisplay, {
+      props: {
+        badge: mockBadge,
+        showVerification: true,
+        autoVerify: true
+      },
+      global: {
+        stubs: {
+          BadgeVerification: {
+            template: '<div class="badge-verification-stub"></div>',
+            mounted() {
+              this.$emit('verified', true);
+            }
+          }
+        }
+      }
+    });
+
+    // Toggle verification details to show the verification component
+    await wrapper.find('.manus-badge-verification-toggle-button').trigger('click');
+
+    // Check if the verified event was emitted
+    expect(wrapper.emitted('verified')).toBeTruthy();
+    expect(wrapper.emitted('verified')![0]).toEqual([true]);
   });
 });
