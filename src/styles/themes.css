@@ -1,4 +1,3 @@
-
 /**
  * Rollercoaster.dev Open Badges Component Library - Theme Variables
  *
@@ -50,7 +49,7 @@
   --ob-border-color: var(--ob-gray-200);
   --ob-border-color-focus: var(--ob-primary);
 
-  /* Spacing */
+  /* Spacing - Ensure consistent usage */
   --ob-space-1: 0.25rem;
   --ob-space-2: 0.5rem;
   --ob-space-3: 0.75rem;
@@ -63,7 +62,7 @@
   --ob-space-16: 4rem;
 
   /* Typography */
-  --ob-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ob-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Keep system default for broad compatibility */
   --ob-font-size-xs: 0.75rem;
   --ob-font-size-sm: 0.875rem;
   --ob-font-size-md: 1rem;
@@ -74,24 +73,24 @@
   --ob-font-weight-medium: 500;
   --ob-font-weight-semibold: 600;
   --ob-font-weight-bold: 700;
-  --ob-line-height-tight: 1.25;
-  --ob-line-height-normal: 1.5;
-  --ob-line-height-relaxed: 1.75;
+  --ob-line-height-tight: 1.3;
+  --ob-line-height-normal: 1.6;
+  --ob-line-height-relaxed: 1.8;
 
   /* Borders */
   --ob-border-width: 1px;
-  --ob-border-radius-sm: 0.125rem;
-  --ob-border-radius-md: 0.25rem;
-  --ob-border-radius-lg: 0.5rem;
-  --ob-border-radius-xl: 0.75rem;
+  --ob-border-radius-sm: 0.25rem;
+  --ob-border-radius-md: 0.375rem;
+  --ob-border-radius-lg: 0.75rem;
+  --ob-border-radius-xl: 1rem; /* 16px */
 
-  /* Shadows */
-  --ob-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --ob-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --ob-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --ob-shadow-focus: 0 0 0 3px rgba(49, 130, 206, 0.3);
+  /* Shadows - Refined for subtlety */
+  --ob-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --ob-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  --ob-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --ob-shadow-focus: 0 0 0 3px rgba(49, 130, 206, 0.4);
 
-  /* Transitions */
+  /* Transitions - Ensure consistent usage */
   --ob-transition-fast: 150ms;
   --ob-transition-normal: 300ms;
   --ob-transition-slow: 500ms;
@@ -104,7 +103,7 @@
 
   /* Component-specific variables */
 
-  /* Badge Display */
+  /* Badge Display - Apply updated radius/shadow */
   --ob-badge-border-color: var(--ob-border-color);
   --ob-badge-border-radius: var(--ob-border-radius-lg);
   --ob-badge-padding: var(--ob-space-4);
@@ -115,7 +114,7 @@
   --ob-badge-hover-shadow: var(--ob-shadow-md);
   --ob-badge-focus-outline-color: var(--ob-primary);
 
-  /* Badge List */
+  /* Badge List - Apply updated radius */
   --ob-badge-list-gap: var(--ob-space-4);
   --ob-badge-list-empty-color: var(--ob-text-secondary);
   --ob-badge-list-pagination-gap: var(--ob-space-2);
@@ -125,7 +124,7 @@
   --ob-badge-list-button-disabled-bg: var(--ob-gray-100);
   --ob-badge-list-button-disabled-color: var(--ob-text-disabled);
 
-  /* Profile Viewer */
+  /* Profile Viewer - Apply updated radius/shadow */
   --ob-profile-padding: var(--ob-space-6);
   --ob-profile-gap: var(--ob-space-8);
   --ob-profile-border-color: var(--ob-border-color);
@@ -135,7 +134,7 @@
   --ob-profile-text-color: var(--ob-text-secondary);
   --ob-profile-link-color: var(--ob-primary);
 
-  /* Badge Issuer Form */
+  /* Badge Issuer Form - Apply updated radius */
   --ob-form-border-color: var(--ob-border-color);
   --ob-form-background: var(--ob-bg-primary);
   --ob-form-text-color: var(--ob-text-primary);
@@ -152,7 +151,7 @@
   --ob-form-button-disabled-bg: var(--ob-bg-disabled);
   --ob-form-button-disabled-color: var(--ob-text-disabled);
 
-  /* Issuer Dashboard */
+  /* Issuer Dashboard - Apply updated radius */
   --ob-dashboard-border-color: var(--ob-border-color);
   --ob-dashboard-background: var(--ob-bg-primary);
   --ob-dashboard-text-color: var(--ob-text-primary);
@@ -306,11 +305,11 @@
   --ob-line-height-relaxed: 1.9;
   --ob-space-between-paragraphs: 1.5em;
   --ob-letter-spacing: 0.05em;
-  --ob-font-weight-normal: 500; /* Slightly bolder for better readability */
+  --ob-font-weight-normal: 500;
 
   /* Colors for reduced visual stress */
-  --ob-bg-primary: #f8f8f8; /* Light cream background reduces visual stress */
-  --ob-text-primary: #333333; /* Dark but not pure black text */
+  --ob-bg-primary: #f8f8f8;
+  --ob-text-primary: #333333;
   --ob-badge-background: #f8f8f8;
   --ob-form-background: #f8f8f8;
   --ob-dashboard-background: #f8f8f8;
@@ -328,10 +327,10 @@
   --ob-paragraph-spacing: 1.5em;
 }
 
-/* ADHD-friendly Theme - Focused on reducing distractions and clear hierarchy */
-.ob-adhd-friendly-theme {
+/* Low Info Theme - Focused on reducing distractions and clear hierarchy */
+.ob-low-info-theme {
   /* Typography for clarity */
-  --ob-font-family: "Arial", "Helvetica", sans-serif;
+  --ob-font-family: "Atkinson Hyperlegible", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Prioritize accessible font */
   --ob-font-size-md: 1rem;
   --ob-line-height-normal: 1.6;
   --ob-font-weight-normal: 400;
