@@ -294,43 +294,135 @@
   --ob-space-between-paragraphs: 1.5em;
 }
 
-/* Dyslexia-friendly Theme - Enhanced for better readability */
+/* Dyslexia-friendly Theme - Enhanced for better readability based on research */
 .ob-dyslexia-friendly-theme {
-  /* Typography improvements */
-  --ob-font-family: "Open Sans", "Verdana", "Arial", sans-serif;
-  --ob-font-size-md: 1.125rem;
-  --ob-font-size-lg: 1.25rem;
-  --ob-font-size-xl: 1.5rem;
-  --ob-line-height-normal: 1.7;
-  --ob-line-height-relaxed: 1.9;
-  --ob-space-between-paragraphs: 1.5em;
-  --ob-letter-spacing: 0.05em;
-  --ob-font-weight-normal: 500;
+  /* Typography improvements - based on British Dyslexia Association guidelines */
+  --ob-font-family: var(--ob-font-opendyslexic);
+  --ob-font-size-xs: 0.875rem; /* Minimum 14px */
+  --ob-font-size-sm: 1rem;     /* 16px */
+  --ob-font-size-md: 1.125rem;  /* 18px */
+  --ob-font-size-lg: 1.25rem;   /* 20px */
+  --ob-font-size-xl: 1.5rem;    /* 24px */
+  --ob-font-size-2xl: 1.75rem;  /* 28px */
+  --ob-line-height-tight: 1.5;   /* Minimum 1.5 */
+  --ob-line-height-normal: 1.7;  /* Recommended for body text */
+  --ob-line-height-relaxed: 1.9; /* For longer text blocks */
+  --ob-letter-spacing: 0.05em;   /* Slightly increased letter spacing */
+  --ob-word-spacing: 0.1em;      /* Increased word spacing */
+  --ob-font-weight-normal: 400;  /* Regular weight for better readability */
+  --ob-font-weight-medium: 500;  /* Medium weight for emphasis */
+  --ob-font-weight-bold: 700;    /* Bold for headings */
 
-  /* Colors for reduced visual stress */
-  --ob-bg-primary: #f8f8f8;
-  --ob-text-primary: #333333;
-  --ob-badge-background: #f8f8f8;
-  --ob-form-background: #f8f8f8;
-  --ob-dashboard-background: #f8f8f8;
+  /* Colors for reduced visual stress - cream background with dark text */
+  --ob-bg-primary: #f8f5e4;      /* Light cream background - reduces visual stress */
+  --ob-bg-secondary: #f0edd8;    /* Slightly darker cream for contrast */
+  --ob-text-primary: #333333;    /* Dark gray text - not pure black */
+  --ob-text-secondary: #555555;  /* Medium gray for secondary text */
+
+  /* Component backgrounds */
+  --ob-badge-background: var(--ob-bg-primary);
+  --ob-form-background: var(--ob-bg-primary);
+  --ob-dashboard-background: var(--ob-bg-primary);
 
   /* Increased spacing for better readability */
   --ob-space-4: 1.25rem;
   --ob-space-6: 1.75rem;
   --ob-space-8: 2.25rem;
+  --ob-space-between-paragraphs: 1.5em;
+  --ob-paragraph-spacing: 1.5em;
 
   /* Stronger focus indicators */
   --ob-border-color-focus: #0066cc;
   --ob-shadow-focus: 0 0 0 4px rgba(0, 102, 204, 0.4);
 
-  /* Paragraph spacing */
-  --ob-paragraph-spacing: 1.5em;
+  /* Borders and structure - clear visual boundaries */
+  --ob-border-width: 2px;        /* Thicker borders for clearer boundaries */
+  --ob-border-color: #c8c3a9;    /* Muted border color */
+  --ob-border-radius-md: 6px;    /* Slightly rounded corners */
+  --ob-border-radius-lg: 8px;    /* Rounded corners for larger elements */
+
+  /* Accent colors - muted to reduce visual stress */
+  --ob-primary: #1b70b6;         /* Muted blue - less harsh than standard blue */
+  --ob-primary-dark: #155a92;    /* Darker blue for hover states */
+  --ob-primary-light: #5a9bd5;   /* Lighter blue for backgrounds */
+  --ob-success: #2e8b57;         /* Muted green */
+  --ob-error: #b54942;           /* Muted red */
+  --ob-warning: #b5913a;         /* Muted amber */
+
+  /* Reduced shadows to minimize visual noise */
+  --ob-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --ob-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --ob-shadow-lg: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Low Vision Theme - Using Atkinson Hyperlegible for maximum legibility */
+.ob-low-vision-theme {
+  /* Typography for clarity - using Atkinson Hyperlegible font */
+  --ob-font-family: var(--ob-font-atkinson);
+  --ob-font-size-xs: 1rem;      /* 16px minimum */
+  --ob-font-size-sm: 1.125rem;  /* 18px */
+  --ob-font-size-md: 1.25rem;   /* 20px */
+  --ob-font-size-lg: 1.5rem;    /* 24px */
+  --ob-font-size-xl: 1.75rem;   /* 28px */
+  --ob-font-size-2xl: 2rem;     /* 32px */
+  --ob-line-height-tight: 1.5;   /* Minimum 1.5 */
+  --ob-line-height-normal: 1.7;  /* Recommended for body text */
+  --ob-line-height-relaxed: 1.9; /* For longer text blocks */
+  --ob-letter-spacing: 0.01em;   /* Slightly increased letter spacing */
+  --ob-word-spacing: 0.05em;     /* Increased word spacing */
+  --ob-font-weight-normal: 400;  /* Regular weight for better readability */
+  --ob-font-weight-medium: 600;  /* Medium weight for emphasis */
+  --ob-font-weight-bold: 700;    /* Bold for headings */
+
+  /* High contrast colors for better visibility */
+  --ob-primary: #0066cc;         /* Strong blue */
+  --ob-primary-dark: #004d99;    /* Darker blue for hover states */
+  --ob-primary-light: #4d94ff;   /* Lighter blue for backgrounds */
+  --ob-bg-primary: #ffffff;      /* Pure white background */
+  --ob-bg-secondary: #f0f0f0;    /* Light gray for secondary backgrounds */
+  --ob-text-primary: #222222;    /* Near black for text - not pure black */
+  --ob-text-secondary: #444444;  /* Dark gray for secondary text */
+
+  /* Reduced color palette to minimize distractions */
+  --ob-secondary: #666666;       /* Medium gray */
+  --ob-secondary-dark: #444444;  /* Darker gray */
+  --ob-secondary-light: #888888; /* Lighter gray */
+  --ob-success: #008000;         /* Clear green */
+  --ob-error: #cc0000;           /* Clear red */
+  --ob-warning: #cc6600;         /* Clear orange */
+
+  /* Clear visual hierarchy with strong borders */
+  --ob-border-width: 2px;        /* Thicker borders for clearer boundaries */
+  --ob-border-color: #999999;    /* Medium gray border */
+  --ob-border-radius-md: 6px;    /* Slightly rounded corners */
+  --ob-border-radius-lg: 8px;    /* Rounded corners for larger elements */
+
+  /* Strong focus indicators */
+  --ob-border-color-focus: #0066cc;
+  --ob-shadow-focus: 0 0 0 4px rgba(0, 102, 204, 0.5);
+
+  /* Reduced shadows to minimize visual noise */
+  --ob-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --ob-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --ob-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* Component-specific overrides */
+  --ob-badge-border-color: #999999;
+  --ob-badge-border-width: 2px;
+  --ob-badge-title-color: #222222;
+  --ob-badge-text-color: #444444;
+
+  /* Form elements with clear focus states */
+  --ob-form-input-border: #999999;
+  --ob-form-input-focus: #0066cc;
+  --ob-form-button-primary-bg: #0066cc;
+  --ob-form-button-primary-color: #ffffff;
 }
 
 /* Low Info Theme - Focused on reducing distractions and clear hierarchy */
 .ob-low-info-theme {
   /* Typography for clarity */
-  --ob-font-family: "Atkinson Hyperlegible", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Prioritize accessible font */
+  --ob-font-family: var(--ob-font-atkinson);
   --ob-font-size-md: 1rem;
   --ob-line-height-normal: 1.6;
   --ob-font-weight-normal: 400;

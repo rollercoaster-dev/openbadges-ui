@@ -5,6 +5,9 @@
  * This file provides additional CSS to enhance accessibility across components.
  */
 
+/* Import font definitions */
+@import './fonts.css';
+
 /* Visually hidden content (for screen readers) */
 .ob-visually-hidden {
   position: absolute;
@@ -254,4 +257,52 @@ textarea:focus-visible,
 .ob-number-highlight {
   font-weight: bold;
   color: var(--ob-primary);
+}
+
+/* Font Family Utility Classes */
+.ob-font-dyslexic {
+  font-family: var(--ob-font-opendyslexic);
+  letter-spacing: var(--ob-letter-spacing, 0.05em);
+  word-spacing: var(--ob-word-spacing, 0.1em);
+}
+
+.ob-font-accessible {
+  font-family: var(--ob-font-atkinson);
+}
+
+.ob-font-readable {
+  font-family: var(--ob-font-lexend);
+  letter-spacing: 0.01em;
+}
+
+.ob-font-standard {
+  font-family: var(--ob-font-inter);
+}
+
+/* Text Spacing Adjustments for Cognitive Accessibility */
+.ob-text-spacing-enhanced {
+  line-height: var(--ob-line-height-relaxed, 1.8);
+  letter-spacing: var(--ob-letter-spacing, 0.05em);
+  word-spacing: var(--ob-word-spacing, 0.1em);
+}
+
+/* Font Size Adjustments */
+.ob-text-size-base {
+  font-size: var(--ob-font-size-md, 1rem);
+}
+
+.ob-text-size-large {
+  font-size: var(--ob-font-size-lg, 1.25rem);
+}
+
+.ob-text-size-xl {
+  font-size: var(--ob-font-size-xl, 1.5rem);
+}
+
+/* Ensure sufficient touch target size for mobile */
+@media (pointer: coarse) {
+  .ob-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

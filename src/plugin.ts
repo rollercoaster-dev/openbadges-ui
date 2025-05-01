@@ -11,6 +11,11 @@ import BadgeVerification from './components/badges/BadgeVerification.vue';
 import BadgeIssuerForm from './components/issuing/BadgeIssuerForm.vue';
 import IssuerDashboard from './components/issuing/IssuerDashboard.vue';
 
+// Import accessibility components
+import FontSelector from './components/accessibility/FontSelector.vue';
+import ThemeSelector from './components/accessibility/ThemeSelector.vue';
+import AccessibilitySettings from './components/accessibility/AccessibilitySettings.vue';
+
 export default {
   install: (app: App, options = {}): void => {
     // Configure PrimeVue in unstyled mode
@@ -26,5 +31,10 @@ export default {
     app.component('BadgeVerification', BadgeVerification);
     app.component('BadgeIssuerForm', BadgeIssuerForm);
     app.component('IssuerDashboard', IssuerDashboard);
+
+    // Register accessibility components
+    app.component('FontSelector', FontSelector);
+    app.component('ThemeSelector', ThemeSelector);
+    app.component('AccessibilitySettings', AccessibilitySettings);
   }
 };
