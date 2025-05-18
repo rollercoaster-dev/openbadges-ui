@@ -5,6 +5,8 @@
 export * from 'openbadges-types';
 
 // Utility types for the library
+export type ProfileType = 'Issuer' | 'Recipient';
+
 export interface Profile {
   id: string;
   name: string;
@@ -12,5 +14,5 @@ export interface Profile {
   description?: string;
   url?: string;
   email?: string;
-  type: 'Issuer' | 'Recipient';
+  type: ProfileType;
 }

@@ -1,6 +1,5 @@
 // src/composables/useBadgeVerification.ts
 import { ref, computed } from 'vue';
-import type { ComputedRef } from 'vue';
 import type { OB2, OB3 } from 'openbadges-types';
 import { BadgeVerificationService, type VerificationResult } from '../services/BadgeVerificationService';
 

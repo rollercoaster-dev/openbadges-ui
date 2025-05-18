@@ -8,6 +8,9 @@ import ProfileViewer from '../../src/components/badges/ProfileViewer.vue';
 import BadgeVerification from '../../src/components/badges/BadgeVerification.vue';
 import BadgeIssuerForm from '../../src/components/issuing/BadgeIssuerForm.vue';
 import IssuerDashboard from '../../src/components/issuing/IssuerDashboard.vue';
+import FontSelector from '../../src/components/accessibility/FontSelector.vue';
+import ThemeSelector from '../../src/components/accessibility/ThemeSelector.vue';
+import AccessibilitySettings from '../../src/components/accessibility/AccessibilitySettings.vue';
 
 // Mock PrimeVue
 vi.mock('primevue/config', () => ({
@@ -37,6 +40,9 @@ describe('OpenBadgesUIPlugin', () => {
     expect(componentSpy).toHaveBeenCalledWith('BadgeVerification', BadgeVerification);
     expect(componentSpy).toHaveBeenCalledWith('BadgeIssuerForm', BadgeIssuerForm);
     expect(componentSpy).toHaveBeenCalledWith('IssuerDashboard', IssuerDashboard);
+    expect(componentSpy).toHaveBeenCalledWith('FontSelector', FontSelector);
+    expect(componentSpy).toHaveBeenCalledWith('ThemeSelector', ThemeSelector);
+    expect(componentSpy).toHaveBeenCalledWith('AccessibilitySettings', AccessibilitySettings);
   });
 
 
@@ -52,7 +58,10 @@ describe('OpenBadgesUIPlugin', () => {
       'ProfileViewer',
       'BadgeVerification',
       'BadgeIssuerForm',
-      'IssuerDashboard'
+      'IssuerDashboard',
+      'FontSelector',
+      'ThemeSelector',
+      'AccessibilitySettings'
     ];
 
     expectedComponents.forEach(componentName => {

@@ -1,5 +1,5 @@
 // src/services/BadgeVerificationService.ts
-import type { OB2, OB3, Shared } from 'openbadges-types';
+import type { OB2, OB3 } from 'openbadges-types';
 import { validateBadge } from 'openbadges-types';
 import { isOB2Assertion, isOB3VerifiableCredential } from './BadgeService';
 

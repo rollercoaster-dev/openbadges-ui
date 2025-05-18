@@ -47,7 +47,7 @@ This file tracks the development tasks for the `openbadges-ui` library. Tasks ar
     - Added utility classes for typography and spacing
     - Ensured consistent visual design across all components
 
-- [ ] **Add Support for Badge Backpacks**
+- [x] **Add Support for Badge Backpacks**
     - Implement functionality for importing badges from standard badge backpacks
     - Implement functionality for exporting badges to standard badge backpacks
 
