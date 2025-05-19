@@ -1,0 +1,404 @@
+{
+  "stories": [
+    {
+      "id": "src-components-accessibility-accessibilityguide-story-vue",
+      "title": "Accessibility",
+      "layout": {
+        "type": "single",
+        "iframe": true,
+        "iframeHeight": 800
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-accessibility-accessibilityguide-story-vue-0",
+          "title": "Introduction"
+        },
+        {
+          "id": "src-components-accessibility-accessibilityguide-story-vue-1",
+          "title": "Accessible Fonts"
+        },
+        {
+          "id": "src-components-accessibility-accessibilityguide-story-vue-2",
+          "title": "Accessible Themes"
+        },
+        {
+          "id": "src-components-accessibility-accessibilityguide-story-vue-3",
+          "title": "Accessibility Settings"
+        },
+        {
+          "id": "src-components-accessibility-accessibilityguide-story-vue-4",
+          "title": "Best Practices"
+        }
+      ],
+      "relativePath": "src/components/accessibility/AccessibilityGuide.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Guides",
+        "Accessibility"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-accessibility-accessibilitysettings-story-vue",
+      "title": "AccessibilitySettings",
+      "layout": {
+        "type": "single",
+        "iframe": true,
+        "iframeHeight": 600
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-accessibility-accessibilitysettings-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-accessibility-accessibilitysettings-story-vue-1",
+          "title": "Without Motion Reduction"
+        },
+        {
+          "id": "src-components-accessibility-accessibilitysettings-story-vue-2",
+          "title": "Without Focus Mode"
+        },
+        {
+          "id": "src-components-accessibility-accessibilitysettings-story-vue-3",
+          "title": "Custom Title"
+        }
+      ],
+      "relativePath": "src/components/accessibility/AccessibilitySettings.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Accessibility",
+        "AccessibilitySettings"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-accessibility-fontselector-story-vue",
+      "title": "FontSelector",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-accessibility-fontselector-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-accessibility-fontselector-story-vue-1",
+          "title": "Without Font Size Controls"
+        },
+        {
+          "id": "src-components-accessibility-fontselector-story-vue-2",
+          "title": "Without Text Spacing Controls"
+        },
+        {
+          "id": "src-components-accessibility-fontselector-story-vue-3",
+          "title": "Limited Font Options"
+        }
+      ],
+      "relativePath": "src/components/accessibility/FontSelector.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Accessibility",
+        "FontSelector"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-accessibility-themeselector-story-vue",
+      "title": "ThemeSelector",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-accessibility-themeselector-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-accessibility-themeselector-story-vue-1",
+          "title": "With Custom Themes"
+        },
+        {
+          "id": "src-components-accessibility-themeselector-story-vue-2",
+          "title": "With Custom Label"
+        }
+      ],
+      "relativePath": "src/components/accessibility/ThemeSelector.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Accessibility",
+        "ThemeSelector"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-badges-badgedisplay-story-vue",
+      "title": "BadgeDisplay",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-badges-badgedisplay-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-badges-badgedisplay-story-vue-1",
+          "title": "Interactive"
+        },
+        {
+          "id": "src-components-badges-badgedisplay-story-vue-2",
+          "title": "Without Description"
+        },
+        {
+          "id": "src-components-badges-badgedisplay-story-vue-3",
+          "title": "With Expiry Date"
+        },
+        {
+          "id": "src-components-badges-badgedisplay-story-vue-4",
+          "title": "OB3 Format"
+        }
+      ],
+      "relativePath": "src/components/badges/BadgeDisplay.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Badges",
+        "BadgeDisplay"
+      ],
+      "virtual": false,
+      "markdownFile": {
+        "id": "src-components-badges-badgedisplay-story-md",
+        "relativePath": "src/components/badges/BadgeDisplay.story.md",
+        "isRelatedToStory": true,
+        "frontmatter": {}
+      }
+    },
+    {
+      "id": "src-components-badges-badgelist-story-vue",
+      "title": "BadgeList",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-badges-badgelist-story-vue-0",
+          "title": "Grid Layout"
+        },
+        {
+          "id": "src-components-badges-badgelist-story-vue-1",
+          "title": "List Layout"
+        },
+        {
+          "id": "src-components-badges-badgelist-story-vue-2",
+          "title": "With Pagination"
+        },
+        {
+          "id": "src-components-badges-badgelist-story-vue-3",
+          "title": "Loading"
+        },
+        {
+          "id": "src-components-badges-badgelist-story-vue-4",
+          "title": "Empty"
+        },
+        {
+          "id": "src-components-badges-badgelist-story-vue-5",
+          "title": "Grid Layout with Neurodiversity Controls"
+        }
+      ],
+      "relativePath": "src/components/badges/BadgeList.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Badges",
+        "BadgeList"
+      ],
+      "virtual": false,
+      "markdownFile": {
+        "id": "src-components-badges-badgelist-story-md",
+        "relativePath": "src/components/badges/BadgeList.story.md",
+        "isRelatedToStory": true,
+        "frontmatter": {}
+      }
+    },
+    {
+      "id": "src-components-badges-badgeverification-story-vue",
+      "title": "BadgeVerification",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-badges-badgeverification-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-badges-badgeverification-story-vue-1",
+          "title": "Expired Badge"
+        },
+        {
+          "id": "src-components-badges-badgeverification-story-vue-2",
+          "title": "Revoked Badge"
+        },
+        {
+          "id": "src-components-badges-badgeverification-story-vue-3",
+          "title": "OB3 Badge"
+        }
+      ],
+      "relativePath": "src/components/badges/BadgeVerification.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Badges",
+        "BadgeVerification"
+      ],
+      "virtual": false,
+      "markdownFile": {
+        "id": "src-components-badges-badgeverification-story-md",
+        "relativePath": "src/components/badges/BadgeVerification.story.md",
+        "isRelatedToStory": true,
+        "frontmatter": {}
+      }
+    },
+    {
+      "id": "src-components-badges-profileviewer-story-vue",
+      "title": "ProfileViewer",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-badges-profileviewer-story-vue-0",
+          "title": "Recipient Profile"
+        },
+        {
+          "id": "src-components-badges-profileviewer-story-vue-1",
+          "title": "Issuer Profile"
+        },
+        {
+          "id": "src-components-badges-profileviewer-story-vue-2",
+          "title": "With List Layout"
+        },
+        {
+          "id": "src-components-badges-profileviewer-story-vue-3",
+          "title": "With Pagination"
+        },
+        {
+          "id": "src-components-badges-profileviewer-story-vue-4",
+          "title": "Loading"
+        }
+      ],
+      "relativePath": "src/components/badges/ProfileViewer.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Badges",
+        "ProfileViewer"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-issuing-badgeissuerform-story-vue",
+      "title": "BadgeIssuerForm",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-issuing-badgeissuerform-story-vue-0",
+          "title": "Empty"
+        },
+        {
+          "id": "src-components-issuing-badgeissuerform-story-vue-1",
+          "title": "Prefilled"
+        },
+        {
+          "id": "src-components-issuing-badgeissuerform-story-vue-2",
+          "title": "With Validation Errors"
+        }
+      ],
+      "relativePath": "src/components/issuing/BadgeIssuerForm.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Issuing",
+        "BadgeIssuerForm"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    },
+    {
+      "id": "src-components-issuing-issuerdashboard-story-vue",
+      "title": "IssuerDashboard",
+      "layout": {
+        "type": "single",
+        "iframe": true
+      },
+      "docsOnly": false,
+      "variants": [
+        {
+          "id": "src-components-issuing-issuerdashboard-story-vue-0",
+          "title": "Default"
+        },
+        {
+          "id": "src-components-issuing-issuerdashboard-story-vue-1",
+          "title": "Empty Badges"
+        }
+      ],
+      "relativePath": "src/components/issuing/IssuerDashboard.story.vue",
+      "supportPluginId": "vue3",
+      "treePath": [
+        "Components",
+        "Issuing",
+        "IssuerDashboard"
+      ],
+      "virtual": false,
+      "markdownFile": null
+    }
+  ],
+  "markdownFiles": [
+    {
+      "id": "src-components-badges-badgedisplay-story-md",
+      "relativePath": "src/components/badges/BadgeDisplay.story.md",
+      "isRelatedToStory": true,
+      "frontmatter": {}
+    },
+    {
+      "id": "src-components-badges-badgelist-story-md",
+      "relativePath": "src/components/badges/BadgeList.story.md",
+      "isRelatedToStory": true,
+      "frontmatter": {}
+    },
+    {
+      "id": "src-components-badges-badgeverification-story-md",
+      "relativePath": "src/components/badges/BadgeVerification.story.md",
+      "isRelatedToStory": true,
+      "frontmatter": {}
+    }
+  ]
+}
