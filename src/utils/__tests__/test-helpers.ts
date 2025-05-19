@@ -1,6 +1,6 @@
 // src/utils/__tests__/test-helpers.ts
 
-import { OB2, OB3 } from '@/types';
+import type { OB2, OB3 } from '@/types';
 import { createIRI, createDateTime } from '@/utils/type-helpers';
 import { vi } from 'vitest';
 

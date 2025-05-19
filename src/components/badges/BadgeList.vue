@@ -82,20 +82,44 @@ const handlePageChange = (page: number) => {
 </script>
 
 <template>
-  <div class="manus-badge-list" :class="{ 'grid-layout': layout === 'grid' }">
-    <div v-if="loading" class="manus-badge-list-loading" role="status" aria-live="polite">
+  <div
+    class="manus-badge-list"
+    :class="{ 'grid-layout': layout === 'grid' }"
+  >
+    <div
+      v-if="loading"
+      class="manus-badge-list-loading"
+      role="status"
+      aria-live="polite"
+    >
       <span>Loading badges...</span>
     </div>
 
-    <div v-else-if="normalizedBadges.length === 0" class="manus-badge-list-empty" role="status">
+    <div
+      v-else-if="normalizedBadges.length === 0"
+      class="manus-badge-list-empty"
+      role="status"
+    >
       <slot name="empty">
         <p>No badges found.</p>
       </slot>
     </div>
 
-    <ul v-else class="manus-badge-list-items" :aria-label="ariaLabel">
-      <li v-for="badge in normalizedBadges" :key="badge.id" class="manus-badge-list-item">
-        <slot name="badge" :badge="badge.original" :normalized="badge">
+    <ul
+      v-else
+      class="manus-badge-list-items"
+      :aria-label="ariaLabel"
+    >
+      <li
+        v-for="badge in normalizedBadges"
+        :key="badge.id"
+        class="manus-badge-list-item"
+      >
+        <slot
+          name="badge"
+          :badge="badge.original"
+          :normalized="badge"
+        >
           <BadgeDisplay
             :badge="badge.original"
             :interactive="interactive"
@@ -105,7 +129,10 @@ const handlePageChange = (page: number) => {
       </li>
     </ul>
 
-    <div v-if="showPagination && totalPages > 1" class="manus-badge-list-pagination">
+    <div
+      v-if="showPagination && totalPages > 1"
+      class="manus-badge-list-pagination"
+    >
       <button
         class="manus-pagination-button"
         :disabled="currentPage === 1"

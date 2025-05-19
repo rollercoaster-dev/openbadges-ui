@@ -1,5 +1,5 @@
 // src/utils/badge-guards.ts
-import { OB2, Shared } from '@/types';
+import type { OB2, Shared } from '@/types';
 import { createIRI, createDateTime } from '@/utils/type-helpers';
 
 // Helper function to create type-safe OB3 ImageObject

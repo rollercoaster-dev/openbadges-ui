@@ -1,5 +1,5 @@
 // tests/test-utils.ts
-import { OB2, OB3, Shared } from '@/types';
+import type { OB2, OB3, Shared } from '@/types';
 import { createIRI, createDateTime } from '@/utils/type-helpers';
 
 /**
@@ -22,21 +22,21 @@ export function asDateTime(date: string): Shared.DateTime {
  */
 export function typedAssertion(assertion: Record<string, any>): OB2.Assertion {
   // Process the basic fields
-  if (typeof assertion.id === 'string') assertion.id = asIRI(assertion.id);
-  if (typeof assertion.issuedOn === 'string') assertion.issuedOn = asDateTime(assertion.issuedOn);
-  if (typeof assertion.expires === 'string') assertion.expires = asDateTime(assertion.expires);
+  if (typeof assertion.id === 'string') {assertion.id = asIRI(assertion.id);}
+  if (typeof assertion.issuedOn === 'string') {assertion.issuedOn = asDateTime(assertion.issuedOn);}
+  if (typeof assertion.expires === 'string') {assertion.expires = asDateTime(assertion.expires);}
 
   // Process badge field
   if (typeof assertion.badge === 'object') {
     const badge = assertion.badge;
-    if (typeof badge.id === 'string') badge.id = asIRI(badge.id);
-    if (typeof badge.image === 'string') badge.image = asIRI(badge.image);
+    if (typeof badge.id === 'string') {badge.id = asIRI(badge.id);}
+    if (typeof badge.image === 'string') {badge.image = asIRI(badge.image);}
 
     // Process issuer inside badge
     if (typeof badge.issuer === 'object') {
       const issuer = badge.issuer;
-      if (typeof issuer.id === 'string') issuer.id = asIRI(issuer.id);
-      if (typeof issuer.url === 'string') issuer.url = asIRI(issuer.url);
+      if (typeof issuer.id === 'string') {issuer.id = asIRI(issuer.id);}
+      if (typeof issuer.url === 'string') {issuer.url = asIRI(issuer.url);}
     }
   }
 
@@ -48,7 +48,7 @@ export function typedAssertion(assertion: Record<string, any>): OB2.Assertion {
  */
 export function typedCredential(credential: Record<string, any>): OB3.VerifiableCredential {
   // Process the basic fields
-  if (typeof credential.id === 'string') credential.id = asIRI(credential.id);
+  if (typeof credential.id === 'string') {credential.id = asIRI(credential.id);}
   if (typeof credential.issuanceDate === 'string') {
     credential.issuanceDate = asDateTime(credential.issuanceDate);
   }
@@ -59,24 +59,24 @@ export function typedCredential(credential: Record<string, any>): OB3.Verifiable
   // Process issuer field
   if (typeof credential.issuer === 'object') {
     const issuer = credential.issuer;
-    if (typeof issuer.id === 'string') issuer.id = asIRI(issuer.id);
-    if (typeof issuer.url === 'string') issuer.url = asIRI(issuer.url);
+    if (typeof issuer.id === 'string') {issuer.id = asIRI(issuer.id);}
+    if (typeof issuer.url === 'string') {issuer.url = asIRI(issuer.url);}
   }
 
   // Process credentialSubject field
   if (typeof credential.credentialSubject === 'object') {
     const subject = credential.credentialSubject;
-    if (typeof subject.id === 'string') subject.id = asIRI(subject.id);
+    if (typeof subject.id === 'string') {subject.id = asIRI(subject.id);}
 
     // Process achievement inside credentialSubject
     if (typeof subject.achievement === 'object' && !Array.isArray(subject.achievement)) {
       const achievement = subject.achievement;
-      if (typeof achievement.id === 'string') achievement.id = asIRI(achievement.id);
+      if (typeof achievement.id === 'string') {achievement.id = asIRI(achievement.id);}
 
       // Process image inside achievement
       if (typeof achievement.image === 'object') {
         const image = achievement.image;
-        if (typeof image.id === 'string') image.id = asIRI(image.id);
+        if (typeof image.id === 'string') {image.id = asIRI(image.id);}
       } else if (typeof achievement.image === 'string') {
         achievement.image = asIRI(achievement.image);
       }

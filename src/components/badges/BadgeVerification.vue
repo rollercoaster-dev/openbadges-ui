@@ -74,18 +74,34 @@ if (props.autoVerify) {
       'is-revoked': revocationStatus === 'revoked',
     }"
   >
-    <div v-if="showStatus" class="ob-badge-verification-status">
-      <div v-if="isVerifying" class="ob-badge-verification-loading" role="status">
+    <div
+      v-if="showStatus"
+      class="ob-badge-verification-status"
+    >
+      <div
+        v-if="isVerifying"
+        class="ob-badge-verification-loading"
+        role="status"
+      >
         <span class="ob-visually-hidden">Verifying badge...</span>
         <div class="ob-badge-verification-spinner" />
       </div>
 
-      <div v-else-if="hasBeenVerified" class="ob-badge-verification-result">
-        <div v-if="isValid" class="ob-badge-verification-valid">
+      <div
+        v-else-if="hasBeenVerified"
+        class="ob-badge-verification-result"
+      >
+        <div
+          v-if="isValid"
+          class="ob-badge-verification-valid"
+        >
           <span class="ob-badge-verification-icon">✓</span>
           <span>Verified</span>
         </div>
-        <div v-else class="ob-badge-verification-invalid">
+        <div
+          v-else
+          class="ob-badge-verification-invalid"
+        >
           <span class="ob-badge-verification-icon">✗</span>
           <span>Invalid</span>
         </div>
@@ -101,15 +117,24 @@ if (props.autoVerify) {
       </button>
     </div>
 
-    <div v-if="showDetails && hasBeenVerified" class="ob-badge-verification-details">
-      <div v-if="verificationMethod" class="ob-badge-verification-method">
+    <div
+      v-if="showDetails && hasBeenVerified"
+      class="ob-badge-verification-details"
+    >
+      <div
+        v-if="verificationMethod"
+        class="ob-badge-verification-method"
+      >
         <span class="ob-badge-verification-label">Verification Method:</span>
         <span class="ob-badge-verification-value">{{
           formatVerificationMethod(verificationMethod)
         }}</span>
       </div>
 
-      <div v-if="expirationStatus !== 'not-applicable'" class="ob-badge-verification-expiration">
+      <div
+        v-if="expirationStatus !== 'not-applicable'"
+        class="ob-badge-verification-expiration"
+      >
         <span class="ob-badge-verification-label">Expiration Status:</span>
         <span
           class="ob-badge-verification-value"
@@ -119,7 +144,10 @@ if (props.autoVerify) {
         </span>
       </div>
 
-      <div v-if="revocationStatus !== 'unknown'" class="ob-badge-verification-revocation">
+      <div
+        v-if="revocationStatus !== 'unknown'"
+        class="ob-badge-verification-revocation"
+      >
         <span class="ob-badge-verification-label">Revocation Status:</span>
         <span
           class="ob-badge-verification-value"
@@ -129,25 +157,44 @@ if (props.autoVerify) {
         </span>
       </div>
 
-      <div v-if="errors.length > 0" class="ob-badge-verification-errors">
-        <h4 class="ob-badge-verification-section-title">Errors:</h4>
+      <div
+        v-if="errors.length > 0"
+        class="ob-badge-verification-errors"
+      >
+        <h4 class="ob-badge-verification-section-title">
+          Errors:
+        </h4>
         <ul>
-          <li v-for="(error, index) in errors" :key="index">
+          <li
+            v-for="(error, index) in errors"
+            :key="index"
+          >
             {{ error }}
           </li>
         </ul>
       </div>
 
-      <div v-if="warnings.length > 0" class="ob-badge-verification-warnings">
-        <h4 class="ob-badge-verification-section-title">Warnings:</h4>
+      <div
+        v-if="warnings.length > 0"
+        class="ob-badge-verification-warnings"
+      >
+        <h4 class="ob-badge-verification-section-title">
+          Warnings:
+        </h4>
         <ul>
-          <li v-for="(warning, index) in warnings" :key="index">
+          <li
+            v-for="(warning, index) in warnings"
+            :key="index"
+          >
             {{ warning }}
           </li>
         </ul>
       </div>
 
-      <div v-if="showLastVerified && lastVerified" class="ob-badge-verification-timestamp">
+      <div
+        v-if="showLastVerified && lastVerified"
+        class="ob-badge-verification-timestamp"
+      >
         <span class="ob-badge-verification-label">Last Verified:</span>
         <span class="ob-badge-verification-value">{{ formatDate(lastVerified) }}</span>
       </div>
