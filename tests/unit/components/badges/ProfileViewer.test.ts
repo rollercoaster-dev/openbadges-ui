@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ProfileViewer from '../../../../src/components/badges/ProfileViewer.vue';
-import BadgeList from '../../../../src/components/badges/BadgeList.vue';
+import ProfileViewer from '@/components/badges/ProfileViewer.vue';
+import BadgeList from '@/components/badges/BadgeList.vue';
 import type { OB2 } from 'openbadges-types';
 
 describe('ProfileViewer.vue', () => {
@@ -21,7 +21,7 @@ describe('ProfileViewer.vue', () => {
         recipient: {
           identity: 'jane.doe@example.org',
           type: 'email',
-          hashed: false
+          hashed: false,
         },
         badge: {
           type: 'BadgeClass',
@@ -32,13 +32,13 @@ describe('ProfileViewer.vue', () => {
           issuer: {
             type: 'Profile',
             id: 'http://example.org/issuer',
-            name: 'Test Issuer'
-          }
+            name: 'Test Issuer',
+          },
         },
         issuedOn: '2023-01-01T00:00:00Z',
         verification: {
-          type: 'hosted'
-        }
+          type: 'hosted',
+        },
       } as OB2.Assertion,
       {
         '@context': 'https://w3id.org/openbadges/v2',
@@ -47,7 +47,7 @@ describe('ProfileViewer.vue', () => {
         recipient: {
           identity: 'jane.doe@example.org',
           type: 'email',
-          hashed: false
+          hashed: false,
         },
         badge: {
           type: 'BadgeClass',
@@ -58,54 +58,58 @@ describe('ProfileViewer.vue', () => {
           issuer: {
             type: 'Profile',
             id: 'http://example.org/issuer',
-            name: 'Test Issuer'
-          }
+            name: 'Test Issuer',
+          },
         },
         issuedOn: '2023-02-01T00:00:00Z',
         verification: {
-          type: 'hosted'
-        }
-      } as OB2.Assertion
-    ]
+          type: 'hosted',
+        },
+      } as OB2.Assertion,
+    ],
   };
 
   it('renders profile information correctly', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockProfile,
-        badges: mockProfile.badges
+        badges: mockProfile.badges,
       },
       global: {
         stubs: {
-          BadgeList: true
-        }
-      }
+          BadgeList: true,
+        },
+      },
     });
 
     // Check if profile name is displayed
     expect(wrapper.find('.manus-profile-name').text()).toBe('Jane Doe');
 
     // Check if profile description is displayed
-    expect(wrapper.find('.manus-profile-description').text()).toBe('Software developer and open badges enthusiast');
+    expect(wrapper.find('.manus-profile-description').text()).toBe(
+      'Software developer and open badges enthusiast'
+    );
 
     // Check if profile name is displayed correctly
     expect(wrapper.find('.manus-profile-name').text()).toBe('Jane Doe');
 
     // Check if profile description is displayed
-    expect(wrapper.find('.manus-profile-description').text()).toBe('Software developer and open badges enthusiast');
+    expect(wrapper.find('.manus-profile-description').text()).toBe(
+      'Software developer and open badges enthusiast'
+    );
   });
 
   it('passes badges to BadgeList component', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockProfile,
-        badges: mockProfile.badges
+        badges: mockProfile.badges,
       },
       global: {
         stubs: {
-          BadgeList: false
-        }
-      }
+          BadgeList: false,
+        },
+      },
     });
 
     // Find the BadgeList component
@@ -119,18 +123,20 @@ describe('ProfileViewer.vue', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockProfile,
-        badges: mockProfile.badges
+        badges: mockProfile.badges,
       },
       global: {
         stubs: {
-          BadgeList: true
-        }
-      }
+          BadgeList: true,
+        },
+      },
     });
 
     // Description should be displayed
     expect(wrapper.find('.manus-profile-description').exists()).toBe(true);
-    expect(wrapper.find('.manus-profile-description').text()).toBe('Software developer and open badges enthusiast');
+    expect(wrapper.find('.manus-profile-description').text()).toBe(
+      'Software developer and open badges enthusiast'
+    );
   });
 
   it('respects showUrl prop', async () => {
@@ -138,13 +144,13 @@ describe('ProfileViewer.vue', () => {
       props: {
         profile: mockProfile,
         badges: mockProfile.badges,
-        showUrl: false
+        showUrl: false,
       },
       global: {
         stubs: {
-          BadgeList: true
-        }
-      }
+          BadgeList: true,
+        },
+      },
     });
 
     // URL should not be displayed
@@ -156,13 +162,13 @@ describe('ProfileViewer.vue', () => {
       props: {
         profile: mockProfile,
         badges: mockProfile.badges,
-        badgesLayout: 'list'
+        badgesLayout: 'list',
       },
       global: {
         stubs: {
-          BadgeList: false
-        }
-      }
+          BadgeList: false,
+        },
+      },
     });
 
     // Find the BadgeList component
@@ -176,8 +182,8 @@ describe('ProfileViewer.vue', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockProfile,
-        badges: mockProfile.badges
-      }
+        badges: mockProfile.badges,
+      },
     });
 
     // Find the BadgeList component and emit a badge-click event
@@ -194,8 +200,8 @@ describe('ProfileViewer.vue', () => {
       props: {
         profile: mockProfile,
         badges: mockProfile.badges,
-        loading: true
-      }
+        loading: true,
+      },
     });
 
     // Check if loading message is displayed
@@ -207,8 +213,8 @@ describe('ProfileViewer.vue', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: { id: 'empty', name: 'Empty Profile', type: 'Recipient' },
-        badges: []
-      }
+        badges: [],
+      },
     });
 
     // Check if badges list is empty
@@ -222,13 +228,13 @@ describe('ProfileViewer.vue', () => {
     const wrapper1 = mount(ProfileViewer, {
       props: {
         profile: issuerProfile,
-        badges: mockProfile.badges
+        badges: mockProfile.badges,
       },
       global: {
         stubs: {
-          BadgeList: true
-        }
-      }
+          BadgeList: true,
+        },
+      },
     });
 
     // Check if issuer title is displayed
@@ -239,13 +245,13 @@ describe('ProfileViewer.vue', () => {
     const wrapper2 = mount(ProfileViewer, {
       props: {
         profile: recipientProfile,
-        badges: mockProfile.badges
+        badges: mockProfile.badges,
       },
       global: {
         stubs: {
-          BadgeList: true
-        }
-      }
+          BadgeList: true,
+        },
+      },
     });
 
     // Check if recipient title is displayed

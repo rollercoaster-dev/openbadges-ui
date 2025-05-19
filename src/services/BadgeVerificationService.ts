@@ -160,13 +160,28 @@ export class BadgeVerificationService {
     // Check expiration
     this.checkExpiration(badge, result);
 
+    // Ensure expirationStatus is set even if badge is not expired
+    if (!result.expirationStatus) {
+      result.expirationStatus = 'not-applicable';
+    }
+
     // Check revocation
     await this.checkRevocation(badge, result);
+
+    // Ensure revocationStatus is set even if badge is not revoked
+    if (!result.revocationStatus) {
+      result.revocationStatus = 'valid';
+    }
 
     // Update overall result based on content validation
     if (!result.contentValidation.isValid) {
       result.errors = result.errors.concat(result.contentValidation.errors);
       result.warnings = result.warnings.concat(result.contentValidation.warnings);
+    }
+
+    // Ensure that if any content validation errors exist, isValid is set to false
+    if (result.contentValidation.errors.length > 0) {
+      result.contentValidation.isValid = false;
     }
 
     // Badge is valid if both structure and content validations pass
@@ -331,6 +346,14 @@ export class BadgeVerificationService {
         result.contentValidation.errors.push('Badge has an invalid evidence structure');
         result.contentValidation.isValid = false;
       }
+    }
+
+    // After all validation, ensure contentValidation.isValid is correct
+    result.contentValidation.isValid = result.contentValidation.errors.length === 0;
+
+    // Ensure that if any content validation errors exist, isValid is set to false
+    if (result.contentValidation.errors.length > 0) {
+      result.contentValidation.isValid = false;
     }
   }
 

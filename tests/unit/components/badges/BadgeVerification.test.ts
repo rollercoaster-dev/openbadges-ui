@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
 import { BadgeVerificationService } from '../../../../src/services/BadgeVerificationService';
 import { createDateTime, createIRI, type OB2 } from 'openbadges-types';
@@ -14,6 +15,16 @@ vi.mock('../../../../src/services/BadgeVerificationService', () => ({
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
       revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: []
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: []
+      },
     }),
   },
 }));
@@ -65,11 +76,11 @@ describe('BadgeVerification.vue', () => {
     });
 
     // Initially, no verification has been performed
-    expect(wrapper.find('.ob-badge-verification-button').text()).toBe('Verify Badge');
+    expect(wrapper.find('button.ob-badge-verification-button').text()).toBe('Verify Badge');
     expect(wrapper.find('.ob-badge-verification-result').exists()).toBe(false);
 
     // Click the verify button
-    await wrapper.find('.ob-badge-verification-button').trigger('click');
+    await wrapper.find('button.ob-badge-verification-button').trigger('click');
 
     // Wait for verification to complete
     await vi.waitFor(() => {
@@ -87,19 +98,16 @@ describe('BadgeVerification.vue', () => {
       props: {
         badge: mockBadge,
         autoVerify: true,
+        showStatus: true,
       },
     });
 
     // Verify that verifyBadge was called
     expect(BadgeVerificationService.verifyBadge).toHaveBeenCalledWith(mockBadge);
 
-    // Manually trigger the verification result since the test environment
-    // doesn't fully simulate the component lifecycle
-    // Use the button click instead of calling the method directly
-    await wrapper.find('.ob-badge-verification-button').trigger('click');
-    await vi.waitFor(() => {
-      return wrapper.find('.ob-badge-verification-valid').exists();
-    });
+    // Manually trigger the promise resolution
+    await flushPromises();
+    await nextTick();
 
     // Verification result should be displayed
     expect(wrapper.find('.ob-badge-verification-valid').exists()).toBe(true);
@@ -113,7 +121,7 @@ describe('BadgeVerification.vue', () => {
     });
 
     // Click the verify button
-    await wrapper.find('.ob-badge-verification-button').trigger('click');
+    await wrapper.find('button.ob-badge-verification-button').trigger('click');
 
     // Wait for verification to complete
     await vi.waitFor(() => {
@@ -134,7 +142,7 @@ describe('BadgeVerification.vue', () => {
     });
 
     // Click the verify button
-    await wrapper.find('.ob-badge-verification-button').trigger('click');
+    await wrapper.find('button.ob-badge-verification-button').trigger('click');
 
     // Wait for verification to complete
     await vi.waitFor(() => {
@@ -169,7 +177,7 @@ describe('BadgeVerification.vue', () => {
     });
 
     // Click the verify button
-    await wrapper.find('.ob-badge-verification-button').trigger('click');
+    await wrapper.find('button.ob-badge-verification-button').trigger('click');
 
     // Wait for verification to complete
     await vi.waitFor(() => {

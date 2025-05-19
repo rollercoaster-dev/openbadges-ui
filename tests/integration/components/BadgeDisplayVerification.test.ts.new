@@ -108,7 +108,7 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
     // Check that BadgeDisplay propagated the event
     expect(wrapper.emitted('verified')).toBeTruthy();
-    expect(wrapper.emitted('verified')[0]).toEqual([true]);
+    expect(wrapper.emitted('verified')![0]).toEqual([true]);
   });
 
   it('should auto-verify badge when autoVerify is true', async () => {
@@ -283,6 +283,6 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
     // Check that the verified event was emitted with false
     expect(wrapper.emitted('verified')).toBeTruthy();
-    expect(wrapper.emitted('verified')[0]).toEqual([false]);
+    expect(wrapper.emitted('verified')![0]).toEqual([false]);
   });
 });

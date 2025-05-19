@@ -43,6 +43,8 @@ vi.mock('openbadges-types', () => ({
       };
     }
   }),
+  isBadge: vi.fn().mockReturnValue(true),
+  isOB2Profile: vi.fn().mockReturnValue(true),
 }));
 
 describe('BadgeVerificationService', () => {
