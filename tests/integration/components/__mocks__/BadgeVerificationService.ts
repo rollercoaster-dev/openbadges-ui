@@ -92,7 +92,7 @@ export function setupCustomVerification(result: Partial<VerificationResult>) {
       warnings: [],
     },
   };
-  
+
   BadgeVerificationService.verifyBadge.mockResolvedValue({
     ...defaultResult,
     ...result,

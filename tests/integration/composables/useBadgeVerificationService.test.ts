@@ -7,8 +7,8 @@ import { nextTick } from 'vue';
 vi.mock('@/services/BadgeVerificationService', () => {
   return {
     BadgeVerificationService: {
-      verifyBadge: vi.fn()
-    }
+      verifyBadge: vi.fn(),
+    },
   };
 });
 

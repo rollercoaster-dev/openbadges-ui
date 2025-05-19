@@ -26,10 +26,10 @@ vi.mock('@/services/BadgeVerificationService', () => {
         errors: [],
         warnings: [],
       },
-    })
+    }),
   };
   return {
-    BadgeVerificationService: mockService
+    BadgeVerificationService: mockService,
   };
 });
 

@@ -18,12 +18,12 @@ vi.mock('../../../../src/services/BadgeVerificationService', () => ({
       structureValidation: {
         isValid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       },
       contentValidation: {
         isValid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       },
     }),
   },
