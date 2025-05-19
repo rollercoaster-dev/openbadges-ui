@@ -10,7 +10,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   initialBadgeClass: () => ({}),
-  initialRecipientEmail: ''
+  initialRecipientEmail: '',
 });
 
 const emit = defineEmits<{
@@ -63,7 +63,10 @@ if (state.badgeClass.image) {
 // Watch for changes in the form fields and update the badge class
 watch(tagsInput, (newValue) => {
   if (newValue.trim()) {
-    state.badgeClass.tags = newValue.split(',').map(tag => tag.trim()).filter(Boolean);
+    state.badgeClass.tags = newValue
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
   } else {
     state.badgeClass.tags = [];
   }
@@ -81,7 +84,7 @@ watch([issuerName, issuerUrl], ([newName, newUrl]) => {
     state.badgeClass.issuer = {
       id: state.badgeClass.id.replace(/\/badge\/.*$/, '/issuer'),
       type: 'Profile',
-      name: ''
+      name: '',
     };
   }
 
@@ -97,7 +100,7 @@ watch(badgeImageUrl, (newValue) => {
     // Create an Image object with the URL as the id
     state.badgeClass.image = {
       id: newValue,
-      type: 'Image'
+      type: 'Image',
     };
   } else {
     state.badgeClass.image = undefined;
@@ -106,9 +109,7 @@ watch(badgeImageUrl, (newValue) => {
 
 // Check if a specific field has an error
 const hasError = (field: string): boolean => {
-  return state.errors.some(error =>
-    error.toLowerCase().includes(field.toLowerCase())
-  );
+  return state.errors.some((error) => error.toLowerCase().includes(field.toLowerCase()));
 };
 
 // Handle form submission

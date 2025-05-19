@@ -1,11 +1,7 @@
 // src/services/BadgeVerificationService.ts
 import type { OB2, OB3 } from 'openbadges-types';
 import { validateBadge } from 'openbadges-types';
-import { isOB2Assertion, isOB3VerifiableCredential } from './BadgeService';
-
-// Import type guards from openbadges-types
-import * as OB2Guards from 'openbadges-types/dist/v2/guards';
-import * as OB3Guards from 'openbadges-types/dist/v3/guards';
+import { isOB2Assertion, isOB3VerifiableCredential } from '../utils/type-helpers';
 
 /**
  * Result of a badge verification operation
@@ -18,12 +14,12 @@ export interface VerificationResult {
   expirationStatus?: 'valid' | 'expired' | 'not-applicable';
   revocationStatus?: 'valid' | 'revoked' | 'unknown';
   badgeVersion?: 'OB2' | 'OB3';
-  structureValidation?: {
+  structureValidation: {
     isValid: boolean;
     errors: string[];
     warnings: string[];
   };
-  contentValidation?: {
+  contentValidation: {
     isValid: boolean;
     errors: string[];
     warnings: string[];
@@ -39,7 +35,9 @@ export class BadgeVerificationService {
    * @param badge The badge to verify
    * @returns Verification result
    */
-  static async verifyBadge(badge: OB2.Assertion | OB3.VerifiableCredential): Promise<VerificationResult> {
+  static async verifyBadge(
+    badge: OB2.Assertion | OB3.VerifiableCredential
+  ): Promise<VerificationResult> {
     // Initialize result
     const result: VerificationResult = {
       isValid: false,
@@ -48,13 +46,13 @@ export class BadgeVerificationService {
       structureValidation: {
         isValid: false,
         errors: [],
-        warnings: []
+        warnings: [],
       },
       contentValidation: {
         isValid: false,
         errors: [],
-        warnings: []
-      }
+        warnings: [],
+      },
     };
 
     try {
@@ -65,7 +63,7 @@ export class BadgeVerificationService {
       result.structureValidation = {
         isValid: validationResult.isValid,
         errors: validationResult.errors,
-        warnings: validationResult.warnings
+        warnings: validationResult.warnings,
       };
 
       // Set the badge version
@@ -89,7 +87,9 @@ export class BadgeVerificationService {
         return result;
       }
     } catch (error) {
-      result.errors.push(`Verification error: ${error instanceof Error ? error.message : String(error)}`);
+      result.errors.push(
+        `Verification error: ${error instanceof Error ? error.message : String(error)}`
+      );
       return result;
     }
   }
@@ -100,7 +100,10 @@ export class BadgeVerificationService {
    * @param result The verification result to update
    * @returns Verification result
    */
-  private static async verifyOB2Badge(badge: OB2.Assertion, result: VerificationResult): Promise<VerificationResult> {
+  private static async verifyOB2Badge(
+    badge: OB2.Assertion,
+    result: VerificationResult
+  ): Promise<VerificationResult> {
     // Set badge version
     result.badgeVersion = 'OB2';
 
@@ -108,7 +111,7 @@ export class BadgeVerificationService {
     result.contentValidation = {
       isValid: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
 
     // Perform detailed validation of badge components using type guards
@@ -120,9 +123,10 @@ export class BadgeVerificationService {
       result.contentValidation.isValid = false;
     } else {
       // Determine verification method
-      const verificationType = typeof badge.verification.type === 'string'
-        ? badge.verification.type
-        : Array.isArray(badge.verification.type)
+      const verificationType =
+        typeof badge.verification.type === 'string'
+          ? badge.verification.type
+          : Array.isArray(badge.verification.type)
           ? badge.verification.type[0]
           : null;
 
@@ -140,7 +144,9 @@ export class BadgeVerificationService {
         } else if (normalizedType === 'signed') {
           await this.verifySignedBadge(badge, result);
         } else {
-          result.contentValidation.errors.push(`Unsupported verification type: ${verificationType}`);
+          result.contentValidation.errors.push(
+            `Unsupported verification type: ${verificationType}`
+          );
           result.contentValidation.isValid = false;
         }
       }
@@ -159,9 +165,10 @@ export class BadgeVerificationService {
     }
 
     // Badge is valid if both structure and content validations pass
-    result.isValid = result.structureValidation?.isValid === true &&
-                     result.contentValidation.isValid === true &&
-                     result.errors.length === 0;
+    result.isValid =
+      result.structureValidation?.isValid === true &&
+      result.contentValidation.isValid === true &&
+      result.errors.length === 0;
     return result;
   }
 
@@ -174,47 +181,50 @@ export class BadgeVerificationService {
     // Validate badge class
     if (typeof badge.badge === 'object') {
       if (!OB2Guards.isBadgeClass(badge.badge)) {
-        result.contentValidation!.errors.push('Invalid BadgeClass structure');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Invalid BadgeClass structure');
+        result.contentValidation.isValid = false;
       } else {
         // Validate badge class components
         if (!badge.badge.name || badge.badge.name.trim() === '') {
-          result.contentValidation!.errors.push('BadgeClass is missing a name');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass is missing a name');
+          result.contentValidation.isValid = false;
         }
 
         if (!badge.badge.description || badge.badge.description.trim() === '') {
-          result.contentValidation!.errors.push('BadgeClass is missing a description');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass is missing a description');
+          result.contentValidation.isValid = false;
         }
 
         // Validate image
         if (!badge.badge.image) {
-          result.contentValidation!.errors.push('BadgeClass is missing an image');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass is missing an image');
+          result.contentValidation.isValid = false;
         } else if (typeof badge.badge.image === 'object' && !OB2Guards.isImage(badge.badge.image)) {
-          result.contentValidation!.errors.push('BadgeClass has an invalid image structure');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass has an invalid image structure');
+          result.contentValidation.isValid = false;
         }
 
         // Validate criteria
         if (badge.badge.criteria && !OB2Guards.isCriteria(badge.badge.criteria)) {
-          result.contentValidation!.errors.push('BadgeClass has an invalid criteria structure');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass has an invalid criteria structure');
+          result.contentValidation.isValid = false;
         }
 
         // Validate issuer
         if (!badge.badge.issuer) {
-          result.contentValidation!.errors.push('BadgeClass is missing an issuer');
-          result.contentValidation!.isValid = false;
-        } else if (typeof badge.badge.issuer === 'object' && !OB2Guards.isProfile(badge.badge.issuer)) {
-          result.contentValidation!.errors.push('BadgeClass has an invalid issuer structure');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('BadgeClass is missing an issuer');
+          result.contentValidation.isValid = false;
+        } else if (
+          typeof badge.badge.issuer === 'object' &&
+          !OB2Guards.isProfile(badge.badge.issuer)
+        ) {
+          result.contentValidation.errors.push('BadgeClass has an invalid issuer structure');
+          result.contentValidation.isValid = false;
         } else if (typeof badge.badge.issuer === 'object') {
           // Validate issuer components
           if (!badge.badge.issuer.name || badge.badge.issuer.name.trim() === '') {
-            result.contentValidation!.errors.push('Issuer is missing a name');
-            result.contentValidation!.isValid = false;
+            result.contentValidation.errors.push('Issuer is missing a name');
+            result.contentValidation.isValid = false;
           }
 
           // Validate issuer URL if present
@@ -222,8 +232,8 @@ export class BadgeVerificationService {
             try {
               new URL(badge.badge.issuer.url);
             } catch (e) {
-              result.contentValidation!.errors.push('Issuer has an invalid URL');
-              result.contentValidation!.isValid = false;
+              result.contentValidation.errors.push('Issuer has an invalid URL');
+              result.contentValidation.isValid = false;
             }
           }
         }
@@ -233,14 +243,16 @@ export class BadgeVerificationService {
           if (Array.isArray(badge.badge.alignment)) {
             for (const alignment of badge.badge.alignment) {
               if (!OB2Guards.isAlignmentObject(alignment)) {
-                result.contentValidation!.errors.push('BadgeClass has an invalid alignment structure');
-                result.contentValidation!.isValid = false;
+                result.contentValidation.errors.push(
+                  'BadgeClass has an invalid alignment structure'
+                );
+                result.contentValidation.isValid = false;
                 break;
               }
             }
           } else if (!OB2Guards.isAlignmentObject(badge.badge.alignment)) {
-            result.contentValidation!.errors.push('BadgeClass has an invalid alignment structure');
-            result.contentValidation!.isValid = false;
+            result.contentValidation.errors.push('BadgeClass has an invalid alignment structure');
+            result.contentValidation.isValid = false;
           }
         }
       }
@@ -249,57 +261,57 @@ export class BadgeVerificationService {
       try {
         new URL(badge.badge);
       } catch (e) {
-        result.contentValidation!.errors.push('BadgeClass reference is not a valid URL');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('BadgeClass reference is not a valid URL');
+        result.contentValidation.isValid = false;
       }
     } else {
-      result.contentValidation!.errors.push('Badge is missing a BadgeClass');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge is missing a BadgeClass');
+      result.contentValidation.isValid = false;
     }
 
     // Validate recipient
     if (!badge.recipient) {
-      result.contentValidation!.errors.push('Badge is missing a recipient');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge is missing a recipient');
+      result.contentValidation.isValid = false;
     } else if (!OB2Guards.isIdentityObject(badge.recipient)) {
-      result.contentValidation!.errors.push('Badge has an invalid recipient structure');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge has an invalid recipient structure');
+      result.contentValidation.isValid = false;
     } else {
       // Validate recipient components
       if (!badge.recipient.identity) {
-        result.contentValidation!.errors.push('Recipient is missing an identity');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Recipient is missing an identity');
+        result.contentValidation.isValid = false;
       }
 
       if (!badge.recipient.type) {
-        result.contentValidation!.errors.push('Recipient is missing a type');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Recipient is missing a type');
+        result.contentValidation.isValid = false;
       }
 
       if (badge.recipient.hashed === undefined) {
-        result.contentValidation!.warnings.push('Recipient is missing the hashed property');
+        result.contentValidation.warnings.push('Recipient is missing the hashed property');
       }
     }
 
     // Validate verification
     if (!badge.verification) {
-      result.contentValidation!.errors.push('Badge is missing verification information');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge is missing verification information');
+      result.contentValidation.isValid = false;
     } else if (!OB2Guards.isVerificationObject(badge.verification)) {
-      result.contentValidation!.errors.push('Badge has an invalid verification structure');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge has an invalid verification structure');
+      result.contentValidation.isValid = false;
     }
 
     // Validate issuedOn
     if (!badge.issuedOn) {
-      result.contentValidation!.errors.push('Badge is missing an issuedOn date');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Badge is missing an issuedOn date');
+      result.contentValidation.isValid = false;
     } else {
       try {
         new Date(badge.issuedOn as string);
       } catch (e) {
-        result.contentValidation!.errors.push('Badge has an invalid issuedOn date');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Badge has an invalid issuedOn date');
+        result.contentValidation.isValid = false;
       }
     }
 
@@ -308,14 +320,14 @@ export class BadgeVerificationService {
       if (Array.isArray(badge.evidence)) {
         for (const evidence of badge.evidence) {
           if (typeof evidence === 'object' && !OB2Guards.isEvidence(evidence)) {
-            result.contentValidation!.errors.push('Badge has an invalid evidence structure');
-            result.contentValidation!.isValid = false;
+            result.contentValidation.errors.push('Badge has an invalid evidence structure');
+            result.contentValidation.isValid = false;
             break;
           }
         }
       } else if (typeof badge.evidence === 'object' && !OB2Guards.isEvidence(badge.evidence)) {
-        result.contentValidation!.errors.push('Badge has an invalid evidence structure');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Badge has an invalid evidence structure');
+        result.contentValidation.isValid = false;
       }
     }
   }
@@ -326,7 +338,10 @@ export class BadgeVerificationService {
    * @param result The verification result to update
    * @returns Verification result
    */
-  private static async verifyOB3Badge(badge: OB3.VerifiableCredential, result: VerificationResult): Promise<VerificationResult> {
+  private static async verifyOB3Badge(
+    badge: OB3.VerifiableCredential,
+    result: VerificationResult
+  ): Promise<VerificationResult> {
     // Set badge version
     result.badgeVersion = 'OB3';
 
@@ -334,7 +349,7 @@ export class BadgeVerificationService {
     result.contentValidation = {
       isValid: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
 
     // Perform detailed validation of badge components using type guards
@@ -354,7 +369,9 @@ export class BadgeVerificationService {
       } else {
         // Currently, we'll add a warning as full cryptographic verification
         // of OB3 credentials requires additional libraries and is complex
-        result.contentValidation.warnings.push('Full cryptographic verification of OB3 credentials is not yet implemented');
+        result.contentValidation.warnings.push(
+          'Full cryptographic verification of OB3 credentials is not yet implemented'
+        );
         result.verificationMethod = 'signed';
 
         // Validate proof components
@@ -392,7 +409,9 @@ export class BadgeVerificationService {
     // Check credential status if present
     if (badge.credentialStatus) {
       if (!OB3Guards.isCredentialStatus(badge.credentialStatus)) {
-        result.contentValidation.errors.push('OB3 credential has an invalid credential status structure');
+        result.contentValidation.errors.push(
+          'OB3 credential has an invalid credential status structure'
+        );
         result.contentValidation.isValid = false;
       } else {
         // Check required credential status properties
@@ -407,7 +426,9 @@ export class BadgeVerificationService {
         }
 
         // Add a warning about credential status checking
-        result.contentValidation.warnings.push('Credential status checking requires network access to validate against the status endpoint');
+        result.contentValidation.warnings.push(
+          'Credential status checking requires network access to validate against the status endpoint'
+        );
       }
     } else {
       // Add a warning about missing credential status
@@ -421,9 +442,10 @@ export class BadgeVerificationService {
     }
 
     // Badge is valid if both structure and content validations pass
-    result.isValid = result.structureValidation?.isValid === true &&
-                     result.contentValidation.isValid === true &&
-                     result.errors.length === 0;
+    result.isValid =
+      result.structureValidation?.isValid === true &&
+      result.contentValidation.isValid === true &&
+      result.errors.length === 0;
     return result;
   }
 
@@ -432,152 +454,177 @@ export class BadgeVerificationService {
    * @param badge The OB3 badge to validate
    * @param result The verification result to update
    */
-  private static validateOB3Components(badge: OB3.VerifiableCredential, result: VerificationResult): void {
+  private static validateOB3Components(
+    badge: OB3.VerifiableCredential,
+    result: VerificationResult
+  ): void {
     // Validate context
     if (!badge['@context'] || !Array.isArray(badge['@context'])) {
-      result.contentValidation!.errors.push('OB3 credential is missing a valid context');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential is missing a valid context');
+      result.contentValidation.isValid = false;
     } else {
       // Check for required contexts
-      const hasW3CContext = badge['@context'].some(ctx =>
-        ctx === 'https://www.w3.org/2018/credentials/v1' ||
-        ctx === 'https://w3id.org/credentials/v1');
+      const hasW3CContext = badge['@context'].some(
+        (ctx) =>
+          ctx === 'https://www.w3.org/2018/credentials/v1' ||
+          ctx === 'https://w3id.org/credentials/v1'
+      );
 
-      const hasOB3Context = badge['@context'].some(ctx =>
-        ctx === 'https://purl.imsglobal.org/spec/ob/v3p0/context.json' ||
-        ctx === 'https://w3id.org/openbadges/v3');
+      const hasOB3Context = badge['@context'].some(
+        (ctx) =>
+          ctx === 'https://purl.imsglobal.org/spec/ob/v3p0/context.json' ||
+          ctx === 'https://w3id.org/openbadges/v3'
+      );
 
       if (!hasW3CContext) {
-        result.contentValidation!.errors.push('OB3 credential is missing the W3C Verifiable Credentials context');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'OB3 credential is missing the W3C Verifiable Credentials context'
+        );
+        result.contentValidation.isValid = false;
       }
 
       if (!hasOB3Context) {
-        result.contentValidation!.errors.push('OB3 credential is missing the Open Badges v3 context');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'OB3 credential is missing the Open Badges v3 context'
+        );
+        result.contentValidation.isValid = false;
       }
     }
 
     // Validate type
     if (!badge.type || !Array.isArray(badge.type)) {
-      result.contentValidation!.errors.push('OB3 credential is missing a valid type');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential is missing a valid type');
+      result.contentValidation.isValid = false;
     } else {
       // Check for required types
       const hasVCType = badge.type.includes('VerifiableCredential');
       const hasOBType = badge.type.includes('OpenBadgeCredential');
 
       if (!hasVCType) {
-        result.contentValidation!.errors.push('OB3 credential is missing the VerifiableCredential type');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'OB3 credential is missing the VerifiableCredential type'
+        );
+        result.contentValidation.isValid = false;
       }
 
       if (!hasOBType) {
-        result.contentValidation!.errors.push('OB3 credential is missing the OpenBadgeCredential type');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'OB3 credential is missing the OpenBadgeCredential type'
+        );
+        result.contentValidation.isValid = false;
       }
     }
 
     // Validate issuer
     if (!badge.issuer) {
-      result.contentValidation!.errors.push('OB3 credential is missing an issuer');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential is missing an issuer');
+      result.contentValidation.isValid = false;
     } else if (!OB3Guards.isIssuer(badge.issuer)) {
-      result.contentValidation!.errors.push('OB3 credential has an invalid issuer structure');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential has an invalid issuer structure');
+      result.contentValidation.isValid = false;
     } else {
       // Validate issuer components
       if (!badge.issuer.id) {
-        result.contentValidation!.errors.push('Issuer is missing an ID');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Issuer is missing an ID');
+        result.contentValidation.isValid = false;
       }
 
       if (!badge.issuer.type) {
-        result.contentValidation!.errors.push('Issuer is missing a type');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Issuer is missing a type');
+        result.contentValidation.isValid = false;
       }
 
       if (!badge.issuer.name) {
-        result.contentValidation!.warnings.push('Issuer is missing a name');
+        result.contentValidation.warnings.push('Issuer is missing a name');
       }
     }
 
     // Validate issuance date
     if (!badge.issuanceDate) {
-      result.contentValidation!.errors.push('OB3 credential is missing an issuance date');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential is missing an issuance date');
+      result.contentValidation.isValid = false;
     } else {
       try {
         new Date(badge.issuanceDate as string);
       } catch (e) {
-        result.contentValidation!.errors.push('OB3 credential has an invalid issuance date');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('OB3 credential has an invalid issuance date');
+        result.contentValidation.isValid = false;
       }
     }
 
     // Validate credential subject
     if (!badge.credentialSubject) {
-      result.contentValidation!.errors.push('OB3 credential is missing a credential subject');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('OB3 credential is missing a credential subject');
+      result.contentValidation.isValid = false;
     } else if (!OB3Guards.isCredentialSubject(badge.credentialSubject)) {
-      result.contentValidation!.errors.push('OB3 credential has an invalid credential subject structure');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push(
+        'OB3 credential has an invalid credential subject structure'
+      );
+      result.contentValidation.isValid = false;
     } else {
       // Validate credential subject components
       if (!badge.credentialSubject.type) {
-        result.contentValidation!.errors.push('Credential subject is missing a type');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Credential subject is missing a type');
+        result.contentValidation.isValid = false;
       }
 
       // Validate achievement
       if (!badge.credentialSubject.achievement) {
-        result.contentValidation!.errors.push('Credential subject is missing an achievement');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Credential subject is missing an achievement');
+        result.contentValidation.isValid = false;
       } else if (!OB3Guards.isAchievement(badge.credentialSubject.achievement)) {
-        result.contentValidation!.errors.push('Credential subject has an invalid achievement structure');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'Credential subject has an invalid achievement structure'
+        );
+        result.contentValidation.isValid = false;
       } else {
         // Validate achievement components
         if (!badge.credentialSubject.achievement.id) {
-          result.contentValidation!.errors.push('Achievement is missing an ID');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('Achievement is missing an ID');
+          result.contentValidation.isValid = false;
         }
 
         if (!badge.credentialSubject.achievement.type) {
-          result.contentValidation!.errors.push('Achievement is missing a type');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('Achievement is missing a type');
+          result.contentValidation.isValid = false;
         }
 
         if (!badge.credentialSubject.achievement.name) {
-          result.contentValidation!.errors.push('Achievement is missing a name');
-          result.contentValidation!.isValid = false;
+          result.contentValidation.errors.push('Achievement is missing a name');
+          result.contentValidation.isValid = false;
         }
 
         // Validate criteria if present
-        if (badge.credentialSubject.achievement.criteria &&
-            !OB3Guards.isCriteria(badge.credentialSubject.achievement.criteria)) {
-          result.contentValidation!.errors.push('Achievement has an invalid criteria structure');
-          result.contentValidation!.isValid = false;
+        if (
+          badge.credentialSubject.achievement.criteria &&
+          !OB3Guards.isCriteria(badge.credentialSubject.achievement.criteria)
+        ) {
+          result.contentValidation.errors.push('Achievement has an invalid criteria structure');
+          result.contentValidation.isValid = false;
         }
 
         // Validate image if present
         if (badge.credentialSubject.achievement.image) {
-          if (typeof badge.credentialSubject.achievement.image === 'object' &&
-              (!badge.credentialSubject.achievement.image.id ||
-               !badge.credentialSubject.achievement.image.type)) {
-            result.contentValidation!.errors.push('Achievement has an invalid image structure');
-            result.contentValidation!.isValid = false;
+          if (
+            typeof badge.credentialSubject.achievement.image === 'object' &&
+            (!badge.credentialSubject.achievement.image.id ||
+              !badge.credentialSubject.achievement.image.type)
+          ) {
+            result.contentValidation.errors.push('Achievement has an invalid image structure');
+            result.contentValidation.isValid = false;
           }
         } else {
-          result.contentValidation!.warnings.push('Achievement is missing an image');
+          result.contentValidation.warnings.push('Achievement is missing an image');
         }
       }
     }
 
     // Validate refresh service if present
     if (badge.refreshService && !OB3Guards.isRefreshService(badge.refreshService)) {
-      result.contentValidation!.errors.push('OB3 credential has an invalid refresh service structure');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push(
+        'OB3 credential has an invalid refresh service structure'
+      );
+      result.contentValidation.isValid = false;
     }
 
     // Validate terms of use if present
@@ -585,14 +632,18 @@ export class BadgeVerificationService {
       if (Array.isArray(badge.termsOfUse)) {
         for (const terms of badge.termsOfUse) {
           if (!OB3Guards.isTermsOfUse(terms)) {
-            result.contentValidation!.errors.push('OB3 credential has an invalid terms of use structure');
-            result.contentValidation!.isValid = false;
+            result.contentValidation.errors.push(
+              'OB3 credential has an invalid terms of use structure'
+            );
+            result.contentValidation.isValid = false;
             break;
           }
         }
       } else if (!OB3Guards.isTermsOfUse(badge.termsOfUse)) {
-        result.contentValidation!.errors.push('OB3 credential has an invalid terms of use structure');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          'OB3 credential has an invalid terms of use structure'
+        );
+        result.contentValidation.isValid = false;
       }
     }
 
@@ -601,14 +652,16 @@ export class BadgeVerificationService {
       if (Array.isArray(badge.evidence)) {
         for (const evidence of badge.evidence) {
           if (!OB3Guards.isEvidence(evidence)) {
-            result.contentValidation!.errors.push('OB3 credential has an invalid evidence structure');
-            result.contentValidation!.isValid = false;
+            result.contentValidation.errors.push(
+              'OB3 credential has an invalid evidence structure'
+            );
+            result.contentValidation.isValid = false;
             break;
           }
         }
       } else if (!OB3Guards.isEvidence(badge.evidence)) {
-        result.contentValidation!.errors.push('OB3 credential has an invalid evidence structure');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('OB3 credential has an invalid evidence structure');
+        result.contentValidation.isValid = false;
       }
     }
   }
@@ -618,18 +671,23 @@ export class BadgeVerificationService {
    * @param badge The badge to verify
    * @param result The verification result to update
    */
-  private static async verifyHostedBadge(badge: OB2.Assertion, result: VerificationResult): Promise<void> {
+  private static async verifyHostedBadge(
+    badge: OB2.Assertion,
+    result: VerificationResult
+  ): Promise<void> {
     // For hosted verification, the badge should be accessible at its ID URL
     if (!badge.id || typeof badge.id !== 'string' || !badge.id.startsWith('http')) {
-      result.contentValidation!.errors.push('Hosted badge must have an HTTP(S) ID URL');
-      result.contentValidation!.isValid = false;
+      result.contentValidation.errors.push('Hosted badge must have an HTTP(S) ID URL');
+      result.contentValidation.isValid = false;
       return;
     }
 
     // In a browser environment, we would fetch the badge from its ID URL
     // and compare it with the current badge
     // For this implementation, we'll simulate this process
-    result.contentValidation!.warnings.push('Hosted badge verification requires network access to validate against the hosted assertion');
+    result.contentValidation.warnings.push(
+      'Hosted badge verification requires network access to validate against the hosted assertion'
+    );
 
     // In a real implementation, we would:
     // 1. Fetch the badge from its ID URL
@@ -645,7 +703,10 @@ export class BadgeVerificationService {
    * @param badge The badge to verify
    * @param result The verification result to update
    */
-  private static async verifySignedBadge(badge: OB2.Assertion, result: VerificationResult): Promise<void> {
+  private static async verifySignedBadge(
+    badge: OB2.Assertion,
+    result: VerificationResult
+  ): Promise<void> {
     // For signed verification, the badge should have a signature that can be verified
     // using the issuer's public key
 
@@ -654,7 +715,9 @@ export class BadgeVerificationService {
     const verification = badge.verification;
     if (!verification.creator && typeof badge.badge === 'object' && badge.badge.issuer) {
       // If no creator is specified, we need to check the issuer's profile for public keys
-      result.contentValidation!.warnings.push('Signed badge does not specify which key was used for signing');
+      result.contentValidation.warnings.push(
+        'Signed badge does not specify which key was used for signing'
+      );
     }
 
     // In a real implementation, we would:
@@ -664,7 +727,9 @@ export class BadgeVerificationService {
 
     // For now, we'll add a warning as full signature verification
     // requires additional libraries and is complex
-    result.contentValidation!.warnings.push('Full signature verification requires cryptographic libraries');
+    result.contentValidation.warnings.push(
+      'Full signature verification requires cryptographic libraries'
+    );
   }
 
   /**
@@ -672,11 +737,12 @@ export class BadgeVerificationService {
    * @param badge The badge to check
    * @param result The verification result to update
    */
-  private static checkExpiration(badge: OB2.Assertion | OB3.VerifiableCredential, result: VerificationResult): void {
+  private static checkExpiration(
+    badge: OB2.Assertion | OB3.VerifiableCredential,
+    result: VerificationResult
+  ): void {
     // Check if the badge has an expiration date
-    const expirationDate = isOB2Assertion(badge)
-      ? badge.expires
-      : badge.expirationDate;
+    const expirationDate = isOB2Assertion(badge) ? badge.expires : badge.expirationDate;
 
     if (expirationDate) {
       const expDate = new Date(expirationDate as string);
@@ -684,8 +750,8 @@ export class BadgeVerificationService {
 
       if (expDate < now) {
         result.expirationStatus = 'expired';
-        result.contentValidation!.errors.push('Badge has expired');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push('Badge has expired');
+        result.contentValidation.isValid = false;
       } else {
         result.expirationStatus = 'valid';
       }
@@ -699,15 +765,20 @@ export class BadgeVerificationService {
    * @param badge The badge to check
    * @param result The verification result to update
    */
-  private static async checkRevocation(badge: OB2.Assertion | OB3.VerifiableCredential, result: VerificationResult): Promise<void> {
+  private static async checkRevocation(
+    badge: OB2.Assertion | OB3.VerifiableCredential,
+    result: VerificationResult
+  ): Promise<void> {
     // For OB2 badges, check the revoked property
     if (isOB2Assertion(badge)) {
       if (badge.revoked === true) {
         result.revocationStatus = 'revoked';
-        result.contentValidation!.errors.push(badge.revocationReason
-          ? `Badge has been revoked: ${badge.revocationReason}`
-          : 'Badge has been revoked');
-        result.contentValidation!.isValid = false;
+        result.contentValidation.errors.push(
+          badge.revocationReason
+            ? `Badge has been revoked: ${badge.revocationReason}`
+            : 'Badge has been revoked'
+        );
+        result.contentValidation.isValid = false;
         return;
       }
 
@@ -725,12 +796,14 @@ export class BadgeVerificationService {
     if (badge.credentialStatus) {
       // In a real implementation, we would check the credential status endpoint
       // This would require network access
-      result.contentValidation!.warnings.push('Credential status checking requires network access');
+      result.contentValidation.warnings.push('Credential status checking requires network access');
       result.revocationStatus = 'unknown';
     } else {
       // If no credential status is provided, we can't determine revocation status
       result.revocationStatus = 'unknown';
-      result.contentValidation!.warnings.push('Revocation checking for OB3 credentials is not fully implemented');
+      result.contentValidation.warnings.push(
+        'Revocation checking for OB3 credentials is not fully implemented'
+      );
     }
   }
 

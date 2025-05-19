@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   badgesLayout: 'grid',
   badgesInteractive: true,
   showPagination: false,
-  pageSize: 6
+  pageSize: 6,
 });
 
 const emit = defineEmits<{
@@ -39,7 +39,7 @@ const badgesSectionTitle = computed(() => {
 const getInitials = (name: string): string => {
   return name
     .split(' ')
-    .map(part => part.charAt(0))
+    .map((part) => part.charAt(0))
     .join('')
     .toUpperCase()
     .substring(0, 2);
@@ -64,10 +64,10 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
       aria-labelledby="profile-title"
     >
       <div class="manus-profile-avatar">
-        <img 
-          v-if="profile.image" 
-          :src="profile.image" 
-          :alt="`${profile.name}'s avatar`" 
+        <img
+          v-if="profile.image"
+          :src="profile.image"
+          :alt="`${profile.name}'s avatar`"
           class="manus-profile-image"
         >
         <div
@@ -78,7 +78,7 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
           {{ getInitials(profile.name) }}
         </div>
       </div>
-      
+
       <div class="manus-profile-info">
         <h2
           id="profile-title"
@@ -86,14 +86,14 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
         >
           {{ profile.name }}
         </h2>
-        
+
         <p
           v-if="profile.description"
           class="manus-profile-description"
         >
           {{ profile.description }}
         </p>
-        
+
         <div class="manus-profile-details">
           <div
             v-if="profile.email"
@@ -107,16 +107,16 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
               {{ profile.email }}
             </a>
           </div>
-          
+
           <div
             v-if="profile.url"
             class="manus-profile-detail"
           >
             <span class="manus-profile-detail-label">Website:</span>
-            <a 
-              :href="profile.url" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              :href="profile.url"
+              target="_blank"
+              rel="noopener noreferrer"
               class="manus-profile-detail-value"
             >
               {{ formatUrl(profile.url) }}
@@ -126,7 +126,7 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
         </div>
       </div>
     </section>
-    
+
     <!-- Badges Section -->
     <section
       class="manus-profile-badges"
@@ -138,7 +138,7 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
       >
         {{ badgesSectionTitle }}
       </h3>
-      
+
       <div
         v-if="loading"
         class="manus-profile-loading"
@@ -147,14 +147,14 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
       >
         <span>Loading badges...</span>
       </div>
-      
+
       <div v-else>
         <slot
           name="badges-list"
           :badges="badges"
         >
-          <BadgeList 
-            :badges="badges" 
+          <BadgeList
+            :badges="badges"
             :layout="badgesLayout"
             :interactive="badgesInteractive"
             :show-pagination="showPagination"
@@ -178,7 +178,7 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
   --profile-title-color: #1a202c;
   --profile-text-color: #4a5568;
   --profile-link-color: #3182ce;
-  
+
   display: flex;
   flex-direction: column;
   gap: var(--profile-gap);
@@ -293,7 +293,7 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
     flex-direction: row;
     text-align: left;
   }
-  
+
   .manus-profile-info {
     flex: 1;
   }

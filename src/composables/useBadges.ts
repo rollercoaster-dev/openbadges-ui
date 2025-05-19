@@ -1,7 +1,7 @@
 // src/composables/useBadges.ts
 import { ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
-import type { OB2, OB3} from 'openbadges-types';
+import type { OB2, OB3 } from 'openbadges-types';
 import { BadgeService } from '../services/BadgeService';
 
 /**
@@ -31,10 +31,12 @@ export function useBadges(initialBadges: (OB2.Assertion | OB3.VerifiableCredenti
 
   // Computed properties
   const filteredBadges = computed(() => {
-    if (!filterText.value) {return badges.value;}
+    if (!filterText.value) {
+      return badges.value;
+    }
 
     const searchTerm = filterText.value.toLowerCase();
-    return badges.value.filter(badge => {
+    return badges.value.filter((badge) => {
       const normalized = BadgeService.normalizeBadge(badge);
       return (
         normalized.name.toLowerCase().includes(searchTerm) ||
@@ -59,9 +61,7 @@ export function useBadges(initialBadges: (OB2.Assertion | OB3.VerifiableCredenti
         // Sort by issuedOn date
         const dateA = new Date(normalizedA.issuedOn).getTime();
         const dateB = new Date(normalizedB.issuedOn).getTime();
-        return sortDirection.value === 'asc'
-          ? dateA - dateB
-          : dateB - dateA;
+        return sortDirection.value === 'asc' ? dateA - dateB : dateB - dateA;
       }
     });
 
@@ -70,14 +70,14 @@ export function useBadges(initialBadges: (OB2.Assertion | OB3.VerifiableCredenti
 
   // Normalized badges for display
   const normalizedBadges = computed(() => {
-    return sortedBadges.value.map(badge => BadgeService.normalizeBadge(badge));
+    return sortedBadges.value.map((badge) => BadgeService.normalizeBadge(badge));
   });
 
   // Group badges by issuer
   const badgesByIssuer = computed(() => {
     const grouped: Record<string, typeof normalizedBadges.value> = {};
 
-    normalizedBadges.value.forEach(badge => {
+    normalizedBadges.value.forEach((badge) => {
       const issuerName = badge.issuer.name || 'Unknown Issuer';
       if (!grouped[issuerName]) {
         grouped[issuerName] = [];
@@ -94,7 +94,7 @@ export function useBadges(initialBadges: (OB2.Assertion | OB3.VerifiableCredenti
   };
 
   const removeBadge = (badgeId: string) => {
-    const index = badges.value.findIndex(b => b.id === badgeId);
+    const index = badges.value.findIndex((b) => b.id === badgeId);
     if (index !== -1) {
       badges.value.splice(index, 1);
     }

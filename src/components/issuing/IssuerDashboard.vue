@@ -20,7 +20,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   issuerProfile: undefined,
   initialBadges: () => [],
-  loading: false
+  loading: false,
 });
 
 const emit = defineEmits<{
@@ -36,7 +36,9 @@ const sortOption = ref<'newest' | 'oldest' | 'name-asc' | 'name-desc'>('newest')
 
 // Create initial badge class with issuer info if available
 const initialBadgeClass = computed<Partial<OB2.BadgeClass>>(() => {
-  if (!props.issuerProfile) { return {} as Partial<OB2.BadgeClass>; }
+  if (!props.issuerProfile) {
+    return {} as Partial<OB2.BadgeClass>;
+  }
   return {
     issuer: {
       id: props.issuerProfile.id as Shared.IRI,
@@ -44,8 +46,8 @@ const initialBadgeClass = computed<Partial<OB2.BadgeClass>>(() => {
       name: props.issuerProfile.name,
       url: props.issuerProfile.url as Shared.IRI | undefined,
       email: props.issuerProfile.email,
-      image: props.issuerProfile.image as Shared.IRI | undefined
-    }
+      image: props.issuerProfile.image as Shared.IRI | undefined,
+    },
   } as Partial<OB2.BadgeClass>;
 });
 
@@ -56,7 +58,7 @@ const filteredBadges = computed(() => {
   // Apply filter
   if (filterText.value) {
     const searchTerm = filterText.value.toLowerCase();
-    result = result.filter(badge => {
+    result = result.filter((badge) => {
       const nb = BadgeService.normalizeBadge(badge);
       return (
         nb.name.toLowerCase().includes(searchTerm) ||
@@ -69,11 +71,19 @@ const filteredBadges = computed(() => {
   // Apply sort
   result.sort((a, b) => {
     if (sortOption.value === 'newest' || sortOption.value === 'oldest') {
-      const dateA = 'issuedOn' in a ? new Date(a.issuedOn).getTime() :
-                   'issuanceDate' in a ? new Date(a.issuanceDate).getTime() : 0;
+      const dateA =
+        'issuedOn' in a
+          ? new Date(a.issuedOn).getTime()
+          : 'issuanceDate' in a
+          ? new Date(a.issuanceDate).getTime()
+          : 0;
 
-      const dateB = 'issuedOn' in b ? new Date(b.issuedOn).getTime() :
-                   'issuanceDate' in b ? new Date(b.issuanceDate).getTime() : 0;
+      const dateB =
+        'issuedOn' in b
+          ? new Date(b.issuedOn).getTime()
+          : 'issuanceDate' in b
+          ? new Date(b.issuanceDate).getTime()
+          : 0;
 
       return sortOption.value === 'newest' ? dateB - dateA : dateA - dateB;
     } else {
@@ -90,9 +100,13 @@ const filteredBadges = computed(() => {
 });
 
 // Watch for changes in initialBadges prop
-watch(() => props.initialBadges, (newBadges) => {
-  badges.value = [...newBadges];
-}, { deep: true });
+watch(
+  () => props.initialBadges,
+  (newBadges) => {
+    badges.value = [...newBadges];
+  },
+  { deep: true }
+);
 
 // Methods
 const setActiveTab = (tab: 'issue' | 'badges') => {
@@ -139,7 +153,7 @@ onMounted(() => {
         <button
           id="issue-tab"
           class="manus-tab-button"
-          :class="{ 'active': activeTab === 'issue' }"
+          :class="{ active: activeTab === 'issue' }"
           aria-controls="issue-tab-panel"
           :aria-selected="activeTab === 'issue'"
           role="tab"
@@ -150,7 +164,7 @@ onMounted(() => {
         <button
           id="badges-tab"
           class="manus-tab-button"
-          :class="{ 'active': activeTab === 'badges' }"
+          :class="{ active: activeTab === 'badges' }"
           aria-controls="badges-tab-panel"
           :aria-selected="activeTab === 'badges'"
           role="tab"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BadgeList from './BadgeList.vue'
-import { mockAssertions } from '../../services/mockData'
+import { ref } from 'vue';
+import BadgeList from './BadgeList.vue';
+import { mockAssertions } from '../../services/mockData';
 
 /**
  * # BadgeList
@@ -61,26 +61,33 @@ const state = ref({
   pageSize: 9,
   currentPage: 1,
   showPagination: false,
-  ariaLabel: 'List of badges'
-})
+  ariaLabel: 'List of badges',
+});
 
 function onBadgeClick(badge) {
-  console.log('Badge clicked:', badge)
+  console.log('Badge clicked:', badge);
 }
 
 function onPageChange(page) {
-  console.log('Page changed:', page)
-  state.value.currentPage = page
+  console.log('Page changed:', page);
+  state.value.currentPage = page;
 }
 </script>
 
 <template>
-  <Story title="Components/Badges/BadgeList" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Badges/BadgeList"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #docs>
       <div class="histoire-docs">
         <h1>BadgeList</h1>
 
-        <p>The <code>BadgeList</code> component displays a collection of badges with filtering and sorting capabilities. It supports both grid and list layouts, pagination, and loading states.</p>
+        <p>
+          The <code>BadgeList</code> component displays a collection of badges with filtering and
+          sorting capabilities. It supports both grid and list layouts, pagination, and loading
+          states.
+        </p>
 
         <h2>When To Use</h2>
         <ul>
@@ -234,16 +241,41 @@ function onPageChange(page) {
       </div>
     </template>
     <template #controls>
-      <HstSelect v-model="state.layout" title="Layout">
-        <option value="grid">Grid</option>
-        <option value="list">List</option>
+      <HstSelect
+        v-model="state.layout"
+        title="Layout"
+      >
+        <option value="grid">
+          Grid
+        </option>
+        <option value="list">
+          List
+        </option>
       </HstSelect>
-      <HstCheckbox v-model="state.interactive" title="Interactive" />
-      <HstCheckbox v-model="state.loading" title="Loading" />
-      <HstCheckbox v-model="state.showPagination" title="Show Pagination" />
-      <HstNumber v-model="state.pageSize" title="Page Size" />
-      <HstNumber v-model="state.currentPage" title="Current Page" />
-      <HstText v-model="state.ariaLabel" title="Aria Label" />
+      <HstCheckbox
+        v-model="state.interactive"
+        title="Interactive"
+      />
+      <HstCheckbox
+        v-model="state.loading"
+        title="Loading"
+      />
+      <HstCheckbox
+        v-model="state.showPagination"
+        title="Show Pagination"
+      />
+      <HstNumber
+        v-model="state.pageSize"
+        title="Page Size"
+      />
+      <HstNumber
+        v-model="state.currentPage"
+        title="Current Page"
+      />
+      <HstText
+        v-model="state.ariaLabel"
+        title="Aria Label"
+      />
     </template>
 
     <Variant title="Grid Layout">

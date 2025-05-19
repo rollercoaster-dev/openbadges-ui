@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import FontSelector from './FontSelector.vue'
+import { ref } from 'vue';
+import FontSelector from './FontSelector.vue';
 
 /**
  * # FontSelector
@@ -37,30 +37,37 @@ import FontSelector from './FontSelector.vue'
  * | `textSpacingChange` | `boolean` | Emitted when the text spacing changes |
  */
 
-const selectedFont = ref('system')
-const showFontSize = ref(true)
-const showTextSpacing = ref(true)
+const selectedFont = ref('system');
+const showFontSize = ref(true);
+const showTextSpacing = ref(true);
 
 function onFontChange(value: string) {
-  console.log('Font changed:', value)
+  console.log('Font changed:', value);
 }
 
 function onFontSizeChange(value: string) {
-  console.log('Font size changed:', value)
+  console.log('Font size changed:', value);
 }
 
 function onTextSpacingChange(value: boolean) {
-  console.log('Text spacing changed:', value)
+  console.log('Text spacing changed:', value);
 }
 </script>
 
 <template>
-  <Story title="Components/Accessibility/FontSelector" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Accessibility/FontSelector"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #docs>
       <div class="histoire-docs">
         <h1>FontSelector</h1>
 
-        <p>The <code>FontSelector</code> component allows users to choose from a selection of accessible fonts, adjust font size, and enable enhanced text spacing for improved readability.</p>
+        <p>
+          The <code>FontSelector</code> component allows users to choose from a selection of
+          accessible fonts, adjust font size, and enable enhanced text spacing for improved
+          readability.
+        </p>
 
         <h2>When To Use</h2>
         <ul>
@@ -132,7 +139,10 @@ function onTextSpacingChange(value: boolean) {
             </tr>
             <tr>
               <td><code>availableFonts</code></td>
-              <td><code>Array&lt;{id: string, name: string, description?: string, className: string}&gt;</code></td>
+              <td>
+                <code>Array&lt;{id: string, name: string, description?: string, className:
+                  string}&gt;</code>
+              </td>
               <td>All fonts</td>
               <td>The available font options to display</td>
             </tr>
@@ -186,7 +196,10 @@ function onTextSpacingChange(value: boolean) {
         </table>
 
         <h2>CSS Variables</h2>
-        <p>The component uses CSS variables for styling, which can be overridden to customize its appearance:</p>
+        <p>
+          The component uses CSS variables for styling, which can be overridden to customize its
+          appearance:
+        </p>
         <table>
           <thead>
             <tr>
@@ -243,16 +256,27 @@ function onTextSpacingChange(value: boolean) {
         <p>The component includes the following accessible fonts by default:</p>
         <ul>
           <li><strong>System Font</strong>: Your device's default font</li>
-          <li><strong>Atkinson Hyperlegible</strong>: Designed for low vision readers by the Braille Institute</li>
+          <li>
+            <strong>Atkinson Hyperlegible</strong>: Designed for low vision readers by the Braille
+            Institute
+          </li>
           <li><strong>OpenDyslexic</strong>: Designed specifically for readers with dyslexia</li>
-          <li><strong>Lexend</strong>: Designed to reduce visual stress and improve reading fluency</li>
+          <li>
+            <strong>Lexend</strong>: Designed to reduce visual stress and improve reading fluency
+          </li>
           <li><strong>Inter</strong>: Modern, highly legible sans-serif font</li>
         </ul>
       </div>
     </template>
     <template #controls>
-      <HstCheckbox v-model="showFontSize" title="Show Font Size Controls" />
-      <HstCheckbox v-model="showTextSpacing" title="Show Text Spacing Controls" />
+      <HstCheckbox
+        v-model="showFontSize"
+        title="Show Font Size Controls"
+      />
+      <HstCheckbox
+        v-model="showTextSpacing"
+        title="Show Text Spacing Controls"
+      />
     </template>
 
     <Variant title="Default">
@@ -260,9 +284,9 @@ function onTextSpacingChange(value: boolean) {
         v-model="selectedFont"
         :show-font-size="showFontSize"
         :show-text-spacing="showTextSpacing"
-        @update:modelValue="onFontChange"
-        @fontSizeChange="onFontSizeChange"
-        @textSpacingChange="onTextSpacingChange"
+        @update:model-value="onFontChange"
+        @font-size-change="onFontSizeChange"
+        @text-spacing-change="onTextSpacingChange"
       />
     </Variant>
 
@@ -271,8 +295,8 @@ function onTextSpacingChange(value: boolean) {
         v-model="selectedFont"
         :show-font-size="false"
         :show-text-spacing="showTextSpacing"
-        @update:modelValue="onFontChange"
-        @textSpacingChange="onTextSpacingChange"
+        @update:model-value="onFontChange"
+        @text-spacing-change="onTextSpacingChange"
       />
     </Variant>
 
@@ -281,8 +305,8 @@ function onTextSpacingChange(value: boolean) {
         v-model="selectedFont"
         :show-font-size="showFontSize"
         :show-text-spacing="false"
-        @update:modelValue="onFontChange"
-        @fontSizeChange="onFontSizeChange"
+        @update:model-value="onFontChange"
+        @font-size-change="onFontSizeChange"
       />
     </Variant>
 
@@ -296,18 +320,18 @@ function onTextSpacingChange(value: boolean) {
             id: 'system',
             name: 'System Font',
             description: 'Your device\'s default font',
-            className: 'ob-font-system'
+            className: 'ob-font-system',
           },
           {
             id: 'opendyslexic',
             name: 'OpenDyslexic',
             description: 'Designed for readers with dyslexia',
-            className: 'ob-font-dyslexic'
-          }
+            className: 'ob-font-dyslexic',
+          },
         ]"
-        @update:modelValue="onFontChange"
-        @fontSizeChange="onFontSizeChange"
-        @textSpacingChange="onTextSpacingChange"
+        @update:model-value="onFontChange"
+        @font-size-change="onFontSizeChange"
+        @text-spacing-change="onTextSpacingChange"
       />
     </Variant>
   </Story>

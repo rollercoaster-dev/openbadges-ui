@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import AccessibilitySettings from './AccessibilitySettings.vue'
+import { ref } from 'vue';
+import AccessibilitySettings from './AccessibilitySettings.vue';
 
 /**
  * # AccessibilitySettings
@@ -42,57 +42,64 @@ import AccessibilitySettings from './AccessibilitySettings.vue'
  * | `resetSettings` | - | Emitted when all settings are reset to defaults |
  */
 
-const selectedTheme = ref('default')
-const selectedFont = ref('system')
-const isOpen = ref(true)
-const showMotionReduction = ref(true)
-const showFocusMode = ref(true)
+const selectedTheme = ref('default');
+const selectedFont = ref('system');
+const isOpen = ref(true);
+const showMotionReduction = ref(true);
+const showFocusMode = ref(true);
 
 function onThemeChange(value: string) {
-  console.log('Theme changed:', value)
-  selectedTheme.value = value
+  console.log('Theme changed:', value);
+  selectedTheme.value = value;
 }
 
 function onFontChange(value: string) {
-  console.log('Font changed:', value)
-  selectedFont.value = value
+  console.log('Font changed:', value);
+  selectedFont.value = value;
 }
 
 function onOpenChange(value: boolean) {
-  console.log('Open state changed:', value)
-  isOpen.value = value
+  console.log('Open state changed:', value);
+  isOpen.value = value;
 }
 
 function onMotionReductionChange(value: boolean) {
-  console.log('Motion reduction changed:', value)
+  console.log('Motion reduction changed:', value);
 }
 
 function onFocusModeChange(value: boolean) {
-  console.log('Focus mode changed:', value)
+  console.log('Focus mode changed:', value);
 }
 
 function onFontSizeChange(value: string) {
-  console.log('Font size changed:', value)
+  console.log('Font size changed:', value);
 }
 
 function onTextSpacingChange(value: boolean) {
-  console.log('Text spacing changed:', value)
+  console.log('Text spacing changed:', value);
 }
 
 function onResetSettings() {
-  console.log('Settings reset')
-  selectedTheme.value = 'default'
-  selectedFont.value = 'system'
+  console.log('Settings reset');
+  selectedTheme.value = 'default';
+  selectedFont.value = 'system';
 }
 </script>
 
 <template>
-  <Story title="Components/Accessibility/AccessibilitySettings" :layout="{ type: 'single', iframe: true, iframeHeight: 600 }">
+  <Story
+    title="Components/Accessibility/AccessibilitySettings"
+    :layout="{ type: 'single', iframe: true, iframeHeight: 600 }"
+  >
     <template #docs>
       <div class="histoire-docs">
         <h1>AccessibilitySettings</h1>
 
-        <p>The <code>AccessibilitySettings</code> component provides a comprehensive interface for users to customize accessibility options, including font selection, theme selection, motion reduction, and focus mode.</p>
+        <p>
+          The <code>AccessibilitySettings</code> component provides a comprehensive interface for
+          users to customize accessibility options, including font selection, theme selection,
+          motion reduction, and focus mode.
+        </p>
 
         <h2>When To Use</h2>
         <ul>
@@ -239,7 +246,10 @@ function onResetSettings() {
         </table>
 
         <h2>CSS Variables</h2>
-        <p>The component uses CSS variables for styling, which can be overridden to customize its appearance:</p>
+        <p>
+          The component uses CSS variables for styling, which can be overridden to customize its
+          appearance:
+        </p>
         <table>
           <thead>
             <tr>
@@ -320,13 +330,31 @@ function onResetSettings() {
       </div>
     </template>
     <template #controls>
-      <HstCheckbox v-model="showMotionReduction" title="Show Motion Reduction Option" />
-      <HstCheckbox v-model="showFocusMode" title="Show Focus Mode Option" />
-      <HstCheckbox v-model="isOpen" title="Panel Open" />
+      <HstCheckbox
+        v-model="showMotionReduction"
+        title="Show Motion Reduction Option"
+      />
+      <HstCheckbox
+        v-model="showFocusMode"
+        title="Show Focus Mode Option"
+      />
+      <HstCheckbox
+        v-model="isOpen"
+        title="Panel Open"
+      />
     </template>
 
     <Variant title="Default">
-      <div style="display: flex; justify-content: flex-end; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 450px;">
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          padding: 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          margin-bottom: 450px;
+        "
+      >
         <AccessibilitySettings
           v-model:theme="selectedTheme"
           v-model:font="selectedFont"
@@ -336,17 +364,26 @@ function onResetSettings() {
           @update:theme="onThemeChange"
           @update:font="onFontChange"
           @update:open="onOpenChange"
-          @motionReductionChange="onMotionReductionChange"
-          @focusModeChange="onFocusModeChange"
-          @fontSizeChange="onFontSizeChange"
-          @textSpacingChange="onTextSpacingChange"
-          @resetSettings="onResetSettings"
+          @motion-reduction-change="onMotionReductionChange"
+          @focus-mode-change="onFocusModeChange"
+          @font-size-change="onFontSizeChange"
+          @text-spacing-change="onTextSpacingChange"
+          @reset-settings="onResetSettings"
         />
       </div>
     </Variant>
 
     <Variant title="Without Motion Reduction">
-      <div style="display: flex; justify-content: flex-end; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 450px;">
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          padding: 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          margin-bottom: 450px;
+        "
+      >
         <AccessibilitySettings
           v-model:theme="selectedTheme"
           v-model:font="selectedFont"
@@ -356,16 +393,25 @@ function onResetSettings() {
           @update:theme="onThemeChange"
           @update:font="onFontChange"
           @update:open="onOpenChange"
-          @focusModeChange="onFocusModeChange"
-          @fontSizeChange="onFontSizeChange"
-          @textSpacingChange="onTextSpacingChange"
-          @resetSettings="onResetSettings"
+          @focus-mode-change="onFocusModeChange"
+          @font-size-change="onFontSizeChange"
+          @text-spacing-change="onTextSpacingChange"
+          @reset-settings="onResetSettings"
         />
       </div>
     </Variant>
 
     <Variant title="Without Focus Mode">
-      <div style="display: flex; justify-content: flex-end; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 450px;">
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          padding: 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          margin-bottom: 450px;
+        "
+      >
         <AccessibilitySettings
           v-model:theme="selectedTheme"
           v-model:font="selectedFont"
@@ -375,16 +421,25 @@ function onResetSettings() {
           @update:theme="onThemeChange"
           @update:font="onFontChange"
           @update:open="onOpenChange"
-          @motionReductionChange="onMotionReductionChange"
-          @fontSizeChange="onFontSizeChange"
-          @textSpacingChange="onTextSpacingChange"
-          @resetSettings="onResetSettings"
+          @motion-reduction-change="onMotionReductionChange"
+          @font-size-change="onFontSizeChange"
+          @text-spacing-change="onTextSpacingChange"
+          @reset-settings="onResetSettings"
         />
       </div>
     </Variant>
 
     <Variant title="Custom Title">
-      <div style="display: flex; justify-content: flex-end; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 450px;">
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          padding: 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          margin-bottom: 450px;
+        "
+      >
         <AccessibilitySettings
           v-model:theme="selectedTheme"
           v-model:font="selectedFont"
@@ -395,11 +450,11 @@ function onResetSettings() {
           @update:theme="onThemeChange"
           @update:font="onFontChange"
           @update:open="onOpenChange"
-          @motionReductionChange="onMotionReductionChange"
-          @focusModeChange="onFocusModeChange"
-          @fontSizeChange="onFontSizeChange"
-          @textSpacingChange="onTextSpacingChange"
-          @resetSettings="onResetSettings"
+          @motion-reduction-change="onMotionReductionChange"
+          @focus-mode-change="onFocusModeChange"
+          @font-size-change="onFontSizeChange"
+          @text-spacing-change="onTextSpacingChange"
+          @reset-settings="onResetSettings"
         />
       </div>
     </Variant>

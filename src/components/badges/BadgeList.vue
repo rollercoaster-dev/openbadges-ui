@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
   pageSize: 9,
   currentPage: 1,
   showPagination: false,
-  ariaLabel: 'List of badges'
+  ariaLabel: 'List of badges',
 });
 
 const emit = defineEmits<{
@@ -34,9 +34,12 @@ const emit = defineEmits<{
 const internalCurrentPage = ref(props.currentPage);
 
 // Watch for external currentPage changes
-watch(() => props.currentPage, (newPage) => {
-  internalCurrentPage.value = newPage;
-});
+watch(
+  () => props.currentPage,
+  (newPage) => {
+    internalCurrentPage.value = newPage;
+  }
+);
 
 // Compute total pages based on badges length and page size
 const totalPages = computed(() => {
@@ -45,8 +48,10 @@ const totalPages = computed(() => {
 
 // Get current page of badges
 const paginatedBadges = computed(() => {
-  if (!props.showPagination) {return props.badges;}
-  
+  if (!props.showPagination) {
+    return props.badges;
+  }
+
   const start = (internalCurrentPage.value - 1) * props.pageSize;
   const end = start + props.pageSize;
   return props.badges.slice(start, end);
@@ -54,9 +59,9 @@ const paginatedBadges = computed(() => {
 
 // Normalize badges for display
 const normalizedBadges = computed(() => {
-  return paginatedBadges.value.map(badge => ({
+  return paginatedBadges.value.map((badge) => ({
     original: badge,
-    ...BadgeService.normalizeBadge(badge)
+    ...BadgeService.normalizeBadge(badge),
   }));
 });
 
@@ -67,8 +72,10 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
 
 // Handle page change
 const handlePageChange = (page: number) => {
-  if (page < 1 || page > totalPages.value) {return;}
-  
+  if (page < 1 || page > totalPages.value) {
+    return;
+  }
+
   internalCurrentPage.value = page;
   emit('page-change', page);
 };
@@ -87,7 +94,7 @@ const handlePageChange = (page: number) => {
     >
       <span>Loading badges...</span>
     </div>
-    
+
     <div
       v-else-if="normalizedBadges.length === 0"
       class="manus-badge-list-empty"
@@ -97,7 +104,7 @@ const handlePageChange = (page: number) => {
         <p>No badges found.</p>
       </slot>
     </div>
-    
+
     <ul
       v-else
       class="manus-badge-list-items"
@@ -113,20 +120,20 @@ const handlePageChange = (page: number) => {
           :badge="badge.original"
           :normalized="badge"
         >
-          <BadgeDisplay 
-            :badge="badge.original" 
+          <BadgeDisplay
+            :badge="badge.original"
             :interactive="interactive"
             @click="handleBadgeClick(badge.original)"
           />
         </slot>
       </li>
     </ul>
-    
+
     <div
       v-if="showPagination && totalPages > 1"
       class="manus-badge-list-pagination"
     >
-      <button 
+      <button
         class="manus-pagination-button"
         :disabled="currentPage === 1"
         aria-label="Previous page"
@@ -134,12 +141,10 @@ const handlePageChange = (page: number) => {
       >
         Previous
       </button>
-      
-      <span class="manus-pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      
-      <button 
+
+      <span class="manus-pagination-info"> Page {{ currentPage }} of {{ totalPages }} </span>
+
+      <button
         class="manus-pagination-button"
         :disabled="currentPage === totalPages"
         aria-label="Next page"
@@ -161,7 +166,7 @@ const handlePageChange = (page: number) => {
   --badge-list-button-hover-bg: #cbd5e0;
   --badge-list-button-disabled-bg: #edf2f7;
   --badge-list-button-disabled-color: #a0aec0;
-  
+
   display: flex;
   flex-direction: column;
   gap: 24px;

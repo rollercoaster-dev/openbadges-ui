@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   showExpiryDate: false,
   interactive: false,
   showVerification: false,
-  autoVerify: false
+  autoVerify: false,
 });
 
 const emit = defineEmits<{
@@ -40,7 +40,7 @@ const formatDate = (dateString: string): string => {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   } catch (e) {
     return dateString;
@@ -113,17 +113,23 @@ const toggleVerificationDetails = () => {
       >
         <span>Expires: {{ formatDate(normalizedBadge.expires) }}</span>
       </div>
-      <div v-if="showVerification" class="manus-badge-verification-toggle">
+      <div
+        v-if="showVerification"
+        class="manus-badge-verification-toggle"
+      >
         <button
           class="manus-badge-verification-toggle-button"
-          @click="toggleVerificationDetails"
           type="button"
+          @click="toggleVerificationDetails"
         >
           {{ showVerificationDetails ? 'Hide Verification Details' : 'Show Verification Details' }}
         </button>
       </div>
 
-      <div v-if="showVerification && showVerificationDetails" class="manus-badge-verification-container">
+      <div
+        v-if="showVerification && showVerificationDetails"
+        class="manus-badge-verification-container"
+      >
         <BadgeVerification
           :badge="badge"
           :auto-verify="autoVerify"

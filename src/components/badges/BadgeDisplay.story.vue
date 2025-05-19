@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BadgeDisplay from './BadgeDisplay.vue'
-import { mockAssertions, mockOB3Credential } from '../../services/mockData'
-import type { OB2 } from 'openbadges-types'
+import { ref } from 'vue';
+import BadgeDisplay from './BadgeDisplay.vue';
+import { mockAssertions, mockOB3Credential } from '../../services/mockData';
+import type { OB2 } from 'openbadges-types';
 
 /**
  * # BadgeDisplay
@@ -60,30 +60,36 @@ const state = ref({
   showExpiryDate: false,
   interactive: false,
   showVerification: false,
-  autoVerify: false
-})
+  autoVerify: false,
+});
 
 const badgeWithExpiry = {
   ...mockAssertions[0],
-  expires: '2026-01-15T12:00:00Z'
-} as OB2.Assertion
+  expires: '2026-01-15T12:00:00Z',
+} as OB2.Assertion;
 
 function onBadgeClick(badge) {
-  console.log('Badge clicked:', badge)
+  console.log('Badge clicked:', badge);
 }
 
 function onVerified(isValid) {
-  console.log('Badge verified:', isValid)
+  console.log('Badge verified:', isValid);
 }
 </script>
 
 <template>
-  <Story title="Components/Badges/BadgeDisplay" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Badges/BadgeDisplay"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #docs>
       <div class="histoire-docs">
         <h1>BadgeDisplay</h1>
 
-        <p>The <code>BadgeDisplay</code> component renders a single badge with its image, name, description, issuer information, and dates.</p>
+        <p>
+          The <code>BadgeDisplay</code> component renders a single badge with its image, name,
+          description, issuer information, and dates.
+        </p>
 
         <h2>When To Use</h2>
         <ul>
@@ -213,7 +219,10 @@ function onVerified(isValid) {
         </table>
 
         <h2>CSS Variables</h2>
-        <p>The component uses CSS variables for styling, which can be overridden to customize its appearance:</p>
+        <p>
+          The component uses CSS variables for styling, which can be overridden to customize its
+          appearance:
+        </p>
         <table>
           <thead>
             <tr>
@@ -263,12 +272,30 @@ function onVerified(isValid) {
       </div>
     </template>
     <template #controls>
-      <HstCheckbox v-model="state.showDescription" title="Show Description" />
-      <HstCheckbox v-model="state.showIssuedDate" title="Show Issued Date" />
-      <HstCheckbox v-model="state.showExpiryDate" title="Show Expiry Date" />
-      <HstCheckbox v-model="state.interactive" title="Interactive" />
-      <HstCheckbox v-model="state.showVerification" title="Show Verification" />
-      <HstCheckbox v-model="state.autoVerify" title="Auto Verify" />
+      <HstCheckbox
+        v-model="state.showDescription"
+        title="Show Description"
+      />
+      <HstCheckbox
+        v-model="state.showIssuedDate"
+        title="Show Issued Date"
+      />
+      <HstCheckbox
+        v-model="state.showExpiryDate"
+        title="Show Expiry Date"
+      />
+      <HstCheckbox
+        v-model="state.interactive"
+        title="Interactive"
+      />
+      <HstCheckbox
+        v-model="state.showVerification"
+        title="Show Verification"
+      />
+      <HstCheckbox
+        v-model="state.autoVerify"
+        title="Auto Verify"
+      />
     </template>
 
     <Variant title="Default">

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BadgeIssuerForm from './BadgeIssuerForm.vue'
-import { mockBadgeClasses } from '../../services/mockData'
+import { ref } from 'vue';
+import BadgeIssuerForm from './BadgeIssuerForm.vue';
+import { mockBadgeClasses } from '../../services/mockData';
 
 const state = ref({
   initialBadgeClass: {},
-  initialRecipientEmail: ''
-})
+  initialRecipientEmail: '',
+});
 
 const prefilledState = {
   initialBadgeClass: {
@@ -16,11 +16,11 @@ const prefilledState = {
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Rollercoaster.dev'
-    }
+      name: 'Rollercoaster.dev',
+    },
   },
-  initialRecipientEmail: 'recipient@example.org'
-}
+  initialRecipientEmail: 'recipient@example.org',
+};
 
 const validationErrorState = {
   initialBadgeClass: {
@@ -29,23 +29,26 @@ const validationErrorState = {
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Rollercoaster.dev'
-    }
+      name: 'Rollercoaster.dev',
+    },
   },
-  initialRecipientEmail: 'invalid-email' // Invalid email to trigger validation error
-}
+  initialRecipientEmail: 'invalid-email', // Invalid email to trigger validation error
+};
 
 function onBadgeIssued(assertion) {
-  console.log('Badge issued:', assertion)
+  console.log('Badge issued:', assertion);
 }
 
 function onReset() {
-  console.log('Form reset')
+  console.log('Form reset');
 }
 </script>
 
 <template>
-  <Story title="Components/Issuing/BadgeIssuerForm" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Issuing/BadgeIssuerForm"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <Variant title="Empty">
       <BadgeIssuerForm
         :initial-badge-class="state.initialBadgeClass"

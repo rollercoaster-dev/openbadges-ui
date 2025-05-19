@@ -1,40 +1,48 @@
 // tests/unit/services/BadgeVerificationService.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BadgeVerificationService } from '../../../src/services/BadgeVerificationService';
-import type { OB2, OB3 } from 'openbadges-types';
+import { type OB2, type OB3 } from 'openbadges-types';
+import type { Shared } from 'openbadges-types'; 
+import { createIRI, createDateTime } from '../../../src/utils/type-helpers';
+type DateTime = Shared.DateTime;
 
 // Mock the validateBadge function from openbadges-types
 vi.mock('openbadges-types', () => ({
   validateBadge: vi.fn().mockImplementation((badge) => {
     // Simple mock implementation that checks for basic properties
-    const isOB2 = badge && typeof badge === 'object' && 'type' in badge && badge.type === 'Assertion';
-    const isOB3 = badge && typeof badge === 'object' && '@context' in badge &&
-                  'type' in badge && Array.isArray(badge.type) &&
-                  badge.type.includes('VerifiableCredential');
+    const isOB2 =
+      badge && typeof badge === 'object' && 'type' in badge && badge.type === 'Assertion';
+    const isOB3 =
+      badge &&
+      typeof badge === 'object' &&
+      '@context' in badge &&
+      'type' in badge &&
+      Array.isArray(badge.type) &&
+      badge.type.includes('VerifiableCredential');
 
     if (isOB2) {
       return {
         isValid: true,
         errors: [],
         warnings: [],
-        version: 'OB2'
+        version: 'OB2',
       };
     } else if (isOB3) {
       return {
         isValid: true,
         errors: [],
         warnings: [],
-        version: 'OB3'
+        version: 'OB3',
       };
     } else {
       return {
         isValid: false,
         errors: ['Invalid badge format'],
         warnings: [],
-        version: undefined
+        version: undefined,
       };
     }
-  })
+  }),
 }));
 
 describe('BadgeVerificationService', () => {
@@ -42,74 +50,76 @@ describe('BadgeVerificationService', () => {
   const validOB2Badge: OB2.Assertion = {
     '@context': 'https://w3id.org/openbadges/v2',
     type: 'Assertion',
-    id: 'http://example.org/assertions/123',
+    id: createIRI('http://example.org/assertions/123'),
     recipient: {
       identity: 'test@example.org',
       type: 'email',
-      hashed: false
+      hashed: false,
     },
     badge: {
       type: 'BadgeClass',
-      id: 'http://example.org/badges/5',
+      id: createIRI('http://example.org/badges/5'),
       name: 'Test Badge',
       description: 'A test badge',
-      image: 'http://example.org/badges/5/image',
+      image: createIRI('http://example.org/badges/5/image'),
       criteria: {
-        narrative: 'The criteria for earning this badge'
+        narrative: 'The criteria for earning this badge',
       },
       issuer: {
         type: 'Profile',
-        id: 'http://example.org/issuer',
+        id: createIRI('http://example.org/issuer'),
         name: 'Test Issuer',
-        url: 'http://example.org'
-      }
+        url: createIRI('http://example.org'),
+      },
     },
     verification: {
-      type: 'hosted'
+      type: 'hosted',
     },
-    issuedOn: '2023-01-01T00:00:00Z'
+    issuedOn: createDateTime('2023-01-01T00:00:00Z'),
   };
 
   // Sample OB3 badge for testing
   const validOB3Badge: OB3.VerifiableCredential = {
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
-      'https://purl.imsglobal.org/spec/ob/v3p0/context.json'
+      'https://purl.imsglobal.org/spec/ob/v3p0/context.json',
     ],
-    id: 'http://example.org/credentials/3732',
+    id: createIRI('http://example.org/credentials/3732'),
     type: ['VerifiableCredential', 'OpenBadgeCredential'],
     issuer: {
-      id: 'http://example.org/issuers/1',
+      id: createIRI('http://example.org/issuers/1'),
       type: 'Profile',
-      name: 'Test Issuer'
+      name: 'Test Issuer',
+      url: createIRI('http://example.org/issuers/1'),
     },
-    issuanceDate: '2023-01-01T00:00:00Z',
+    issuanceDate: createDateTime('2023-01-01T00:00:00Z'),
     credentialSubject: {
-      id: 'did:example:ebfeb1f712ebc6f1c276e12ec21',
+      id: createIRI('did:example:ebfeb1f712ebc6f1c276e12ec21'),
       type: 'AchievementSubject',
       achievement: {
-        id: 'http://example.org/achievements/1',
+        id: createIRI('http://example.org/achievements/1'),
         type: 'Achievement',
         name: 'Test Badge',
         description: 'A test badge',
         image: {
-          id: 'http://example.org/badges/5/image',
-          type: 'Image'
-        }
-      }
+          id: createIRI('http://example.org/badges/5/image'),
+          type: 'Image',
+        },
+      },
     },
     proof: {
       type: 'Ed25519Signature2020',
-      created: '2023-01-01T00:00:00Z',
-      verificationMethod: 'http://example.org/issuers/1#keys/1',
+      created: createDateTime('2023-01-01T00:00:00Z'),
+      verificationMethod: createIRI('http://example.org/issuers/1#keys/1'),
       proofPurpose: 'assertionMethod',
-      proofValue: 'z58DAdFfa9SkqZMVPxAQpic6FPCsJWa6SpsfDLnfWE3SV8mZ9qqLH81imXXAiLnJwkoXkgZ1xQ24zQ6yVsQFKR29D'
-    }
+      proofValue:
+        'z58DAdFfa9SkqZMVPxAQpic6FPCsJWa6SpsfDLnfWE3SV8mZ9qqLH81imXXAiLnJwkoXkgZ1xQ24zQ6yVsQFKR29D',
+    },
   };
 
   // Invalid badge for testing
   const invalidBadge = {
-    id: 'not-a-valid-badge'
+    id: 'not-a-valid-badge',
   };
 
   beforeEach(() => {
@@ -143,6 +153,7 @@ describe('BadgeVerificationService', () => {
     });
 
     it('should reject an invalid badge', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await BadgeVerificationService.verifyBadge(invalidBadge as any);
 
       expect(result.isValid).toBe(false);
@@ -151,9 +162,9 @@ describe('BadgeVerificationService', () => {
     });
 
     it('should detect expired badges', async () => {
-      const expiredBadge = {
+      const expiredBadge: OB2.Assertion = {
         ...validOB2Badge,
-        expires: '2020-01-01T00:00:00Z'
+        expires: '2020-01-01T00:00:00Z' as DateTime,
       };
 
       const result = await BadgeVerificationService.verifyBadge(expiredBadge);
@@ -167,7 +178,7 @@ describe('BadgeVerificationService', () => {
       const revokedBadge = {
         ...validOB2Badge,
         revoked: true,
-        revocationReason: 'Test revocation'
+        revocationReason: 'Test revocation',
       };
 
       const result = await BadgeVerificationService.verifyBadge(revokedBadge);
@@ -181,12 +192,14 @@ describe('BadgeVerificationService', () => {
       const badgeWithMissingName = {
         ...validOB2Badge,
         badge: {
-          ...validOB2Badge.badge,
-          name: ''
-        }
+          ...(validOB2Badge.badge as object),
+          name: '',
+        },
       };
 
-      const result = await BadgeVerificationService.verifyBadge(badgeWithMissingName);
+      const result = await BadgeVerificationService.verifyBadge(
+        badgeWithMissingName as OB2.Assertion
+      );
 
       expect(result.isValid).toBe(false);
       expect(result.contentValidation?.errors).toContain('BadgeClass is missing a name');
@@ -197,23 +210,25 @@ describe('BadgeVerificationService', () => {
         ...validOB3Badge,
         credentialSubject: {
           ...validOB3Badge.credentialSubject,
-          achievement: undefined
-        }
+          achievement: undefined,
+        },
       };
-
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await BadgeVerificationService.verifyBadge(badgeWithMissingAchievement as any);
 
       expect(result.isValid).toBe(false);
-      expect(result.contentValidation?.errors).toContain('Credential subject is missing an achievement');
+      expect(result.contentValidation?.errors).toContain(
+        'Credential subject is missing an achievement'
+      );
     });
 
     it('should handle errors during verification', async () => {
       // Create a completely invalid badge that will fail validation
       const invalidBadge = {
         type: 'Invalid',
-        id: 'not-a-valid-badge'
+        id: 'not-a-valid-badge',
       };
-
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await BadgeVerificationService.verifyBadge(invalidBadge as any);
 
       expect(result.isValid).toBe(false);

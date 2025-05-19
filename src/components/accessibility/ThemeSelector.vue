@@ -10,7 +10,7 @@ interface ThemeSelectorProps {
    * @default 'default'
    */
   modelValue?: string;
-  
+
   /**
    * The available theme options to display
    * @default all themes
@@ -21,7 +21,7 @@ interface ThemeSelectorProps {
     description?: string;
     className: string;
   }>;
-  
+
   /**
    * The label for the theme selector
    * @default 'Theme'
@@ -37,45 +37,45 @@ const props = withDefaults(defineProps<ThemeSelectorProps>(), {
       id: 'default',
       name: 'Default Theme',
       description: 'Standard theme with balanced colors and spacing',
-      className: 'ob-default-theme'
+      className: 'ob-default-theme',
     },
     {
       id: 'dyslexia',
       name: 'Dyslexia-Friendly',
       description: 'Optimized for readers with dyslexia, with improved spacing and readability',
-      className: 'ob-dyslexia-friendly-theme'
+      className: 'ob-dyslexia-friendly-theme',
     },
     {
       id: 'low-vision',
       name: 'Low Vision',
       description: 'High contrast theme with larger text for low vision users',
-      className: 'ob-low-vision-theme'
+      className: 'ob-low-vision-theme',
     },
     {
       id: 'low-info',
       name: 'Low Information Density',
       description: 'Reduced visual complexity for easier focus',
-      className: 'ob-low-info-theme'
+      className: 'ob-low-info-theme',
     },
     {
       id: 'autism',
       name: 'Autism-Friendly',
       description: 'Predictable layouts with reduced sensory stimulation',
-      className: 'ob-autism-friendly-theme'
+      className: 'ob-autism-friendly-theme',
     },
     {
       id: 'dark',
       name: 'Dark Theme',
       description: 'Reduced light emission for comfortable viewing in low light',
-      className: 'ob-dark-theme'
+      className: 'ob-dark-theme',
     },
     {
       id: 'high-contrast',
       name: 'High Contrast',
       description: 'Maximum contrast for better visibility',
-      className: 'ob-high-contrast-theme'
-    }
-  ]
+      className: 'ob-high-contrast-theme',
+    },
+  ],
 });
 
 /**
@@ -94,19 +94,22 @@ const selectedTheme = ref(props.modelValue);
 
 // Computed properties
 const currentThemeClass = computed(() => {
-  const theme = props.availableThemes.find(t => t.id === selectedTheme.value);
+  const theme = props.availableThemes.find((t) => t.id === selectedTheme.value);
   return theme ? theme.className : 'ob-default-theme';
 });
 
 const currentThemeDescription = computed(() => {
-  const theme = props.availableThemes.find(t => t.id === selectedTheme.value);
+  const theme = props.availableThemes.find((t) => t.id === selectedTheme.value);
   return theme?.description || '';
 });
 
 // Watch for changes in props
-watch(() => props.modelValue, (newValue) => {
-  selectedTheme.value = newValue;
-});
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedTheme.value = newValue;
+  }
+);
 
 // Methods
 const handleThemeChange = (event: Event) => {
@@ -119,7 +122,10 @@ const handleThemeChange = (event: Event) => {
 <template>
   <div class="ob-theme-selector">
     <div class="ob-theme-selector-group">
-      <label :for="'ob-theme-select'" class="ob-theme-selector-label">{{ themeLabel }}</label>
+      <label
+        :for="'ob-theme-select'"
+        class="ob-theme-selector-label"
+      >{{ themeLabel }}</label>
       <select
         :id="'ob-theme-select'"
         class="ob-theme-selector-select"
@@ -134,19 +140,33 @@ const handleThemeChange = (event: Event) => {
           {{ theme.name }}
         </option>
       </select>
-      <p v-if="currentThemeDescription" class="ob-theme-selector-description">
+      <p
+        v-if="currentThemeDescription"
+        class="ob-theme-selector-description"
+      >
         {{ currentThemeDescription }}
       </p>
     </div>
-    
-    <div class="ob-theme-selector-preview" :class="currentThemeClass">
-      <div class="ob-theme-preview-header">Theme Preview</div>
+
+    <div
+      class="ob-theme-selector-preview"
+      :class="currentThemeClass"
+    >
+      <div class="ob-theme-preview-header">
+        Theme Preview
+      </div>
       <div class="ob-theme-preview-content">
         <div class="ob-theme-preview-text">
-          <h3 class="ob-theme-preview-title">Sample Badge</h3>
-          <p class="ob-theme-preview-description">This is how content will appear with this theme.</p>
+          <h3 class="ob-theme-preview-title">
+            Sample Badge
+          </h3>
+          <p class="ob-theme-preview-description">
+            This is how content will appear with this theme.
+          </p>
         </div>
-        <div class="ob-theme-preview-button">View</div>
+        <div class="ob-theme-preview-button">
+          View
+        </div>
       </div>
     </div>
   </div>

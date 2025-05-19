@@ -116,7 +116,7 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should show verification status correctly', async () => {
     // Mock a successful verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
@@ -151,7 +151,7 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should show verification details when verification is complete', async () => {
     // Mock a successful verification with some warnings
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['This is a test warning'],
@@ -190,7 +190,7 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should handle verification failure correctly', async () => {
     // Mock a failed verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge format'],
       warnings: [],

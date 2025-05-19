@@ -1,6 +1,6 @@
 // tests/integration/components/BadgeListDisplay.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import BadgeList from '../../../src/components/badges/BadgeList.vue';
 import BadgeDisplay from '../../../src/components/badges/BadgeDisplay.vue';
 import { createMockOB2Badge, createMockOB3Badge } from '../utils';

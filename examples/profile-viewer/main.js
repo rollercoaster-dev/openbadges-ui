@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { OpenBadgesUIPlugin, ProfileViewer, BadgeDisplay, AccessibilityService } from '../../dist/openbadges-ui.es.js';
+import { OpenBadgesUIPlugin } from '../../dist/openbadges-ui.es.js';
 import '../../dist/style.css';
 
 // Sample profile data with OB2 badges
@@ -122,6 +122,62 @@ const themes = [
 
 // Create the Vue app
 const app = createApp({
+  data() {
+    return {
+      profile: profileData,
+      themes,
+      selectedTheme: 'default',
+      badgeLayout: 'grid',
+      showDescription: true,
+      showUrl: true,
+      interactiveBadges: true,
+      selectedBadge: null
+    };
+  },
+  computed: {
+    codeExample() {
+      return `<template>
+  <profile-viewer 
+    :profile="profile" 
+    :badge-layout="${this.badgeLayout}"
+    :show-description="${this.showDescription}"
+    :show-url="${this.showUrl}"
+    :interactive-badges="${this.interactiveBadges}"
+    title="User Profile"
+    @badge-click="handleBadgeClick"
+  />
+</template>
+
+<script>
+import { ProfileViewer } from 'openbadges-ui';
+
+export default {
+  components: {
+    ProfileViewer
+  },
+  methods: {
+    handleBadgeClick(badge) {
+      console.log('Badge clicked:', badge);
+      // Handle badge click event
+    }
+  }
+}
+</script>`;
+    }
+  },
+  methods: {
+    applyTheme() {
+      // Apply the selected theme
+      document.body.className = '';
+      if (this.selectedTheme !== 'default') {
+        document.body.classList.add(`ob-${this.selectedTheme}-theme`);
+      }
+    },
+    handleBadgeClick(badge) {
+      console.log('Badge clicked:', badge);
+      this.selectedBadge = badge;
+    }
+  },
   template: `
     <div>
       <section class="theme-selector">
@@ -189,63 +245,7 @@ const app = createApp({
         </div>
       </section>
     </div>
-  `,
-  data() {
-    return {
-      profile: profileData,
-      themes,
-      selectedTheme: 'default',
-      badgeLayout: 'grid',
-      showDescription: true,
-      showUrl: true,
-      interactiveBadges: true,
-      selectedBadge: null
-    };
-  },
-  computed: {
-    codeExample() {
-      return `<template>
-  <profile-viewer 
-    :profile="profile" 
-    :badge-layout="${this.badgeLayout}"
-    :show-description="${this.showDescription}"
-    :show-url="${this.showUrl}"
-    :interactive-badges="${this.interactiveBadges}"
-    title="User Profile"
-    @badge-click="handleBadgeClick"
-  />
-</template>
-
-<script>
-import { ProfileViewer } from 'openbadges-ui';
-
-export default {
-  components: {
-    ProfileViewer
-  },
-  methods: {
-    handleBadgeClick(badge) {
-      console.log('Badge clicked:', badge);
-      // Handle badge click event
-    }
-  }
-}
-</script>`;
-    }
-  },
-  methods: {
-    applyTheme() {
-      // Apply the selected theme
-      document.body.className = '';
-      if (this.selectedTheme !== 'default') {
-        document.body.classList.add(`ob-${this.selectedTheme}-theme`);
-      }
-    },
-    handleBadgeClick(badge) {
-      console.log('Badge clicked:', badge);
-      this.selectedBadge = badge;
-    }
-  }
+  `
 });
 
 // Use the OpenBadges UI plugin

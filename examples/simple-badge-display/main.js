@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { OpenBadgesUIPlugin, BadgeDisplay, BadgeList } from '../../dist/openbadges-ui.es.js';
+import { OpenBadgesUIPlugin } from '../../dist/openbadges-ui.es.js';
 import '../../dist/style.css';
 
 // Sample OB2 badge
@@ -73,6 +73,19 @@ const badgeList = [ob2Badge, ob3Badge];
 
 // Create the Vue app
 const app = createApp({
+  data() {
+    return {
+      ob2Badge,
+      ob3Badge,
+      badgeList
+    };
+  },
+  methods: {
+    handleBadgeClick(badge) {
+      console.log('Badge clicked:', badge);
+      alert(`Badge clicked: ${badge.type === 'Assertion' ? badge.badge.name : badge.credentialSubject.achievement.name}`);
+    }
+  },
   template: `
     <div>
       <section>
@@ -111,20 +124,7 @@ const app = createApp({
         </div>
       </section>
     </div>
-  `,
-  data() {
-    return {
-      ob2Badge,
-      ob3Badge,
-      badgeList
-    };
-  },
-  methods: {
-    handleBadgeClick(badge) {
-      console.log('Badge clicked:', badge);
-      alert(`Badge clicked: ${badge.type === 'Assertion' ? badge.badge.name : badge.credentialSubject.achievement.name}`);
-    }
-  }
+  `
 });
 
 // Use the OpenBadges UI plugin

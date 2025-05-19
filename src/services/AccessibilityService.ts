@@ -24,7 +24,7 @@ export class AccessibilityService {
       return new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       }).format(date);
     } catch (e) {
       return dateString;
@@ -40,7 +40,7 @@ export class AccessibilityService {
   static getInitials(name: string, maxLength = 2): string {
     return name
       .split(' ')
-      .map(part => part.charAt(0))
+      .map((part) => part.charAt(0))
       .join('')
       .toUpperCase()
       .substring(0, maxLength);
@@ -53,7 +53,9 @@ export class AccessibilityService {
    * @returns Truncated text with ellipsis if needed
    */
   static truncateText(text: string, maxLength: number): string {
-    if (text.length <= maxLength) {return text;}
+    if (text.length <= maxLength) {
+      return text;
+    }
     return text.substring(0, maxLength) + '…';
   }
 
@@ -80,7 +82,16 @@ export class AccessibilityService {
    * Applies a theme to the document by adding a class to the body
    * @param themeName Name of the theme to apply
    */
-  static applyTheme(themeName: 'default' | 'dark' | 'high-contrast' | 'large-text' | 'dyslexia-friendly' | 'adhd-friendly' | 'autism-friendly'): void {
+  static applyTheme(
+    themeName:
+      | 'default'
+      | 'dark'
+      | 'high-contrast'
+      | 'large-text'
+      | 'dyslexia-friendly'
+      | 'adhd-friendly'
+      | 'autism-friendly'
+  ): void {
     // Remove any existing theme classes
     document.body.classList.remove(
       'ob-dark-theme',
@@ -229,20 +240,19 @@ export class AccessibilityService {
    * @param options Formatting options
    * @returns Formatted number string
    */
-  static formatNumber(value: number, options: {
-    useGrouping?: boolean;
-    addVisualSeparators?: boolean;
-    highlightDigits?: boolean;
-  } = {}): string {
-    const {
-      useGrouping = true,
-      addVisualSeparators = false,
-      highlightDigits = false
-    } = options;
+  static formatNumber(
+    value: number,
+    options: {
+      useGrouping?: boolean;
+      addVisualSeparators?: boolean;
+      highlightDigits?: boolean;
+    } = {}
+  ): string {
+    const { useGrouping = true, addVisualSeparators = false, highlightDigits = false } = options;
 
     // Format with locale and grouping
     let formatted = value.toLocaleString(undefined, {
-      useGrouping
+      useGrouping,
     });
 
     // Add visual separators if requested

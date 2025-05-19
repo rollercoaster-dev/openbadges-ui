@@ -21,7 +21,7 @@ export default {
     // Configure PrimeVue in unstyled mode
     app.use(PrimeVue, {
       unstyled: true,
-      ...options
+      ...options,
     });
 
     // Register components globally
@@ -36,5 +36,5 @@ export default {
     app.component('FontSelector', FontSelector);
     app.component('ThemeSelector', ThemeSelector);
     app.component('AccessibilitySettings', AccessibilitySettings);
-  }
+  },
 };

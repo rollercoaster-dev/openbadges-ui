@@ -1,7 +1,11 @@
 // src/composables/useBadgeVerification.ts
 import { ref, computed } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import type { OB2, OB3 } from 'openbadges-types';
-import { BadgeVerificationService, type VerificationResult } from '../services/BadgeVerificationService';
+import {
+  BadgeVerificationService,
+  type VerificationResult,
+} from '../services/BadgeVerificationService';
 
 /**
  * State for badge verification
@@ -13,17 +17,30 @@ export interface BadgeVerificationState {
   badge: OB2.Assertion | OB3.VerifiableCredential | null;
 }
 
+interface UseBadgeVerificationReturn {
+  state: Ref<BadgeVerificationState>;
+  isValid: ComputedRef<boolean>;
+  errors: ComputedRef<string[]>;
+  warnings: ComputedRef<string[]>;
+  verificationMethod: ComputedRef<string | undefined>;
+  expirationStatus: ComputedRef<string | undefined>;
+  revocationStatus: ComputedRef<string | undefined>;
+  hasBeenVerified: ComputedRef<boolean>;
+  verifyBadge: (badge: OB2.Assertion | OB3.VerifiableCredential) => Promise<VerificationResult>;
+  clearVerification: () => void;
+}
+
 /**
  * Composable for badge verification functionality
  * Provides reactive state and methods for verifying badges
  */
-export function useBadgeVerification() {
+export function useBadgeVerification(): UseBadgeVerificationReturn {
   // Initialize state
   const state = ref<BadgeVerificationState>({
     isVerifying: false,
     lastVerified: null,
     result: null,
-    badge: null
+    badge: null,
   });
 
   // Computed properties
@@ -40,20 +57,33 @@ export function useBadgeVerification() {
    * @param badge The badge to verify
    * @returns Verification result
    */
-  const verifyBadge = async (badge: OB2.Assertion | OB3.VerifiableCredential): Promise<VerificationResult> => {
+  const verifyBadge = async (
+    badge: OB2.Assertion | OB3.VerifiableCredential
+  ): Promise<VerificationResult> => {
     state.value.isVerifying = true;
     state.value.badge = badge;
-    
+
     try {
       const result = await BadgeVerificationService.verifyBadge(badge);
       state.value.result = result;
       state.value.lastVerified = new Date();
       return result;
     } catch (error) {
+      const errorMessage = `Verification failed: ${error instanceof Error ? error.message : String(error)}`;
       const errorResult: VerificationResult = {
         isValid: false,
-        errors: [`Verification failed: ${error instanceof Error ? error.message : String(error)}`],
-        warnings: []
+        errors: [errorMessage],
+        warnings: [],
+        structureValidation: {
+          isValid: false,
+          errors: [errorMessage],
+          warnings: [],
+        },
+        contentValidation: {
+          isValid: false,
+          errors: [errorMessage],
+          warnings: [],
+        },
       };
       state.value.result = errorResult;
       return errorResult;
@@ -70,14 +100,14 @@ export function useBadgeVerification() {
       isVerifying: false,
       lastVerified: null,
       result: null,
-      badge: null
+      badge: null,
     };
   };
 
   return {
     // State
     state,
-    
+
     // Computed
     isValid,
     errors,
@@ -86,9 +116,9 @@ export function useBadgeVerification() {
     expirationStatus,
     revocationStatus,
     hasBeenVerified,
-    
+
     // Methods
     verifyBadge,
-    clearVerification
+    clearVerification,
   };
 }

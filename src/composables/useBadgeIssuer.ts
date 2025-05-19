@@ -1,7 +1,7 @@
 // src/composables/useBadgeIssuer.ts
 import { reactive, computed } from 'vue';
 import type { ComputedRef } from 'vue';
-import type { OB2} from 'openbadges-types';
+import type { OB2 } from 'openbadges-types';
 import { BadgeService } from '../services/BadgeService';
 
 export interface BadgeIssuerState {

@@ -5,6 +5,8 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
 
     /* Bundler mode */
     "moduleResolution": "node",
@@ -15,7 +17,7 @@
     /* For declaration files */
     "declaration": true,
     "declarationDir": "dist/types",
-    "emitDeclarationOnly": true,
+//    "emitDeclarationOnly": true,
     "outDir": "dist",
 
     /* Linting */
@@ -25,7 +27,14 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true
   },
-  "include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts"
+  ],
   "exclude": ["src/**/*.stories.ts", "src/**/*.story.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

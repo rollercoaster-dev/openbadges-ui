@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import IssuerDashboard from './IssuerDashboard.vue'
-import { mockAssertions } from '../../services/mockData'
+import { ref } from 'vue';
+import IssuerDashboard from './IssuerDashboard.vue';
+import { mockAssertions } from '../../services/mockData';
 
 const state = ref({
   issuerProfile: {
@@ -9,25 +9,31 @@ const state = ref({
     name: 'Rollercoaster.dev',
     url: 'https://example.org',
     email: 'badges@example.org',
-    image: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff'
+    image: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff',
   },
   initialBadges: mockAssertions,
-  loading: false
-})
+  loading: false,
+});
 
 function onBadgeIssued(assertion) {
-  console.log('Badge issued:', assertion)
+  console.log('Badge issued:', assertion);
 }
 
 function onBadgeClick(badge) {
-  console.log('Badge clicked:', badge)
+  console.log('Badge clicked:', badge);
 }
 </script>
 
 <template>
-  <Story title="Components/Issuing/IssuerDashboard" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Issuing/IssuerDashboard"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #controls>
-      <HstCheckbox v-model="state.loading" title="Loading" />
+      <HstCheckbox
+        v-model="state.loading"
+        title="Loading"
+      />
     </template>
 
     <Variant title="Default">

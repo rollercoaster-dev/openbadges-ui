@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
-import BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
+import _BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
 import type { OB2 } from 'openbadges-types';
 
 describe('BadgeDisplay.vue', () => {

@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { BadgeService, isOB2Assertion, isOB3VerifiableCredential } from '../../../src/services/BadgeService';
+import {
+  BadgeService,
+  isOB2Assertion,
+  isOB3VerifiableCredential,
+} from '../../../src/services/BadgeService';
 import type { OB2, OB3 } from 'openbadges-types';
+import { createIRI } from '../../../src/utils/type-helpers';
 
 describe('BadgeService', () => {
   describe('isOB2Assertion', () => {
@@ -11,7 +16,7 @@ describe('BadgeService', () => {
         recipient: {
           identity: 'test@example.org',
           type: 'email',
-          hashed: false
+          hashed: false,
         },
         badge: {
           type: 'BadgeClass',
@@ -22,13 +27,13 @@ describe('BadgeService', () => {
           issuer: {
             type: 'Profile',
             id: 'http://example.org/issuer',
-            name: 'Test Issuer'
-          }
+            name: 'Test Issuer',
+          },
         },
         issuedOn: '2023-01-01T00:00:00Z',
         verification: {
-          type: 'hosted'
-        }
+          type: 'hosted',
+        },
       } as OB2.Assertion;
 
       expect(isOB2Assertion(ob2Assertion)).toBe(true);
@@ -49,7 +54,7 @@ describe('BadgeService', () => {
         id: 'http://example.org/credentials/123',
         issuer: {
           id: 'http://example.org/issuers/1',
-          name: 'Test Issuer'
+          name: 'Test Issuer',
         },
         issuanceDate: '2023-01-01T00:00:00Z',
         credentialSubject: {
@@ -58,9 +63,9 @@ describe('BadgeService', () => {
             id: 'http://example.org/achievements/1',
             name: 'Test Achievement',
             description: 'A test achievement',
-            image: 'http://example.org/badge.png'
-          }
-        }
+            image: 'http://example.org/badge.png',
+          },
+        },
       } as OB3.VerifiableCredential;
 
       expect(isOB3VerifiableCredential(ob3VC)).toBe(true);
@@ -76,7 +81,7 @@ describe('BadgeService', () => {
   describe('createBadgeClassTemplate', () => {
     it('should create a valid BadgeClass template', () => {
       const template = BadgeService.createBadgeClassTemplate();
-      
+
       expect(template).toHaveProperty('@context', 'https://w3id.org/openbadges/v2');
       expect(template).toHaveProperty('type', 'BadgeClass');
       expect(template).toHaveProperty('name', '');
@@ -92,9 +97,9 @@ describe('BadgeService', () => {
     it('should create a valid Assertion template', () => {
       const badgeClass = BadgeService.createBadgeClassTemplate();
       badgeClass.name = 'Test Badge';
-      
+
       const template = BadgeService.createAssertionTemplate(badgeClass, 'test@example.org');
-      
+
       expect(template).toHaveProperty('@context', 'https://w3id.org/openbadges/v2');
       expect(template).toHaveProperty('type', 'Assertion');
       expect(template).toHaveProperty('recipient');
@@ -110,17 +115,17 @@ describe('BadgeService', () => {
     it('should return no errors for valid BadgeClass', () => {
       const badgeClass: OB2.BadgeClass = {
         '@context': 'https://w3id.org/openbadges/v2',
-        id: 'http://example.org/badgeclass1',
+        id: createIRI('http://example.org/badgeclass1'),
         type: 'BadgeClass',
         name: 'Test Badge',
         description: 'A test badge',
-        image: 'http://example.org/badge.png',
+        image: createIRI('http://example.org/badge.png'),
         criteria: { narrative: 'Test criteria' },
         issuer: {
-          id: 'http://example.org/issuer',
+          id: createIRI('http://example.org/issuer'),
           type: 'Profile',
-          name: 'Test Issuer'
-        }
+          name: 'Test Issuer',
+        },
       };
 
       const errors = BadgeService.validateBadgeClass(badgeClass);
@@ -156,7 +161,7 @@ describe('BadgeService', () => {
         recipient: {
           identity: 'test@example.org',
           type: 'email',
-          hashed: false
+          hashed: false,
         },
         badge: {
           type: 'BadgeClass',
@@ -168,18 +173,18 @@ describe('BadgeService', () => {
             type: 'Profile',
             id: 'http://example.org/issuer',
             name: 'Test Issuer',
-            url: 'http://example.org'
-          }
+            url: 'http://example.org',
+          },
         },
         issuedOn: '2023-01-01T00:00:00Z',
         expires: '2024-01-01T00:00:00Z',
         verification: {
-          type: 'hosted'
-        }
+          type: 'hosted',
+        },
       } as OB2.Assertion;
 
       const normalized = BadgeService.normalizeBadge(ob2Assertion);
-      
+
       expect(normalized).toHaveProperty('id', 'http://example.org/badge1');
       expect(normalized).toHaveProperty('name', 'Test Badge');
       expect(normalized).toHaveProperty('description', 'A test badge');
@@ -199,7 +204,7 @@ describe('BadgeService', () => {
         issuer: {
           id: 'http://example.org/issuers/1',
           name: 'Test Issuer',
-          url: 'http://example.org'
+          url: 'http://example.org',
         },
         issuanceDate: '2023-01-01T00:00:00Z',
         expirationDate: '2024-01-01T00:00:00Z',
@@ -209,13 +214,13 @@ describe('BadgeService', () => {
             id: 'http://example.org/achievements/1',
             name: 'Test Achievement',
             description: 'A test achievement',
-            image: 'http://example.org/badge.png'
-          }
-        }
+            image: 'http://example.org/badge.png',
+          },
+        },
       } as OB3.VerifiableCredential;
 
       const normalized = BadgeService.normalizeBadge(ob3VC);
-      
+
       expect(normalized).toHaveProperty('id', 'http://example.org/credentials/123');
       expect(normalized).toHaveProperty('name', 'Test Achievement');
       expect(normalized).toHaveProperty('description', 'A test achievement');
@@ -228,10 +233,11 @@ describe('BadgeService', () => {
     });
 
     it('should handle unknown badge formats', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const unknownBadge = { foo: 'bar' } as any;
-      
+
       const normalized = BadgeService.normalizeBadge(unknownBadge);
-      
+
       expect(normalized).toHaveProperty('id', 'unknown');
       expect(normalized).toHaveProperty('name', 'Unknown Badge');
       expect(normalized).toHaveProperty('description', 'Badge format not recognized');

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ProfileViewer from './ProfileViewer.vue'
-import { mockProfiles } from '../../services/mockData'
+import { ref } from 'vue';
+import ProfileViewer from './ProfileViewer.vue';
+import { mockProfiles } from '../../services/mockData';
 
 const state = ref({
   profile: mockProfiles.alice,
@@ -10,25 +10,47 @@ const state = ref({
   badgesLayout: 'grid',
   badgesInteractive: true,
   showPagination: false,
-  pageSize: 6
-})
+  pageSize: 6,
+});
 
 function onBadgeClick(badge) {
-  console.log('Badge clicked:', badge)
+  console.log('Badge clicked:', badge);
 }
 </script>
 
 <template>
-  <Story title="Components/Badges/ProfileViewer" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Badges/ProfileViewer"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #controls>
-      <HstSelect v-model="state.badgesLayout" title="Badges Layout">
-        <option value="grid">Grid</option>
-        <option value="list">List</option>
+      <HstSelect
+        v-model="state.badgesLayout"
+        title="Badges Layout"
+      >
+        <option value="grid">
+          Grid
+        </option>
+        <option value="list">
+          List
+        </option>
       </HstSelect>
-      <HstCheckbox v-model="state.badgesInteractive" title="Badges Interactive" />
-      <HstCheckbox v-model="state.loading" title="Loading" />
-      <HstCheckbox v-model="state.showPagination" title="Show Pagination" />
-      <HstNumber v-model="state.pageSize" title="Page Size" />
+      <HstCheckbox
+        v-model="state.badgesInteractive"
+        title="Badges Interactive"
+      />
+      <HstCheckbox
+        v-model="state.loading"
+        title="Loading"
+      />
+      <HstCheckbox
+        v-model="state.showPagination"
+        title="Show Pagination"
+      />
+      <HstNumber
+        v-model="state.pageSize"
+        title="Page Size"
+      />
     </template>
 
     <Variant title="Recipient Profile">

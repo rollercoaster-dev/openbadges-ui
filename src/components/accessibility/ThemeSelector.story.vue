@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ThemeSelector from './ThemeSelector.vue'
+import { ref } from 'vue';
+import ThemeSelector from './ThemeSelector.vue';
 
 /**
  * # ThemeSelector
@@ -30,10 +30,10 @@ import ThemeSelector from './ThemeSelector.vue'
  * | `update:modelValue` | `string` | Emitted when the selected theme changes |
  */
 
-const selectedTheme = ref('default')
+const selectedTheme = ref('default');
 
 function onThemeChange(value: string) {
-  console.log('Theme changed:', value)
+  console.log('Theme changed:', value);
 }
 
 const customThemes = ref([
@@ -41,30 +41,37 @@ const customThemes = ref([
     id: 'default',
     name: 'Default Theme',
     description: 'Standard theme with balanced colors and spacing',
-    className: 'ob-default-theme'
+    className: 'ob-default-theme',
   },
   {
     id: 'dyslexia',
     name: 'Dyslexia-Friendly',
     description: 'Optimized for readers with dyslexia',
-    className: 'ob-dyslexia-friendly-theme'
+    className: 'ob-dyslexia-friendly-theme',
   },
   {
     id: 'dark',
     name: 'Dark Theme',
     description: 'Reduced light emission for comfortable viewing',
-    className: 'ob-dark-theme'
-  }
-])
+    className: 'ob-dark-theme',
+  },
+]);
 </script>
 
 <template>
-  <Story title="Components/Accessibility/ThemeSelector" :layout="{ type: 'single', iframe: true }">
+  <Story
+    title="Components/Accessibility/ThemeSelector"
+    :layout="{ type: 'single', iframe: true }"
+  >
     <template #docs>
       <div class="histoire-docs">
         <h1>ThemeSelector</h1>
 
-        <p>The <code>ThemeSelector</code> component allows users to choose from a selection of accessibility-focused themes, including options for dyslexia, low vision, and autism-friendly designs.</p>
+        <p>
+          The <code>ThemeSelector</code> component allows users to choose from a selection of
+          accessibility-focused themes, including options for dyslexia, low vision, and
+          autism-friendly designs.
+        </p>
 
         <h2>When To Use</h2>
         <ul>
@@ -123,7 +130,10 @@ const customThemes = ref([
             </tr>
             <tr>
               <td><code>availableThemes</code></td>
-              <td><code>Array&lt;{id: string, name: string, description?: string, className: string}&gt;</code></td>
+              <td>
+                <code>Array&lt;{id: string, name: string, description?: string, className:
+                  string}&gt;</code>
+              </td>
               <td>All themes</td>
               <td>The available theme options to display</td>
             </tr>
@@ -155,7 +165,10 @@ const customThemes = ref([
         </table>
 
         <h2>CSS Variables</h2>
-        <p>The component uses CSS variables for styling, which can be overridden to customize its appearance:</p>
+        <p>
+          The component uses CSS variables for styling, which can be overridden to customize its
+          appearance:
+        </p>
         <table>
           <thead>
             <tr>
@@ -217,11 +230,22 @@ const customThemes = ref([
         <p>The component includes the following accessibility-focused themes by default:</p>
         <ul>
           <li><strong>Default Theme</strong>: Standard theme with balanced colors and spacing</li>
-          <li><strong>Dyslexia-Friendly</strong>: Optimized for readers with dyslexia, with improved spacing and readability</li>
-          <li><strong>Low Vision</strong>: High contrast theme with larger text for low vision users</li>
-          <li><strong>Low Information Density</strong>: Reduced visual complexity for easier focus</li>
-          <li><strong>Autism-Friendly</strong>: Predictable layouts with reduced sensory stimulation</li>
-          <li><strong>Dark Theme</strong>: Reduced light emission for comfortable viewing in low light</li>
+          <li>
+            <strong>Dyslexia-Friendly</strong>: Optimized for readers with dyslexia, with improved
+            spacing and readability
+          </li>
+          <li>
+            <strong>Low Vision</strong>: High contrast theme with larger text for low vision users
+          </li>
+          <li>
+            <strong>Low Information Density</strong>: Reduced visual complexity for easier focus
+          </li>
+          <li>
+            <strong>Autism-Friendly</strong>: Predictable layouts with reduced sensory stimulation
+          </li>
+          <li>
+            <strong>Dark Theme</strong>: Reduced light emission for comfortable viewing in low light
+          </li>
           <li><strong>High Contrast</strong>: Maximum contrast for better visibility</li>
         </ul>
       </div>
@@ -230,7 +254,7 @@ const customThemes = ref([
     <Variant title="Default">
       <ThemeSelector
         v-model="selectedTheme"
-        @update:modelValue="onThemeChange"
+        @update:model-value="onThemeChange"
       />
     </Variant>
 
@@ -238,7 +262,7 @@ const customThemes = ref([
       <ThemeSelector
         v-model="selectedTheme"
         :available-themes="customThemes"
-        @update:modelValue="onThemeChange"
+        @update:model-value="onThemeChange"
       />
     </Variant>
 
@@ -246,7 +270,7 @@ const customThemes = ref([
       <ThemeSelector
         v-model="selectedTheme"
         theme-label="Color Theme"
-        @update:modelValue="onThemeChange"
+        @update:model-value="onThemeChange"
       />
     </Variant>
   </Story>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 import FontSelector from './FontSelector.vue';
 import ThemeSelector from './ThemeSelector.vue';
 
@@ -12,31 +12,31 @@ interface AccessibilitySettingsProps {
    * @default 'default'
    */
   theme?: string;
-  
+
   /**
    * The currently selected font
    * @default 'system'
    */
   font?: string;
-  
+
   /**
    * Whether the settings are open
    * @default false
    */
   open?: boolean;
-  
+
   /**
    * The title of the settings panel
    * @default 'Accessibility Settings'
    */
   title?: string;
-  
+
   /**
    * Whether to show the motion reduction option
    * @default true
    */
   showMotionReduction?: boolean;
-  
+
   /**
    * Whether to show the focus mode option
    * @default true
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<AccessibilitySettingsProps>(), {
   open: false,
   title: 'Accessibility Settings',
   showMotionReduction: true,
-  showFocusMode: true
+  showFocusMode: true,
 });
 
 /**
@@ -62,43 +62,43 @@ const emit = defineEmits<{
    * @param value The new theme value
    */
   (e: 'update:theme', value: string): void;
-  
+
   /**
    * Emitted when the selected font changes
    * @param value The new font value
    */
   (e: 'update:font', value: string): void;
-  
+
   /**
    * Emitted when the open state changes
    * @param value The new open state
    */
   (e: 'update:open', value: boolean): void;
-  
+
   /**
    * Emitted when the motion reduction setting changes
    * @param value The new motion reduction state
    */
   (e: 'motionReductionChange', value: boolean): void;
-  
+
   /**
    * Emitted when the focus mode setting changes
    * @param value The new focus mode state
    */
   (e: 'focusModeChange', value: boolean): void;
-  
+
   /**
    * Emitted when the font size changes
    * @param value The new font size value
    */
   (e: 'fontSizeChange', value: string): void;
-  
+
   /**
    * Emitted when the text spacing changes
    * @param value The new text spacing value
    */
   (e: 'textSpacingChange', value: boolean): void;
-  
+
   /**
    * Emitted when all settings are reset to defaults
    */
@@ -113,17 +113,26 @@ const reduceMotion = ref(false);
 const focusMode = ref(false);
 
 // Watch for changes in props
-watch(() => props.open, (newValue) => {
-  isOpen.value = newValue;
-});
+watch(
+  () => props.open,
+  (newValue) => {
+    isOpen.value = newValue;
+  }
+);
 
-watch(() => props.theme, (newValue) => {
-  selectedTheme.value = newValue;
-});
+watch(
+  () => props.theme,
+  (newValue) => {
+    selectedTheme.value = newValue;
+  }
+);
 
-watch(() => props.font, (newValue) => {
-  selectedFont.value = newValue;
-});
+watch(
+  () => props.font,
+  (newValue) => {
+    selectedFont.value = newValue;
+  }
+);
 
 // Methods
 const toggleOpen = () => {
@@ -145,7 +154,7 @@ const handleMotionReductionChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   reduceMotion.value = target.checked;
   emit('motionReductionChange', target.checked);
-  
+
   // Apply the class to the document body
   if (reduceMotion.value) {
     document.body.classList.add('ob-animations-none');
@@ -158,7 +167,7 @@ const handleFocusModeChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   focusMode.value = target.checked;
   emit('focusModeChange', target.checked);
-  
+
   // Apply the class to the document body
   if (focusMode.value) {
     document.body.classList.add('ob-focus-mode');
@@ -180,10 +189,10 @@ const resetSettings = () => {
   selectedFont.value = 'system';
   reduceMotion.value = false;
   focusMode.value = false;
-  
+
   // Remove classes from the document body
   document.body.classList.remove('ob-animations-none', 'ob-focus-mode');
-  
+
   // Emit events
   emit('update:theme', 'default');
   emit('update:font', 'system');
@@ -195,54 +204,101 @@ const resetSettings = () => {
 
 <template>
   <div class="ob-accessibility-settings">
-    <button 
-      class="ob-accessibility-toggle" 
-      @click="toggleOpen"
+    <button
+      class="ob-accessibility-toggle"
       aria-expanded="isOpen"
       :aria-label="isOpen ? 'Close accessibility settings' : 'Open accessibility settings'"
+      @click="toggleOpen"
     >
       <span class="ob-accessibility-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 8v4"></path>
-          <path d="M12 16h.01"></path>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <path d="M12 8v4" />
+          <path d="M12 16h.01" />
         </svg>
       </span>
       <span class="ob-accessibility-toggle-text">Accessibility</span>
     </button>
-    
-    <div v-if="isOpen" class="ob-accessibility-panel">
+
+    <div
+      v-if="isOpen"
+      class="ob-accessibility-panel"
+    >
       <div class="ob-accessibility-panel-header">
-        <h2 class="ob-accessibility-panel-title">{{ title }}</h2>
-        <button 
-          class="ob-accessibility-panel-close" 
-          @click="toggleOpen"
+        <h2 class="ob-accessibility-panel-title">
+          {{ title }}
+        </h2>
+        <button
+          class="ob-accessibility-panel-close"
           aria-label="Close accessibility settings"
+          @click="toggleOpen"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line
+              x1="18"
+              y1="6"
+              x2="6"
+              y2="18"
+            />
+            <line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            />
           </svg>
         </button>
       </div>
-      
+
       <div class="ob-accessibility-panel-content">
-        <ThemeSelector 
+        <ThemeSelector
           v-model="selectedTheme"
-          @update:modelValue="handleThemeChange"
+          @update:model-value="handleThemeChange"
         />
-        
-        <FontSelector 
+
+        <FontSelector
           v-model="selectedFont"
-          @update:modelValue="handleFontChange"
-          @fontSizeChange="handleFontSizeChange"
-          @textSpacingChange="handleTextSpacingChange"
+          @update:model-value="handleFontChange"
+          @font-size-change="handleFontSizeChange"
+          @text-spacing-change="handleTextSpacingChange"
         />
-        
-        <div v-if="showMotionReduction || showFocusMode" class="ob-accessibility-options">
-          <h3 class="ob-accessibility-options-title">Additional Options</h3>
-          
-          <div v-if="showMotionReduction" class="ob-accessibility-option">
+
+        <div
+          v-if="showMotionReduction || showFocusMode"
+          class="ob-accessibility-options"
+        >
+          <h3 class="ob-accessibility-options-title">
+            Additional Options
+          </h3>
+
+          <div
+            v-if="showMotionReduction"
+            class="ob-accessibility-option"
+          >
             <div class="ob-accessibility-checkbox-group">
               <input
                 id="ob-reduce-motion"
@@ -250,8 +306,11 @@ const resetSettings = () => {
                 class="ob-accessibility-checkbox"
                 :checked="reduceMotion"
                 @change="handleMotionReductionChange"
-              />
-              <label for="ob-reduce-motion" class="ob-accessibility-checkbox-label">
+              >
+              <label
+                for="ob-reduce-motion"
+                class="ob-accessibility-checkbox-label"
+              >
                 Reduce Motion
               </label>
             </div>
@@ -259,8 +318,11 @@ const resetSettings = () => {
               Minimizes animations and transitions for users with vestibular disorders
             </p>
           </div>
-          
-          <div v-if="showFocusMode" class="ob-accessibility-option">
+
+          <div
+            v-if="showFocusMode"
+            class="ob-accessibility-option"
+          >
             <div class="ob-accessibility-checkbox-group">
               <input
                 id="ob-focus-mode"
@@ -268,8 +330,11 @@ const resetSettings = () => {
                 class="ob-accessibility-checkbox"
                 :checked="focusMode"
                 @change="handleFocusModeChange"
-              />
-              <label for="ob-focus-mode" class="ob-accessibility-checkbox-label">
+              >
+              <label
+                for="ob-focus-mode"
+                class="ob-accessibility-checkbox-label"
+              >
                 Focus Mode
               </label>
             </div>
@@ -278,9 +343,12 @@ const resetSettings = () => {
             </p>
           </div>
         </div>
-        
+
         <div class="ob-accessibility-panel-footer">
-          <button class="ob-accessibility-reset-button" @click="resetSettings">
+          <button
+            class="ob-accessibility-reset-button"
+            @click="resetSettings"
+          >
             Reset to Defaults
           </button>
         </div>
@@ -332,7 +400,11 @@ const resetSettings = () => {
   background-color: var(--ob-bg-primary, #ffffff);
   border: 1px solid var(--ob-border-color, #e2e8f0);
   border-radius: var(--ob-border-radius-lg, 8px);
-  box-shadow: var(--ob-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
+  box-shadow: var(
+    --ob-shadow-lg,
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05)
+  );
   z-index: var(--ob-z-index-modal, 1000);
   max-height: 80vh;
   overflow-y: auto;
@@ -457,7 +529,7 @@ const resetSettings = () => {
   .ob-accessibility-toggle-text {
     display: none;
   }
-  
+
   .ob-accessibility-panel {
     width: 100%;
     max-width: 100%;

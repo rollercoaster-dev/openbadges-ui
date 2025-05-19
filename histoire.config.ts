@@ -1,8 +1,6 @@
 import { defineConfig } from 'histoire'
 import { HstVue } from '@histoire/plugin-vue'
 
-import type { HstConfig } from '@histoire/shared'
-
 export default defineConfig({
   // Configuration for GitHub Pages deployment
 

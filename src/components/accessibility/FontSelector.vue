@@ -10,19 +10,19 @@ interface FontSelectorProps {
    * @default 'system'
    */
   modelValue?: string;
-  
+
   /**
    * Whether to show the font size controls
    * @default true
    */
   showFontSize?: boolean;
-  
+
   /**
    * Whether to show the text spacing controls
    * @default true
    */
   showTextSpacing?: boolean;
-  
+
   /**
    * The available font options to display
    * @default all fonts
@@ -33,19 +33,19 @@ interface FontSelectorProps {
     description?: string;
     className: string;
   }>;
-  
+
   /**
    * The label for the font selector
    * @default 'Font Family'
    */
   fontLabel?: string;
-  
+
   /**
    * The label for the font size selector
    * @default 'Font Size'
    */
   fontSizeLabel?: string;
-  
+
   /**
    * The label for the text spacing selector
    * @default 'Text Spacing'
@@ -64,34 +64,34 @@ const props = withDefaults(defineProps<FontSelectorProps>(), {
     {
       id: 'system',
       name: 'System Font',
-      description: 'Your device\'s default font',
-      className: 'ob-font-system'
+      description: "Your device's default font",
+      className: 'ob-font-system',
     },
     {
       id: 'atkinson',
       name: 'Atkinson Hyperlegible',
       description: 'Designed for low vision readers',
-      className: 'ob-font-accessible'
+      className: 'ob-font-accessible',
     },
     {
       id: 'opendyslexic',
       name: 'OpenDyslexic',
       description: 'Designed for readers with dyslexia',
-      className: 'ob-font-dyslexic'
+      className: 'ob-font-dyslexic',
     },
     {
       id: 'lexend',
       name: 'Lexend',
       description: 'Designed for improved reading fluency',
-      className: 'ob-font-readable'
+      className: 'ob-font-readable',
     },
     {
       id: 'inter',
       name: 'Inter',
       description: 'Modern, highly legible sans-serif',
-      className: 'ob-font-standard'
-    }
-  ]
+      className: 'ob-font-standard',
+    },
+  ],
 });
 
 /**
@@ -103,13 +103,13 @@ const emit = defineEmits<{
    * @param value The new font value
    */
   (e: 'update:modelValue', value: string): void;
-  
+
   /**
    * Emitted when the font size changes
    * @param value The new font size value
    */
   (e: 'fontSizeChange', value: string): void;
-  
+
   /**
    * Emitted when the text spacing changes
    * @param value The new text spacing value
@@ -124,7 +124,7 @@ const enhancedSpacing = ref(false);
 
 // Computed properties
 const currentFontClass = computed(() => {
-  const font = props.availableFonts.find(f => f.id === selectedFont.value);
+  const font = props.availableFonts.find((f) => f.id === selectedFont.value);
   return font ? font.className : 'ob-font-system';
 });
 
@@ -144,9 +144,12 @@ const spacingClass = computed(() => {
 });
 
 // Watch for changes in props
-watch(() => props.modelValue, (newValue) => {
-  selectedFont.value = newValue;
-});
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedFont.value = newValue;
+  }
+);
 
 // Methods
 const handleFontChange = (event: Event) => {
@@ -171,13 +174,16 @@ const handleSpacingChange = (event: Event) => {
 <template>
   <div class="ob-font-selector">
     <div class="ob-font-selector-group">
-      <label :for="'ob-font-family-select'" class="ob-font-selector-label">{{ fontLabel }}</label>
+      <label
+        :for="'ob-font-family-select'"
+        class="ob-font-selector-label"
+      >{{ fontLabel }}</label>
       <select
         :id="'ob-font-family-select'"
         class="ob-font-selector-select"
         :value="selectedFont"
-        @change="handleFontChange"
         :class="currentFontClass"
+        @change="handleFontChange"
       >
         <option
           v-for="font in availableFonts"
@@ -188,27 +194,45 @@ const handleSpacingChange = (event: Event) => {
           {{ font.name }}
         </option>
       </select>
-      <p v-if="selectedFont && availableFonts.find(f => f.id === selectedFont)?.description" class="ob-font-selector-description">
-        {{ availableFonts.find(f => f.id === selectedFont)?.description }}
+      <p
+        v-if="selectedFont && availableFonts.find((f) => f.id === selectedFont)?.description"
+        class="ob-font-selector-description"
+      >
+        {{ availableFonts.find((f) => f.id === selectedFont)?.description }}
       </p>
     </div>
-    
-    <div v-if="showFontSize" class="ob-font-selector-group">
-      <label :for="'ob-font-size-select'" class="ob-font-selector-label">{{ fontSizeLabel }}</label>
+
+    <div
+      v-if="showFontSize"
+      class="ob-font-selector-group"
+    >
+      <label
+        :for="'ob-font-size-select'"
+        class="ob-font-selector-label"
+      >{{ fontSizeLabel }}</label>
       <select
         :id="'ob-font-size-select'"
         class="ob-font-selector-select"
         :value="selectedFontSize"
-        @change="handleFontSizeChange"
         :class="[currentFontClass, currentFontSizeClass]"
+        @change="handleFontSizeChange"
       >
-        <option value="base">Normal</option>
-        <option value="large">Large</option>
-        <option value="xl">Extra Large</option>
+        <option value="base">
+          Normal
+        </option>
+        <option value="large">
+          Large
+        </option>
+        <option value="xl">
+          Extra Large
+        </option>
       </select>
     </div>
-    
-    <div v-if="showTextSpacing" class="ob-font-selector-group">
+
+    <div
+      v-if="showTextSpacing"
+      class="ob-font-selector-group"
+    >
       <div class="ob-font-selector-checkbox-group">
         <input
           :id="'ob-text-spacing-checkbox'"
@@ -216,8 +240,11 @@ const handleSpacingChange = (event: Event) => {
           class="ob-font-selector-checkbox"
           :checked="enhancedSpacing"
           @change="handleSpacingChange"
-        />
-        <label :for="'ob-text-spacing-checkbox'" class="ob-font-selector-checkbox-label">
+        >
+        <label
+          :for="'ob-text-spacing-checkbox'"
+          class="ob-font-selector-checkbox-label"
+        >
           {{ textSpacingLabel }}
         </label>
       </div>
@@ -225,8 +252,11 @@ const handleSpacingChange = (event: Event) => {
         Increases letter spacing and line height for easier reading
       </p>
     </div>
-    
-    <div class="ob-font-selector-preview" :class="[currentFontClass, currentFontSizeClass, spacingClass]">
+
+    <div
+      class="ob-font-selector-preview"
+      :class="[currentFontClass, currentFontSizeClass, spacingClass]"
+    >
       <p>The quick brown fox jumps over the lazy dog.</p>
       <p>1234567890</p>
     </div>

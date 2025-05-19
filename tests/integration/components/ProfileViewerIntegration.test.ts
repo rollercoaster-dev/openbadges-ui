@@ -1,6 +1,6 @@
 // tests/integration/components/ProfileViewerIntegration.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ProfileViewer from '../../../src/components/badges/ProfileViewer.vue';
 import BadgeList from '../../../src/components/badges/BadgeList.vue';
 import BadgeDisplay from '../../../src/components/badges/BadgeDisplay.vue';
@@ -202,7 +202,7 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     expect(badgeList.props('showPagination')).toBe(true);
 
     // Initially, only the first 2 badges should be displayed
-    let badgeDisplays = wrapper.findAllComponents(BadgeDisplay);
+    const badgeDisplays = wrapper.findAllComponents(BadgeDisplay);
     expect(badgeDisplays.length).toBe(2);
 
     // Click the next page button

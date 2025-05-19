@@ -63,13 +63,16 @@ export function useProfile(initialProfile?: Profile): UseProfileReturn {
     try {
       // In a real implementation, this would fetch the profile from an API
       // For now, we'll just simulate a delay and return a mock profile
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       // This is a placeholder - in a real app, you would fetch actual data
       profile.value = {
         id: profileId,
         name: `${type} ${profileId.substring(0, 8)}`,
-        image: `https://ui-avatars.com/api/?name=${type}+${profileId.substring(0, 8)}&background=random`,
+        image: `https://ui-avatars.com/api/?name=${type}+${profileId.substring(
+          0,
+          8
+        )}&background=random`,
         description: `This is a ${type.toLowerCase()} profile.`,
         type,
       };
@@ -96,7 +99,9 @@ export function useProfile(initialProfile?: Profile): UseProfileReturn {
    * @param badge - An Open Badges assertion or verifiable credential
    * @returns A Profile object for the issuer, or null if extraction fails
    */
-  const extractIssuerFromBadge = (badge: OB2.Assertion | OB3.VerifiableCredential): Profile | null => {
+  const extractIssuerFromBadge = (
+    badge: OB2.Assertion | OB3.VerifiableCredential
+  ): Profile | null => {
     try {
       const normalized = BadgeService.normalizeBadge(badge);
 
@@ -108,7 +113,7 @@ export function useProfile(initialProfile?: Profile): UseProfileReturn {
       const issuerProfile: Profile = {
         id: normalized.issuer.url || `issuer:${normalized.issuer.name}`,
         name: normalized.issuer.name,
-        type: 'Issuer' as const
+        type: 'Issuer' as const,
       };
 
       // Add optional properties if they exist

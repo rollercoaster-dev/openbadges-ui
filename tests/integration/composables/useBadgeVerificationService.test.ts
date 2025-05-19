@@ -22,7 +22,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should call BadgeVerificationService.verifyBadge when verifyBadge is called', async () => {
     // Mock a successful verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
@@ -57,7 +57,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should update computed properties based on verification result', async () => {
     // Mock a successful verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['Test warning'],
@@ -105,7 +105,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle verification failure correctly', async () => {
     // Mock a failed verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge format'],
       warnings: [],
@@ -144,7 +144,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle service exceptions correctly', async () => {
     // Mock an exception in the service
-    (BadgeVerificationService.verifyBadge as any).mockRejectedValueOnce(new Error('Network error'));
+    BadgeVerificationService.verifyBadge.mockRejectedValueOnce(new Error('Network error'));
 
     // Use the composable
     const { verifyBadge, isValid, errors, state } = useBadgeVerification();
@@ -167,7 +167,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should verify OB3 badges correctly', async () => {
     // Mock a successful verification for OB3
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['Full cryptographic verification of OB3 credentials is not yet implemented'],
@@ -196,7 +196,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should clear verification state correctly', async () => {
     // Mock a successful verification
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
@@ -244,7 +244,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle multiple verification calls correctly', async () => {
     // Mock first verification (success)
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
@@ -267,7 +267,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
     expect(state.value.badge).toEqual(mockOB2Badge);
 
     // Mock second verification (failure)
-    (BadgeVerificationService.verifyBadge as any).mockResolvedValueOnce({
+    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge'],
       warnings: [],

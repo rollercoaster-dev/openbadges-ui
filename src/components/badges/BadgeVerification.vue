@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
   showStatus: true,
   showDetails: true,
   showLastVerified: true,
-  autoVerify: false
+  autoVerify: false,
 });
 
 const emit = defineEmits<{
@@ -71,7 +71,7 @@ if (props.autoVerify) {
       'is-invalid': !isValid && hasBeenVerified,
       'is-verifying': isVerifying,
       'is-expired': expirationStatus === 'expired',
-      'is-revoked': revocationStatus === 'revoked'
+      'is-revoked': revocationStatus === 'revoked',
     }"
   >
     <div
@@ -126,7 +126,9 @@ if (props.autoVerify) {
         class="ob-badge-verification-method"
       >
         <span class="ob-badge-verification-label">Verification Method:</span>
-        <span class="ob-badge-verification-value">{{ formatVerificationMethod(verificationMethod) }}</span>
+        <span class="ob-badge-verification-value">{{
+          formatVerificationMethod(verificationMethod)
+        }}</span>
       </div>
 
       <div
@@ -199,8 +201,6 @@ if (props.autoVerify) {
     </div>
   </div>
 </template>
-
-
 
 <style>
 .ob-badge-verification {

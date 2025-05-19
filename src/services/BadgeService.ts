@@ -1,17 +1,7 @@
 // src/services/BadgeService.ts
 import type { OB2, OB3, Shared } from 'openbadges-types';
 import { v4 as uuidv4 } from 'uuid';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isOB2Assertion(badge: unknown): badge is OB2.Assertion {
-  return !!badge && typeof badge === 'object' && 'type' in badge && badge.type === 'Assertion';
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isOB3VerifiableCredential(badge: unknown): badge is OB3.VerifiableCredential {
-  return !!badge && typeof badge === 'object' && '@context' in badge && 'type' in badge &&
-    Array.isArray(badge.type) && badge.type.includes('VerifiableCredential');
-}
+import { createIRI, isOB2Assertion, isOB3VerifiableCredential } from '../utils/type-helpers';
 
 /**
  * Utility service for badge-related operations
@@ -21,10 +11,10 @@ export class BadgeService {
    * Creates a new BadgeClass template with default values
    */
   static createBadgeClassTemplate(): OB2.BadgeClass {
-    const id = `urn:uuid:${uuidv4()}` as Shared.IRI;
+    const id = createIRI(`urn:uuid:${uuidv4()}`);
     const emptyImage = {
       id,
-      type: 'Image'
+      type: 'Image',
     } as OB2.Image;
     return {
       '@context': 'https://w3id.org/openbadges/v2',
@@ -38,14 +28,17 @@ export class BadgeService {
         id,
         type: 'Profile',
         name: '',
-      }
+      },
     };
   }
 
   /**
    * Creates a new Assertion template with default values
    */
-  static createAssertionTemplate(badgeClass: OB2.BadgeClass, recipientEmail: string): OB2.Assertion {
+  static createAssertionTemplate(
+    badgeClass: OB2.BadgeClass,
+    recipientEmail: string
+  ): OB2.Assertion {
     const id = `urn:uuid:${uuidv4()}` as Shared.IRI;
     const now = new Date().toISOString() as Shared.DateTime;
     return {
@@ -60,8 +53,8 @@ export class BadgeService {
       badge: badgeClass,
       issuedOn: now,
       verification: {
-        type: 'hosted'
-      }
+        type: 'hosted',
+      },
     };
   }
 
@@ -72,11 +65,21 @@ export class BadgeService {
   static validateBadgeClass(badgeClass: OB2.BadgeClass): string[] {
     const errors: string[] = [];
 
-    if (!badgeClass.id) {errors.push('Badge ID is required');}
-    if (!badgeClass.name) {errors.push('Badge name is required');}
-    if (!badgeClass.description) {errors.push('Badge description is required');}
-    if (!badgeClass.image) {errors.push('Badge image is required');}
-    if (!badgeClass.issuer) {errors.push('Issuer is required');}
+    if (!badgeClass.id) {
+      errors.push('Badge ID is required');
+    }
+    if (!badgeClass.name) {
+      errors.push('Badge name is required');
+    }
+    if (!badgeClass.description) {
+      errors.push('Badge description is required');
+    }
+    if (!badgeClass.image) {
+      errors.push('Badge image is required');
+    }
+    if (!badgeClass.issuer) {
+      errors.push('Issuer is required');
+    }
     if (typeof badgeClass.issuer === 'object' && !badgeClass.issuer.name) {
       errors.push('Issuer name is required');
     }
@@ -91,10 +94,18 @@ export class BadgeService {
   static validateAssertion(assertion: OB2.Assertion): string[] {
     const errors: string[] = [];
 
-    if (!assertion.id) {errors.push('Assertion ID is required');}
-    if (!assertion.badge) {errors.push('Badge reference is required');}
-    if (!assertion.issuedOn) {errors.push('Issue date is required');}
-    if (!assertion.recipient?.identity) {errors.push('Recipient identity is required');}
+    if (!assertion.id) {
+      errors.push('Assertion ID is required');
+    }
+    if (!assertion.badge) {
+      errors.push('Badge reference is required');
+    }
+    if (!assertion.issuedOn) {
+      errors.push('Issue date is required');
+    }
+    if (!assertion.recipient?.identity) {
+      errors.push('Recipient identity is required');
+    }
 
     return errors;
   }
@@ -117,9 +128,10 @@ export class BadgeService {
   } {
     if (isOB2Assertion(badge)) {
       // Handle OB2 Assertion
-      const badgeClass = typeof badge.badge === 'string'
-        ? { name: 'Unknown Badge', description: '', image: '' }
-        : badge.badge;
+      const badgeClass =
+        typeof badge.badge === 'string'
+          ? { name: 'Unknown Badge', description: '', image: '' }
+          : badge.badge;
 
       // Handle issuer which could be a string or Profile object
       let issuerName = 'Unknown Issuer';
@@ -138,7 +150,10 @@ export class BadgeService {
           if (badgeClass.issuer.image) {
             if (typeof badgeClass.issuer.image === 'string') {
               issuerImage = badgeClass.issuer.image;
-            } else if (typeof badgeClass.issuer.image === 'object' && 'id' in badgeClass.issuer.image) {
+            } else if (
+              typeof badgeClass.issuer.image === 'object' &&
+              'id' in badgeClass.issuer.image
+            ) {
               issuerImage = badgeClass.issuer.image.id as string;
             }
           }
@@ -157,8 +172,14 @@ export class BadgeService {
 
       return {
         id: badge.id as string,
-        name: typeof badgeClass === 'object' && 'name' in badgeClass ? badgeClass.name : 'Unknown Badge',
-        description: typeof badgeClass === 'object' && 'description' in badgeClass ? badgeClass.description : '',
+        name:
+          typeof badgeClass === 'object' && 'name' in badgeClass
+            ? badgeClass.name
+            : 'Unknown Badge',
+        description:
+          typeof badgeClass === 'object' && 'description' in badgeClass
+            ? badgeClass.description
+            : '',
         image: badgeImage,
         issuer: {
           name: issuerName,
@@ -195,7 +216,11 @@ export class BadgeService {
 
       // Handle achievement description
       let achievementDescription = '';
-      if (typeof achievement === 'object' && !Array.isArray(achievement) && 'description' in achievement) {
+      if (
+        typeof achievement === 'object' &&
+        !Array.isArray(achievement) &&
+        'description' in achievement
+      ) {
         const description = achievement.description;
         if (typeof description === 'string') {
           achievementDescription = description;
@@ -204,7 +229,11 @@ export class BadgeService {
 
       // Handle achievement image
       let achievementImage = '';
-      if (typeof achievement === 'object' && !Array.isArray(achievement) && 'image' in achievement) {
+      if (
+        typeof achievement === 'object' &&
+        !Array.isArray(achievement) &&
+        'image' in achievement
+      ) {
         const image = achievement.image;
         if (typeof image === 'string') {
           achievementImage = image;
