@@ -5,26 +5,31 @@ import ProfileViewer from '../../../src/components/badges/ProfileViewer.vue';
 import BadgeList from '../../../src/components/badges/BadgeList.vue';
 import BadgeDisplay from '../../../src/components/badges/BadgeDisplay.vue';
 import { createMockOB2Badge } from '../utils';
+import { createIRI } from 'openbadges-types';
 
 describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
   // Create mock profile and badges
   const mockBadges = [
-    createMockOB2Badge({ id: 'http://example.org/badge1' }),
+    createMockOB2Badge({ id: createIRI('http://example.org/badge1') }),
     createMockOB2Badge({
-      id: 'http://example.org/badge2',
+      id: createIRI('http://example.org/badge2'),
       badge: {
         type: 'BadgeClass',
-        id: 'http://example.org/badgeclass2',
+        id: createIRI('http://example.org/badgeclass2'),
         name: 'Test Badge 2',
         description: 'Another test badge description',
-        image: 'http://example.org/badge2.png',
+        image: createIRI('http://example.org/badge2.png'),
+        criteria: {
+          id: createIRI('http://example.org/criteria'),
+          narrative: 'Test criteria narrative',
+        },
         issuer: {
           type: 'Profile',
-          id: 'http://example.org/issuer',
-          name: 'Test Issuer'
-        }
-      }
-    })
+          id: createIRI('http://example.org/issuer'),
+          name: 'Test Issuer',
+        },
+      },
+    }),
   ];
 
   const mockRecipientProfile = {
@@ -34,7 +39,7 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     image: 'http://example.org/profile.jpg',
     description: 'Software developer and open badges enthusiast',
     url: 'http://example.org/jane',
-    type: 'Recipient'
+    type: 'Recipient',
   };
 
   const mockIssuerProfile = {
@@ -44,7 +49,7 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     image: 'http://example.org/org.jpg',
     description: 'An organization that issues badges',
     url: 'http://example.org/org',
-    type: 'Issuer'
+    type: 'Issuer',
   };
 
   beforeEach(() => {
@@ -55,13 +60,15 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
 
     // Check profile information
     expect(wrapper.find('.manus-profile-name').text()).toBe('Jane Doe');
-    expect(wrapper.find('.manus-profile-description').text()).toBe('Software developer and open badges enthusiast');
+    expect(wrapper.find('.manus-profile-description').text()).toBe(
+      'Software developer and open badges enthusiast'
+    );
 
     // Check that BadgeList is rendered
     const badgeList = wrapper.findComponent(BadgeList);
@@ -80,8 +87,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const recipientWrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
     expect(recipientWrapper.find('.manus-section-title').text()).toBe('Badges Earned');
 
@@ -89,8 +96,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const issuerWrapper = mount(ProfileViewer, {
       props: {
         profile: mockIssuerProfile,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
     expect(issuerWrapper.find('.manus-section-title').text()).toBe('Badges Offered');
   });
@@ -101,8 +108,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesLayout: 'grid'
-      }
+        badgesLayout: 'grid',
+      },
     });
     expect(gridWrapper.findComponent(BadgeList).props('layout')).toBe('grid');
 
@@ -111,8 +118,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesLayout: 'list'
-      }
+        badgesLayout: 'list',
+      },
     });
     expect(listWrapper.findComponent(BadgeList).props('layout')).toBe('list');
   });
@@ -123,8 +130,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesInteractive: true
-      }
+        badgesInteractive: true,
+      },
     });
     expect(interactiveWrapper.findComponent(BadgeList).props('interactive')).toBe(true);
 
@@ -133,8 +140,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesInteractive: false
-      }
+        badgesInteractive: false,
+      },
     });
     expect(nonInteractiveWrapper.findComponent(BadgeList).props('interactive')).toBe(false);
   });
@@ -144,8 +151,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesInteractive: true
-      }
+        badgesInteractive: true,
+      },
     });
 
     // Get the BadgeList component
@@ -164,8 +171,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        badgesInteractive: true
-      }
+        badgesInteractive: true,
+      },
     });
 
     // Get the first BadgeDisplay component
@@ -181,17 +188,19 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
 
   it('should handle pagination correctly', async () => {
     // Create an array of 5 badges
-    const manyBadges = Array(5).fill(null).map((_, index) =>
-      createMockOB2Badge({ id: `http://example.org/badge${index + 1}` })
-    );
+    const manyBadges = Array(5)
+      .fill(null)
+      .map((_, index) =>
+        createMockOB2Badge({ id: createIRI(`http://example.org/badge${index + 1}`) })
+      );
 
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
         badges: manyBadges,
         pageSize: 2,
-        showPagination: true
-      }
+        showPagination: true,
+      },
     });
 
     // Get the BadgeList component
@@ -217,8 +226,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
       props: {
         profile: mockRecipientProfile,
         badges: mockBadges,
-        loading: true
-      }
+        loading: true,
+      },
     });
 
     // Check that loading message is displayed
@@ -233,8 +242,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
 
     // Check that profile image is displayed
@@ -249,8 +258,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: profileWithoutImage,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
 
     // Check that initials placeholder is displayed
@@ -263,8 +272,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
-        badges: mockBadges
-      }
+        badges: mockBadges,
+      },
     });
 
     // Check that URL is formatted correctly (protocol removed)
@@ -277,7 +286,7 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     const wrapper = mount(ProfileViewer, {
       props: {
         profile: mockRecipientProfile,
-        badges: mockBadges
+        badges: mockBadges,
       },
       slots: {
         'badges-list': `
@@ -286,8 +295,8 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
               <p>Custom badges list with {{ badges.length }} badges</p>
             </div>
           </template>
-        `
-      }
+        `,
+      },
     });
 
     // Check that custom slot content is rendered

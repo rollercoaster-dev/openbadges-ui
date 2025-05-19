@@ -14,6 +14,17 @@
     "isolatedModules": true,
     "jsx": "preserve",
 
+    /* Path aliases for cleaner imports */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@composables/*": ["src/composables/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"]
+    },
+
     /* For declaration files */
     "declaration": true,
     "declarationDir": "dist/types",

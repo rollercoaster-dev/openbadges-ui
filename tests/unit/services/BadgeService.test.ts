@@ -1,11 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import {
-  BadgeService,
-  isOB2Assertion,
-  isOB3VerifiableCredential,
-} from '../../../src/services/BadgeService';
-import type { OB2, OB3 } from 'openbadges-types';
-import { createIRI } from '../../../src/utils/type-helpers';
+import { BadgeService } from '@services/BadgeService';
+import type { OB2, OB3 } from '@/types';
+import { createIRI } from '@utils/type-helpers';
+import { isOB2Assertion, isOB3VerifiableCredential } from '@utils/type-helpers';
 
 describe('BadgeService', () => {
   describe('isOB2Assertion', () => {

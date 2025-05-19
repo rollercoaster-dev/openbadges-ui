@@ -1,5 +1,5 @@
 // src/services/mockData.ts
-import type { OB2, OB3, Shared } from 'openbadges-types';
+import type { OB2, OB3, Shared } from '@/types';
 
 /**
  * Mock data for testing and development

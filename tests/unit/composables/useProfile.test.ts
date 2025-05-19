@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { useProfile } from '../../../src/composables/useProfile';
-import type { Profile } from '../../../src/composables/useProfile';
+import type { Profile } from '../../../src/types';
 import { BadgeService } from '../../../src/services/BadgeService';
 
 describe('useProfile', () => {
@@ -39,7 +39,10 @@ describe('useProfile', () => {
 
   it('extractIssuerFromBadge returns null for no issuer', () => {
     const { extractIssuerFromBadge } = useProfile();
-    const assertion = BadgeService.createAssertionTemplate(BadgeService.createBadgeClassTemplate(), 'e@e.com');
+    const assertion = BadgeService.createAssertionTemplate(
+      BadgeService.createBadgeClassTemplate(),
+      'e@e.com'
+    );
     // Remove issuer name
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (assertion.badge as any).issuer.name = ''; // Intentionally modify for test
@@ -49,7 +52,10 @@ describe('useProfile', () => {
 
   it('extractIssuerFromBadge returns Profile when available', () => {
     const { extractIssuerFromBadge } = useProfile();
-    const assertion = BadgeService.createAssertionTemplate(BadgeService.createBadgeClassTemplate(), 'e@e.com');
+    const assertion = BadgeService.createAssertionTemplate(
+      BadgeService.createBadgeClassTemplate(),
+      'e@e.com'
+    );
 
     // Ensure the badgeClass has an issuer with a name for this test case
     if (typeof assertion.badge === 'object' && typeof assertion.badge.issuer === 'object') {
@@ -63,7 +69,11 @@ describe('useProfile', () => {
     expect(profile).not.toBeNull();
 
     // Add type guard for accessing issuer name in assertion
-    if (profile && typeof assertion.badge === 'object' && typeof assertion.badge.issuer === 'object') {
+    if (
+      profile &&
+      typeof assertion.badge === 'object' &&
+      typeof assertion.badge.issuer === 'object'
+    ) {
       expect(profile.name).toBe(assertion.badge.issuer.name);
     } else {
       // Fail test if profile is null or badge structure is unexpected after extraction

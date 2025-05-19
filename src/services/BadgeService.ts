@@ -1,7 +1,7 @@
 // src/services/BadgeService.ts
-import type { OB2, OB3, Shared } from 'openbadges-types';
+import type { OB2, OB3, Shared } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
-import { createIRI, isOB2Assertion, isOB3VerifiableCredential } from '../utils/type-helpers';
+import { createIRI, isOB2Assertion, isOB3VerifiableCredential } from '@utils/type-helpers';
 
 /**
  * Utility service for badge-related operations

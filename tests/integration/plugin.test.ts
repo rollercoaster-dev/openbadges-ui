@@ -1,25 +1,26 @@
 // tests/integration/plugin.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createApp } from 'vue';
-import OpenBadgesUIPlugin from '../../src/plugin';
-import BadgeDisplay from '../../src/components/badges/BadgeDisplay.vue';
-import BadgeList from '../../src/components/badges/BadgeList.vue';
-import ProfileViewer from '../../src/components/badges/ProfileViewer.vue';
-import BadgeVerification from '../../src/components/badges/BadgeVerification.vue';
-import BadgeIssuerForm from '../../src/components/issuing/BadgeIssuerForm.vue';
-import IssuerDashboard from '../../src/components/issuing/IssuerDashboard.vue';
-import FontSelector from '../../src/components/accessibility/FontSelector.vue';
-import ThemeSelector from '../../src/components/accessibility/ThemeSelector.vue';
-import AccessibilitySettings from '../../src/components/accessibility/AccessibilitySettings.vue';
+import OpenBadgesUIPlugin from '@/plugin';
+import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
+import BadgeList from '@/components/badges/BadgeList.vue';
+import ProfileViewer from '@/components/badges/ProfileViewer.vue';
+import BadgeVerification from '@/components/badges/BadgeVerification.vue';
+import BadgeIssuerForm from '@/components/issuing/BadgeIssuerForm.vue';
+import IssuerDashboard from '@/components/issuing/IssuerDashboard.vue';
+import FontSelector from '@/components/accessibility/FontSelector.vue';
+import ThemeSelector from '@/components/accessibility/ThemeSelector.vue';
+import AccessibilitySettings from '@/components/accessibility/AccessibilitySettings.vue';
 
 // Mock PrimeVue
 vi.mock('primevue/config', () => ({
-  default: {}
+  default: {},
 }));
 
 describe('OpenBadgesUIPlugin', () => {
-  let app;
-  let componentSpy;
+  let app: ReturnType<typeof createApp>;
+  // Use any type for the spy to avoid TypeScript errors
+  let componentSpy: any;
 
   beforeEach(() => {
     // Create a new Vue app for each test
@@ -45,8 +46,6 @@ describe('OpenBadgesUIPlugin', () => {
     expect(componentSpy).toHaveBeenCalledWith('AccessibilitySettings', AccessibilitySettings);
   });
 
-
-
   it('should register all components with the correct names', () => {
     // Install the plugin
     app.use(OpenBadgesUIPlugin);
@@ -61,10 +60,10 @@ describe('OpenBadgesUIPlugin', () => {
       'IssuerDashboard',
       'FontSelector',
       'ThemeSelector',
-      'AccessibilitySettings'
+      'AccessibilitySettings',
     ];
 
-    expectedComponents.forEach(componentName => {
+    expectedComponents.forEach((componentName) => {
       expect(componentSpy).toHaveBeenCalledWith(componentName, expect.any(Object));
     });
 

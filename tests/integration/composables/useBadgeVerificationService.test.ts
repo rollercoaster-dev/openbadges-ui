@@ -1,16 +1,23 @@
 // tests/integration/composables/useBadgeVerificationService.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useBadgeVerification } from '../../../src/composables/useBadgeVerification';
-import { BadgeVerificationService } from '../../../src/services/BadgeVerificationService';
+import { useBadgeVerification } from '@/composables/useBadgeVerification';
+import { BadgeVerificationService } from '@/services/BadgeVerificationService';
 import { createMockOB2Badge, createMockOB3Badge } from '../utils';
 import { nextTick } from 'vue';
 
+// Import the mockBadgeVerificationService helper
+import { mockBadgeVerificationService } from '@/utils/__tests__/test-helpers';
+
 // Mock the BadgeVerificationService
-vi.mock('../../../src/services/BadgeVerificationService', () => ({
-  BadgeVerificationService: {
-    verifyBadge: vi.fn()
-  }
-}));
+const { mockVerifyBadge } = mockBadgeVerificationService();
+
+vi.mock('../../../src/services/BadgeVerificationService', () => {
+  return {
+    BadgeVerificationService: {
+      verifyBadge: mockVerifyBadge,
+    },
+  };
+});
 
 describe('useBadgeVerification and BadgeVerificationService Integration', () => {
   const mockOB2Badge = createMockOB2Badge();
@@ -22,13 +29,24 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should call BadgeVerificationService.verifyBadge when verifyBadge is called', async () => {
     // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
-      revocationStatus: 'valid'
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
@@ -57,13 +75,24 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should update computed properties based on verification result', async () => {
     // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['Test warning'],
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
-      revocationStatus: 'valid'
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
@@ -75,7 +104,7 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
       verificationMethod,
       expirationStatus,
       revocationStatus,
-      hasBeenVerified
+      hasBeenVerified,
     } = useBadgeVerification();
 
     // Initially, computed properties should have default values
@@ -105,24 +134,29 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle verification failure correctly', async () => {
     // Mock a failed verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge format'],
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'expired',
-      revocationStatus: 'revoked'
+      revocationStatus: 'revoked',
+      structureValidation: {
+        isValid: false,
+        errors: ['Invalid badge format'],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
-    const {
-      verifyBadge,
-      isValid,
-      errors,
-      warnings,
-      expirationStatus,
-      revocationStatus
-    } = useBadgeVerification();
+    const { verifyBadge, isValid, errors, warnings, expirationStatus, revocationStatus } =
+      useBadgeVerification();
 
     // Call verifyBadge
     const result = await verifyBadge(mockOB2Badge);
@@ -144,7 +178,8 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle service exceptions correctly', async () => {
     // Mock an exception in the service
-    BadgeVerificationService.verifyBadge.mockRejectedValueOnce(new Error('Network error'));
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockRejectedValueOnce(new Error('Network error'));
 
     // Use the composable
     const { verifyBadge, isValid, errors, state } = useBadgeVerification();
@@ -167,13 +202,24 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should verify OB3 badges correctly', async () => {
     // Mock a successful verification for OB3
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['Full cryptographic verification of OB3 credentials is not yet implemented'],
       verificationMethod: 'signed',
       expirationStatus: 'valid',
-      revocationStatus: 'unknown'
+      revocationStatus: 'unknown',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
@@ -190,29 +236,37 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
     // Check that computed properties were updated correctly
     expect(isValid.value).toBe(true);
-    expect(warnings.value).toContain('Full cryptographic verification of OB3 credentials is not yet implemented');
+    expect(warnings.value).toContain(
+      'Full cryptographic verification of OB3 credentials is not yet implemented'
+    );
     expect(verificationMethod.value).toBe('signed');
   });
 
   it('should clear verification state correctly', async () => {
     // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
-      revocationStatus: 'valid'
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
-    const {
-      verifyBadge,
-      clearVerification,
-      isValid,
-      hasBeenVerified,
-      state
-    } = useBadgeVerification();
+    const { verifyBadge, clearVerification, isValid, hasBeenVerified, state } =
+      useBadgeVerification();
 
     // Call verifyBadge
     await verifyBadge(mockOB2Badge);
@@ -244,13 +298,24 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
 
   it('should handle multiple verification calls correctly', async () => {
     // Mock first verification (success)
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
-      revocationStatus: 'valid'
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Use the composable
@@ -267,13 +332,24 @@ describe('useBadgeVerification and BadgeVerificationService Integration', () => 
     expect(state.value.badge).toEqual(mockOB2Badge);
 
     // Mock second verification (failure)
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    // Use the mockVerifyBadge function directly
+    mockVerifyBadge.mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge'],
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'expired',
-      revocationStatus: 'valid'
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: false,
+        errors: ['Invalid badge'],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
     });
 
     // Second verification with a different badge

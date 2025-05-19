@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { OB2, OB3 } from 'openbadges-types';
-import BadgeList from './BadgeList.vue';
-import type { Profile } from '../../composables/useProfile';
+import type { OB2, OB3 } from '@/types';
+import BadgeList from '@components/badges/BadgeList.vue';
+import type { Profile } from '@composables/useProfile';
 
 interface Props {
   profile: Profile;
@@ -59,59 +59,37 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
 <template>
   <div class="manus-profile-viewer">
     <!-- Profile Header -->
-    <section
-      class="manus-profile-header"
-      aria-labelledby="profile-title"
-    >
+    <section class="manus-profile-header" aria-labelledby="profile-title">
       <div class="manus-profile-avatar">
         <img
           v-if="profile.image"
           :src="profile.image"
           :alt="`${profile.name}'s avatar`"
           class="manus-profile-image"
-        >
-        <div
-          v-else
-          class="manus-profile-image-placeholder"
-          aria-hidden="true"
-        >
+        />
+        <div v-else class="manus-profile-image-placeholder" aria-hidden="true">
           {{ getInitials(profile.name) }}
         </div>
       </div>
 
       <div class="manus-profile-info">
-        <h2
-          id="profile-title"
-          class="manus-profile-name"
-        >
+        <h2 id="profile-title" class="manus-profile-name">
           {{ profile.name }}
         </h2>
 
-        <p
-          v-if="profile.description"
-          class="manus-profile-description"
-        >
+        <p v-if="profile.description" class="manus-profile-description">
           {{ profile.description }}
         </p>
 
         <div class="manus-profile-details">
-          <div
-            v-if="profile.email"
-            class="manus-profile-detail"
-          >
+          <div v-if="profile.email" class="manus-profile-detail">
             <span class="manus-profile-detail-label">Email:</span>
-            <a
-              :href="`mailto:${profile.email}`"
-              class="manus-profile-detail-value"
-            >
+            <a :href="`mailto:${profile.email}`" class="manus-profile-detail-value">
               {{ profile.email }}
             </a>
           </div>
 
-          <div
-            v-if="profile.url"
-            class="manus-profile-detail"
-          >
+          <div v-if="profile.url" class="manus-profile-detail">
             <span class="manus-profile-detail-label">Website:</span>
             <a
               :href="profile.url"
@@ -128,31 +106,17 @@ const handleBadgeClick = (badge: OB2.Assertion | OB3.VerifiableCredential) => {
     </section>
 
     <!-- Badges Section -->
-    <section
-      class="manus-profile-badges"
-      aria-labelledby="badges-title"
-    >
-      <h3
-        id="badges-title"
-        class="manus-section-title"
-      >
+    <section class="manus-profile-badges" aria-labelledby="badges-title">
+      <h3 id="badges-title" class="manus-section-title">
         {{ badgesSectionTitle }}
       </h3>
 
-      <div
-        v-if="loading"
-        class="manus-profile-loading"
-        role="status"
-        aria-live="polite"
-      >
+      <div v-if="loading" class="manus-profile-loading" role="status" aria-live="polite">
         <span>Loading badges...</span>
       </div>
 
       <div v-else>
-        <slot
-          name="badges-list"
-          :badges="badges"
-        >
+        <slot name="badges-list" :badges="badges">
           <BadgeList
             :badges="badges"
             :layout="badgesLayout"

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
 import { BadgeVerificationService } from '../../../../src/services/BadgeVerificationService';
-import type { OB2 } from 'openbadges-types';
+import { createDateTime, createIRI, type OB2 } from 'openbadges-types';
 
 // Mock the BadgeVerificationService
 vi.mock('../../../../src/services/BadgeVerificationService', () => ({
@@ -13,37 +13,41 @@ vi.mock('../../../../src/services/BadgeVerificationService', () => ({
       warnings: [],
       verificationMethod: 'hosted',
       expirationStatus: 'valid',
-      revocationStatus: 'valid'
-    })
-  }
+      revocationStatus: 'valid',
+    }),
+  },
 }));
 
 describe('BadgeVerification.vue', () => {
   const mockBadge: OB2.Assertion = {
     '@context': 'https://w3id.org/openbadges/v2',
     type: 'Assertion',
-    id: 'http://example.org/badge1',
+    id: createIRI('http://example.org/badge1'),
     recipient: {
       identity: 'test@example.org',
       type: 'email',
-      hashed: false
+      hashed: false,
     },
     badge: {
       type: 'BadgeClass',
-      id: 'http://example.org/badgeclass1',
+      id: createIRI('http://example.org/badgeclass1'),
       name: 'Test Badge',
       description: 'A test badge description',
-      image: 'http://example.org/badge.png',
+      image: createIRI('http://example.org/badge.png'),
+      criteria: {
+        id: createIRI('http://example.org/criteria'),
+        narrative: 'Test criteria narrative',
+      },
       issuer: {
         type: 'Profile',
-        id: 'http://example.org/issuer',
-        name: 'Test Issuer'
-      }
+        id: createIRI('http://example.org/issuer'),
+        name: 'Test Issuer',
+      },
     },
-    issuedOn: '2023-01-01T00:00:00Z',
+    issuedOn: createDateTime('2023-01-01T00:00:00Z'),
     verification: {
-      type: 'hosted'
-    }
+      type: 'hosted',
+    },
   };
 
   beforeEach(() => {
@@ -56,8 +60,8 @@ describe('BadgeVerification.vue', () => {
         badge: mockBadge,
         showStatus: true,
         showDetails: true,
-        autoVerify: false
-      }
+        autoVerify: false,
+      },
     });
 
     // Initially, no verification has been performed
@@ -82,8 +86,8 @@ describe('BadgeVerification.vue', () => {
     const wrapper = mount(BadgeVerification, {
       props: {
         badge: mockBadge,
-        autoVerify: true
-      }
+        autoVerify: true,
+      },
     });
 
     // Verify that verifyBadge was called
@@ -91,8 +95,11 @@ describe('BadgeVerification.vue', () => {
 
     // Manually trigger the verification result since the test environment
     // doesn't fully simulate the component lifecycle
-    await wrapper.vm.handleVerify();
-    await wrapper.vm.$nextTick();
+    // Use the button click instead of calling the method directly
+    await wrapper.find('.ob-badge-verification-button').trigger('click');
+    await vi.waitFor(() => {
+      return wrapper.find('.ob-badge-verification-valid').exists();
+    });
 
     // Verification result should be displayed
     expect(wrapper.find('.ob-badge-verification-valid').exists()).toBe(true);
@@ -101,8 +108,8 @@ describe('BadgeVerification.vue', () => {
   it('emits verified event when verification is complete', async () => {
     const wrapper = mount(BadgeVerification, {
       props: {
-        badge: mockBadge
-      }
+        badge: mockBadge,
+      },
     });
 
     // Click the verify button
@@ -122,8 +129,8 @@ describe('BadgeVerification.vue', () => {
     const wrapper = mount(BadgeVerification, {
       props: {
         badge: mockBadge,
-        showDetails: true
-      }
+        showDetails: true,
+      },
     });
 
     // Click the verify button
@@ -145,8 +152,8 @@ describe('BadgeVerification.vue', () => {
     const wrapper = mount(BadgeVerification, {
       props: {
         badge: mockBadge,
-        showStatus: false
-      }
+        showStatus: false,
+      },
     });
 
     // Verification status should not be displayed
@@ -157,8 +164,8 @@ describe('BadgeVerification.vue', () => {
     const wrapper = mount(BadgeVerification, {
       props: {
         badge: mockBadge,
-        showLastVerified: false
-      }
+        showLastVerified: false,
+      },
     });
 
     // Click the verify button

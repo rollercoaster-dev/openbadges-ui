@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { OB2, OB3 } from 'openbadges-types';
-import { BadgeService } from '../../services/BadgeService';
-import BadgeVerification from './BadgeVerification.vue';
+import type { OB2, OB3 } from '@/types';
+import { BadgeService } from '@services/BadgeService';
+import BadgeVerification from '@components/badges/BadgeVerification.vue';
 
 interface Props {
   badge: OB2.Assertion | OB3.VerifiableCredential;
@@ -86,37 +86,25 @@ const toggleVerificationDetails = () => {
         :src="normalizedBadge.image"
         :alt="generateAltText(normalizedBadge.name)"
         class="manus-badge-img"
-      >
+      />
     </div>
     <div class="manus-badge-content">
       <h3 class="manus-badge-title">
         {{ normalizedBadge.name }}
       </h3>
-      <p
-        v-if="showDescription"
-        class="manus-badge-description"
-      >
+      <p v-if="showDescription" class="manus-badge-description">
         {{ normalizedBadge.description }}
       </p>
       <div class="manus-badge-issuer">
         <span>Issued by: {{ normalizedBadge.issuer.name }}</span>
       </div>
-      <div
-        v-if="showIssuedDate"
-        class="manus-badge-date"
-      >
+      <div v-if="showIssuedDate" class="manus-badge-date">
         <span>Issued: {{ formatDate(normalizedBadge.issuedOn) }}</span>
       </div>
-      <div
-        v-if="showExpiryDate && normalizedBadge.expires"
-        class="manus-badge-expiry"
-      >
+      <div v-if="showExpiryDate && normalizedBadge.expires" class="manus-badge-expiry">
         <span>Expires: {{ formatDate(normalizedBadge.expires) }}</span>
       </div>
-      <div
-        v-if="showVerification"
-        class="manus-badge-verification-toggle"
-      >
+      <div v-if="showVerification" class="manus-badge-verification-toggle">
         <button
           class="manus-badge-verification-toggle-button"
           type="button"
@@ -130,11 +118,7 @@ const toggleVerificationDetails = () => {
         v-if="showVerification && showVerificationDetails"
         class="manus-badge-verification-container"
       >
-        <BadgeVerification
-          :badge="badge"
-          :auto-verify="autoVerify"
-          @verified="handleVerified"
-        />
+        <BadgeVerification :badge="badge" :auto-verify="autoVerify" @verified="handleVerified" />
       </div>
 
       <slot name="badge-actions" />

@@ -4,17 +4,17 @@ import type { App } from 'vue';
 import PrimeVue from 'primevue/config';
 
 // Import components
-import BadgeDisplay from './components/badges/BadgeDisplay.vue';
-import BadgeList from './components/badges/BadgeList.vue';
-import ProfileViewer from './components/badges/ProfileViewer.vue';
-import BadgeVerification from './components/badges/BadgeVerification.vue';
-import BadgeIssuerForm from './components/issuing/BadgeIssuerForm.vue';
-import IssuerDashboard from './components/issuing/IssuerDashboard.vue';
+import BadgeDisplay from '@components/badges/BadgeDisplay.vue';
+import BadgeList from '@components/badges/BadgeList.vue';
+import ProfileViewer from '@components/badges/ProfileViewer.vue';
+import BadgeVerification from '@components/badges/BadgeVerification.vue';
+import BadgeIssuerForm from '@components/issuing/BadgeIssuerForm.vue';
+import IssuerDashboard from '@components/issuing/IssuerDashboard.vue';
 
 // Import accessibility components
-import FontSelector from './components/accessibility/FontSelector.vue';
-import ThemeSelector from './components/accessibility/ThemeSelector.vue';
-import AccessibilitySettings from './components/accessibility/AccessibilitySettings.vue';
+import FontSelector from '@components/accessibility/FontSelector.vue';
+import ThemeSelector from '@components/accessibility/ThemeSelector.vue';
+import AccessibilitySettings from '@components/accessibility/AccessibilitySettings.vue';
 
 export default {
   install: (app: App, options = {}): void => {

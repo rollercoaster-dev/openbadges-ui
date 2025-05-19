@@ -4,6 +4,16 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [vue()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@components': resolve(__dirname, './src/components'),
+      '@composables': resolve(__dirname, './src/composables'),
+      '@services': resolve(__dirname, './src/services'),
+      '@utils': resolve(__dirname, './src/utils'),
+      '@types': resolve(__dirname, './src/types'),
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
@@ -22,11 +32,6 @@ export default defineConfig({
     },
     deps: {
       inline: ['vue', 'primevue'],
-    },
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
     },
   },
 });

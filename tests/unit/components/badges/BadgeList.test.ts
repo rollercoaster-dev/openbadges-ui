@@ -2,56 +2,67 @@ import { describe, it, expect, vi as _vi } from 'vitest'; // eslint-disable-line
 import { mount } from '@vue/test-utils';
 import BadgeList from '../../../../src/components/badges/BadgeList.vue';
 import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
-import type { OB2, OB3 } from 'openbadges-types';
+import { createDateTime, createIRI, type OB2, type OB3 } from 'openbadges-types';
 
 describe('BadgeList.vue', () => {
   // Mock OB2 badge
   const mockOB2Badge: OB2.Assertion = {
     '@context': 'https://w3id.org/openbadges/v2',
     type: 'Assertion',
-    id: 'http://example.org/badge1',
+    id: createIRI('http://example.org/badge1'),
     recipient: {
       identity: 'test@example.org',
       type: 'email',
-      hashed: false
+      hashed: false,
     },
     badge: {
       type: 'BadgeClass',
-      id: 'http://example.org/badgeclass1',
+      id: createIRI('http://example.org/badgeclass1'),
       name: 'Test Badge 1',
       description: 'A test badge description',
-      image: 'http://example.org/badge1.png',
+      image: createIRI('http://example.org/badge1.png'),
+      criteria: {
+        id: createIRI('http://example.org/criteria'),
+        narrative: 'Test criteria narrative',
+      },
       issuer: {
         type: 'Profile',
-        id: 'http://example.org/issuer',
-        name: 'Test Issuer'
-      }
+        id: createIRI('http://example.org/issuer'),
+        name: 'Test Issuer',
+      },
     },
-    issuedOn: '2023-01-01T00:00:00Z',
+    issuedOn: createDateTime('2023-01-01T00:00:00Z'),
     verification: {
-      type: 'hosted'
-    }
+      type: 'hosted',
+    },
   };
 
   // Mock OB3 badge
   const mockOB3Badge: OB3.VerifiableCredential = {
     '@context': ['https://www.w3.org/2018/credentials/v1'],
     type: ['VerifiableCredential', 'OpenBadgeCredential'],
-    id: 'http://example.org/credentials/123',
+    id: createIRI('http://example.org/credentials/123'),
     issuer: {
-      id: 'http://example.org/issuers/1',
-      name: 'Test Issuer'
+      id: createIRI('http://example.org/issuers/1'),
+      name: 'Test Issuer',
+      type: 'Profile',
+      url: createIRI('http://example.org/issuers/1'),
     },
-    issuanceDate: '2023-02-01T00:00:00Z',
+    issuanceDate: createDateTime('2023-02-01T00:00:00Z'),
     credentialSubject: {
-      id: 'did:example:123',
+      id: createIRI('did:example:123'),
       achievement: {
-        id: 'http://example.org/achievements/1',
+        id: createIRI('http://example.org/achievements/1'),
+        type: 'Achievement',
         name: 'Test Badge 2',
         description: 'Another test badge',
-        image: 'http://example.org/badge2.png'
-      }
-    }
+        image: createIRI('http://example.org/badge2.png'),
+        criteria: {
+          id: createIRI('http://example.org/criteria'),
+          narrative: 'Test criteria narrative',
+        },
+      },
+    },
   };
 
   // Create an array of badges for testing
@@ -60,13 +71,13 @@ describe('BadgeList.vue', () => {
   it('renders a list of badges correctly', () => {
     const wrapper = mount(BadgeList, {
       props: {
-        badges: mockBadges
+        badges: mockBadges,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
 
     // Check if the correct number of badges are rendered
@@ -78,8 +89,8 @@ describe('BadgeList.vue', () => {
     const wrapper = mount(BadgeList, {
       props: {
         badges: mockBadges,
-        loading: true
-      }
+        loading: true,
+      },
     });
 
     // Check if loading message is displayed
@@ -90,8 +101,8 @@ describe('BadgeList.vue', () => {
   it('displays an empty state when no badges are provided', () => {
     const wrapper = mount(BadgeList, {
       props: {
-        badges: []
-      }
+        badges: [],
+      },
     });
 
     // Check if empty message is displayed
@@ -104,13 +115,13 @@ describe('BadgeList.vue', () => {
     const gridWrapper = mount(BadgeList, {
       props: {
         badges: mockBadges,
-        layout: 'grid'
+        layout: 'grid',
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
     expect(gridWrapper.classes()).toContain('grid-layout');
 
@@ -118,13 +129,13 @@ describe('BadgeList.vue', () => {
     const listWrapper = mount(BadgeList, {
       props: {
         badges: mockBadges,
-        layout: 'list'
+        layout: 'list',
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
     expect(listWrapper.classes()).not.toContain('grid-layout');
   });
@@ -133,8 +144,8 @@ describe('BadgeList.vue', () => {
     const wrapper = mount(BadgeList, {
       props: {
         badges: [mockOB2Badge],
-        interactive: true
-      }
+        interactive: true,
+      },
     });
 
     // Find the BadgeDisplay component and trigger a click
@@ -148,23 +159,23 @@ describe('BadgeList.vue', () => {
 
   it('shows pagination when showPagination is true and there are multiple pages', () => {
     const manyBadges = Array(15).fill(mockOB2Badge);
-    
+
     const wrapper = mount(BadgeList, {
       props: {
         badges: manyBadges,
         pageSize: 5,
-        showPagination: true
+        showPagination: true,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
 
     // Check if pagination is displayed
     expect(wrapper.find('.manus-badge-list-pagination').exists()).toBe(true);
-    
+
     // Check if page info is correct
     expect(wrapper.find('.manus-pagination-info').text()).toContain('Page 1 of 3');
   });
@@ -174,13 +185,13 @@ describe('BadgeList.vue', () => {
       props: {
         badges: mockBadges,
         pageSize: 5,
-        showPagination: true
+        showPagination: true,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
 
     // Check that pagination is not displayed
@@ -189,24 +200,24 @@ describe('BadgeList.vue', () => {
 
   it('emits page-change event when pagination buttons are clicked', async () => {
     const manyBadges = Array(15).fill(mockOB2Badge);
-    
+
     const wrapper = mount(BadgeList, {
       props: {
         badges: manyBadges,
         pageSize: 5,
         showPagination: true,
-        currentPage: 1
+        currentPage: 1,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
 
     // Click the next page button
     await wrapper.find('.manus-pagination-button:last-child').trigger('click');
-    
+
     // Check if page-change event was emitted with the correct page number
     expect(wrapper.emitted('page-change')).toBeTruthy();
     expect(wrapper.emitted('page-change')![0][0]).toBe(2);
@@ -214,37 +225,37 @@ describe('BadgeList.vue', () => {
 
   it('respects the pageSize prop for pagination', () => {
     const manyBadges = Array(10).fill(mockOB2Badge);
-    
+
     // With pageSize 5, should have 2 pages
     const wrapper1 = mount(BadgeList, {
       props: {
         badges: manyBadges,
         pageSize: 5,
-        showPagination: true
+        showPagination: true,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
-    
+
     expect(wrapper1.find('.manus-pagination-info').text()).toContain('Page 1 of 2');
-    
+
     // With pageSize 10, should have 1 page
     const wrapper2 = mount(BadgeList, {
       props: {
         badges: manyBadges,
         pageSize: 10,
-        showPagination: true
+        showPagination: true,
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
-    
+
     // Pagination should not be displayed with only 1 page
     expect(wrapper2.find('.manus-badge-list-pagination').exists()).toBe(false);
   });
@@ -253,13 +264,13 @@ describe('BadgeList.vue', () => {
     const wrapper = mount(BadgeList, {
       props: {
         badges: mockBadges,
-        ariaLabel: 'Custom badge list label'
+        ariaLabel: 'Custom badge list label',
       },
       global: {
         stubs: {
-          BadgeDisplay: true
-        }
-      }
+          BadgeDisplay: true,
+        },
+      },
     });
 
     const listElement = wrapper.find('.manus-badge-list-items');

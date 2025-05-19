@@ -1,5 +1,5 @@
-import { defineConfig } from 'histoire'
-import { HstVue } from '@histoire/plugin-vue'
+import { defineConfig } from 'histoire';
+import { HstVue } from '@histoire/plugin-vue';
 
 export default defineConfig({
   // Configuration for GitHub Pages deployment
@@ -9,6 +9,16 @@ export default defineConfig({
   // Use a custom index.html template
   vite: {
     base: '/openbadges-ui/',
+    resolve: {
+      alias: {
+        '@': '/src',
+        '@components': '/src/components',
+        '@composables': '/src/composables',
+        '@services': '/src/services',
+        '@utils': '/src/utils',
+        '@types': '/src/types',
+      },
+    },
     build: {
       rollupOptions: {
         output: {
@@ -19,9 +29,7 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    HstVue(),
-  ],
+  plugins: [HstVue()],
   theme: {
     title: 'OpenBadges UI',
     // Removed logo configuration as the file doesn't exist
@@ -36,9 +44,9 @@ export default defineConfig({
         600: '#4f46e5',
         700: '#4338ca',
         800: '#3730a3',
-        900: '#312e81'
-      }
-    }
+        900: '#312e81',
+      },
+    },
   },
   tree: {
     groups: [
@@ -49,15 +57,15 @@ export default defineConfig({
       {
         id: 'badges',
         title: 'Badges',
-        include: file => file.title?.startsWith('Components/Badges/'),
+        include: (file) => file.title?.startsWith('Components/Badges/'),
       },
       {
         id: 'issuing',
         title: 'Issuing',
-        include: file => file.title?.startsWith('Components/Issuing/'),
+        include: (file) => file.title?.startsWith('Components/Issuing/'),
       },
     ],
   },
   setupFile: './histoire.setup.ts',
-  outDir: 'histoire-dist'
-})
+  outDir: 'histoire-dist',
+});

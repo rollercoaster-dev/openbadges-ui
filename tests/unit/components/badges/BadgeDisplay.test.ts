@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
 import _BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
-import type { OB2 } from 'openbadges-types';
+import { typedAssertion } from '../../../test-utils';
 
 describe('BadgeDisplay.vue', () => {
-  const mockBadge: OB2.Assertion = {
+  const mockBadge = typedAssertion({
     '@context': 'https://w3id.org/openbadges/v2',
     type: 'Assertion',
     id: 'http://example.org/badge1',
@@ -20,6 +20,9 @@ describe('BadgeDisplay.vue', () => {
       name: 'Test Badge',
       description: 'A test badge description',
       image: 'http://example.org/badge.png',
+      criteria: {
+        narrative: 'Test criteria',
+      },
       issuer: {
         type: 'Profile',
         id: 'http://example.org/issuer',
@@ -31,7 +34,7 @@ describe('BadgeDisplay.vue', () => {
     verification: {
       type: 'hosted',
     },
-  };
+  });
 
   it('renders badge information correctly', () => {
     const wrapper = mount(BadgeDisplay, {

@@ -1,11 +1,11 @@
 // src/composables/useBadgeVerification.ts
 import { ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
-import type { OB2, OB3 } from 'openbadges-types';
+import type { OB2, OB3 } from '@/types';
 import {
   BadgeVerificationService,
   type VerificationResult,
-} from '../services/BadgeVerificationService';
+} from '@services/BadgeVerificationService';
 
 /**
  * State for badge verification
@@ -69,7 +69,9 @@ export function useBadgeVerification(): UseBadgeVerificationReturn {
       state.value.lastVerified = new Date();
       return result;
     } catch (error) {
-      const errorMessage = `Verification failed: ${error instanceof Error ? error.message : String(error)}`;
+      const errorMessage = `Verification failed: ${
+        error instanceof Error ? error.message : String(error)
+      }`;
       const errorResult: VerificationResult = {
         isValid: false,
         errors: [errorMessage],

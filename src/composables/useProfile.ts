@@ -1,9 +1,9 @@
 // src/composables/useProfile.ts
 import { ref, computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
-import type { OB2, OB3 } from 'openbadges-types';
-import { BadgeService } from '../services/BadgeService';
-import type { Profile, ProfileType } from '../types';
+import type { OB2, OB3 } from '@/types';
+import { BadgeService } from '@services/BadgeService';
+import type { Profile, ProfileType } from '@/types';
 
 // Return type for the useProfile composable
 export interface UseProfileReturn {

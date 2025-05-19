@@ -1,8 +1,8 @@
 // src/composables/useBadges.ts
 import { ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
-import type { OB2, OB3 } from 'openbadges-types';
-import { BadgeService } from '../services/BadgeService';
+import type { OB2, OB3 } from '@/types';
+import { BadgeService } from '@services/BadgeService';
 
 /**
  * Composable for managing a collection of badges

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useBadgeIssuer } from '../../composables/useBadgeIssuer';
-import type { OB2 } from 'openbadges-types';
+import { useBadgeIssuer } from '@composables/useBadgeIssuer';
+import type { OB2 } from '@/types';
 
 interface Props {
   initialBadgeClass?: Partial<OB2.BadgeClass>;
@@ -134,21 +134,13 @@ const resetForm = () => {
 
 <template>
   <div class="manus-badge-issuer-form">
-    <form
-      novalidate
-      @submit.prevent="handleSubmit"
-    >
+    <form novalidate @submit.prevent="handleSubmit">
       <fieldset class="manus-form-section">
-        <legend class="manus-form-section-title">
-          Badge Information
-        </legend>
+        <legend class="manus-form-section-title">Badge Information</legend>
 
         <!-- Badge Name -->
         <div class="manus-form-field">
-          <label
-            for="badge-name"
-            class="manus-form-label"
-          >Badge Name *</label>
+          <label for="badge-name" class="manus-form-label">Badge Name *</label>
           <input
             id="badge-name"
             v-model="state.badgeClass.name"
@@ -157,23 +149,15 @@ const resetForm = () => {
             :class="{ 'manus-form-input-error': hasError('name') }"
             required
             aria-describedby="badge-name-error"
-          >
-          <div
-            v-if="hasError('name')"
-            id="badge-name-error"
-            class="manus-form-error"
-            role="alert"
-          >
+          />
+          <div v-if="hasError('name')" id="badge-name-error" class="manus-form-error" role="alert">
             Badge name is required
           </div>
         </div>
 
         <!-- Badge Description -->
         <div class="manus-form-field">
-          <label
-            for="badge-description"
-            class="manus-form-label"
-          >Description *</label>
+          <label for="badge-description" class="manus-form-label">Description *</label>
           <textarea
             id="badge-description"
             v-model="state.badgeClass.description"
@@ -195,10 +179,7 @@ const resetForm = () => {
 
         <!-- Badge Image URL -->
         <div class="manus-form-field">
-          <label
-            for="badge-image"
-            class="manus-form-label"
-          >Image URL *</label>
+          <label for="badge-image" class="manus-form-label">Image URL *</label>
           <input
             id="badge-image"
             v-model="badgeImageUrl"
@@ -208,7 +189,7 @@ const resetForm = () => {
             placeholder="https://example.com/badge-image.png"
             required
             aria-describedby="badge-image-error badge-image-help"
-          >
+          />
           <div
             v-if="hasError('image')"
             id="badge-image-error"
@@ -217,20 +198,14 @@ const resetForm = () => {
           >
             Valid badge image URL is required
           </div>
-          <div
-            id="badge-image-help"
-            class="manus-form-help"
-          >
+          <div id="badge-image-help" class="manus-form-help">
             Provide a URL to an image for this badge (PNG, SVG, or JPEG recommended)
           </div>
         </div>
 
         <!-- Badge Criteria -->
         <div class="manus-form-field">
-          <label
-            for="badge-criteria"
-            class="manus-form-label"
-          >Criteria</label>
+          <label for="badge-criteria" class="manus-form-label">Criteria</label>
           <textarea
             id="badge-criteria"
             v-model="criteriaText"
@@ -242,10 +217,7 @@ const resetForm = () => {
 
         <!-- Badge Tags -->
         <div class="manus-form-field">
-          <label
-            for="badge-tags"
-            class="manus-form-label"
-          >Tags</label>
+          <label for="badge-tags" class="manus-form-label">Tags</label>
           <input
             id="badge-tags"
             v-model="tagsInput"
@@ -253,27 +225,19 @@ const resetForm = () => {
             class="manus-form-input"
             placeholder="Enter comma-separated tags"
             aria-describedby="badge-tags-help"
-          >
-          <div
-            id="badge-tags-help"
-            class="manus-form-help"
-          >
+          />
+          <div id="badge-tags-help" class="manus-form-help">
             Optional: Add comma-separated tags to help categorize this badge
           </div>
         </div>
       </fieldset>
 
       <fieldset class="manus-form-section">
-        <legend class="manus-form-section-title">
-          Issuer Information
-        </legend>
+        <legend class="manus-form-section-title">Issuer Information</legend>
 
         <!-- Issuer Name -->
         <div class="manus-form-field">
-          <label
-            for="issuer-name"
-            class="manus-form-label"
-          >Issuer Name *</label>
+          <label for="issuer-name" class="manus-form-label">Issuer Name *</label>
           <input
             id="issuer-name"
             v-model="issuerName"
@@ -282,7 +246,7 @@ const resetForm = () => {
             :class="{ 'manus-form-input-error': hasError('issuer') }"
             required
             aria-describedby="issuer-name-error"
-          >
+          />
           <div
             v-if="hasError('issuer')"
             id="issuer-name-error"
@@ -295,31 +259,23 @@ const resetForm = () => {
 
         <!-- Issuer URL -->
         <div class="manus-form-field">
-          <label
-            for="issuer-url"
-            class="manus-form-label"
-          >Issuer URL</label>
+          <label for="issuer-url" class="manus-form-label">Issuer URL</label>
           <input
             id="issuer-url"
             v-model="issuerUrl"
             type="url"
             class="manus-form-input"
             placeholder="https://example.org"
-          >
+          />
         </div>
       </fieldset>
 
       <fieldset class="manus-form-section">
-        <legend class="manus-form-section-title">
-          Recipient Information
-        </legend>
+        <legend class="manus-form-section-title">Recipient Information</legend>
 
         <!-- Recipient Email -->
         <div class="manus-form-field">
-          <label
-            for="recipient-email"
-            class="manus-form-label"
-          >Recipient Email *</label>
+          <label for="recipient-email" class="manus-form-label">Recipient Email *</label>
           <input
             id="recipient-email"
             v-model="state.recipientEmail"
@@ -328,7 +284,7 @@ const resetForm = () => {
             :class="{ 'manus-form-input-error': hasError('recipient') }"
             required
             aria-describedby="recipient-email-error"
-          >
+          />
           <div
             v-if="hasError('recipient')"
             id="recipient-email-error"
@@ -361,30 +317,17 @@ const resetForm = () => {
       </div>
 
       <!-- Form Errors -->
-      <div
-        v-if="state.errors.length > 0"
-        class="manus-form-errors"
-        role="alert"
-        aria-live="polite"
-      >
+      <div v-if="state.errors.length > 0" class="manus-form-errors" role="alert" aria-live="polite">
         <p>Please correct the following errors:</p>
         <ul>
-          <li
-            v-for="(error, index) in state.errors"
-            :key="index"
-          >
+          <li v-for="(error, index) in state.errors" :key="index">
             {{ error }}
           </li>
         </ul>
       </div>
 
       <!-- Success Message -->
-      <div
-        v-if="state.success"
-        class="manus-form-success"
-        role="status"
-        aria-live="polite"
-      >
+      <div v-if="state.success" class="manus-form-success" role="status" aria-live="polite">
         Badge successfully issued!
       </div>
     </form>

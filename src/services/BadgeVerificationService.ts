@@ -1,7 +1,12 @@
 // src/services/BadgeVerificationService.ts
-import type { OB2, OB3 } from 'openbadges-types';
-import { validateBadge } from 'openbadges-types';
-import { isOB2Assertion, isOB3VerifiableCredential } from '../utils/type-helpers';
+import type { OB2, OB3 } from '@/types';
+import { validateBadge, isBadge, isOB2Profile } from 'openbadges-types';
+import {
+  isOB2Assertion,
+  isOB3VerifiableCredential,
+  OB2Guards,
+  OB3Guards,
+} from '@utils/type-helpers';
 
 /**
  * Result of a badge verification operation
@@ -180,7 +185,7 @@ export class BadgeVerificationService {
   private static validateOB2Components(badge: OB2.Assertion, result: VerificationResult): void {
     // Validate badge class
     if (typeof badge.badge === 'object') {
-      if (!OB2Guards.isBadgeClass(badge.badge)) {
+      if (!isBadge(badge.badge)) {
         result.contentValidation.errors.push('Invalid BadgeClass structure');
         result.contentValidation.isValid = false;
       } else {
@@ -214,10 +219,7 @@ export class BadgeVerificationService {
         if (!badge.badge.issuer) {
           result.contentValidation.errors.push('BadgeClass is missing an issuer');
           result.contentValidation.isValid = false;
-        } else if (
-          typeof badge.badge.issuer === 'object' &&
-          !OB2Guards.isProfile(badge.badge.issuer)
-        ) {
+        } else if (typeof badge.badge.issuer === 'object' && !isOB2Profile(badge.badge.issuer)) {
           result.contentValidation.errors.push('BadgeClass has an invalid issuer structure');
           result.contentValidation.isValid = false;
         } else if (typeof badge.badge.issuer === 'object') {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
-import type { OB2, OB3, Shared } from 'openbadges-types';
-import BadgeIssuerForm from './BadgeIssuerForm.vue';
-import BadgeList from '../badges/BadgeList.vue';
-import { BadgeService } from '../../services/BadgeService';
+import type { OB2, OB3, Shared } from '@/types';
+import BadgeIssuerForm from '@components/issuing/BadgeIssuerForm.vue';
+import BadgeList from '@components/badges/BadgeList.vue';
+import { BadgeService } from '@services/BadgeService';
 
 interface Props {
   issuerProfile?: {
@@ -145,9 +145,7 @@ onMounted(() => {
   <div class="manus-issuer-dashboard">
     <!-- Dashboard Header -->
     <header class="manus-dashboard-header">
-      <h1 class="manus-dashboard-title">
-        Badge Issuer Dashboard
-      </h1>
+      <h1 class="manus-dashboard-title">Badge Issuer Dashboard</h1>
 
       <div class="manus-dashboard-tabs">
         <button
@@ -204,69 +202,35 @@ onMounted(() => {
       >
         <div class="manus-dashboard-controls">
           <div class="manus-dashboard-filter">
-            <label
-              for="badge-filter"
-              class="manus-filter-label"
-            >Filter:</label>
+            <label for="badge-filter" class="manus-filter-label">Filter:</label>
             <input
               id="badge-filter"
               v-model="filterText"
               type="text"
               class="manus-filter-input"
               placeholder="Search badges..."
-            >
+            />
           </div>
 
           <div class="manus-dashboard-sort">
-            <label
-              for="badge-sort"
-              class="manus-sort-label"
-            >Sort by:</label>
-            <select
-              id="badge-sort"
-              v-model="sortOption"
-              class="manus-sort-select"
-            >
-              <option value="newest">
-                Newest first
-              </option>
-              <option value="oldest">
-                Oldest first
-              </option>
-              <option value="name-asc">
-                Name (A-Z)
-              </option>
-              <option value="name-desc">
-                Name (Z-A)
-              </option>
+            <label for="badge-sort" class="manus-sort-label">Sort by:</label>
+            <select id="badge-sort" v-model="sortOption" class="manus-sort-select">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
             </select>
           </div>
         </div>
 
-        <div
-          v-if="loading"
-          class="manus-dashboard-loading"
-          role="status"
-          aria-live="polite"
-        >
+        <div v-if="loading" class="manus-dashboard-loading" role="status" aria-live="polite">
           <span>Loading badges...</span>
         </div>
 
-        <div
-          v-else-if="filteredBadges.length === 0"
-          class="manus-dashboard-empty"
-          role="status"
-        >
-          <p v-if="filterText">
-            No badges match your search.
-          </p>
-          <p v-else>
-            You haven't issued any badges yet.
-          </p>
-          <button
-            class="manus-button manus-button-primary"
-            @click="setActiveTab('issue')"
-          >
+        <div v-else-if="filteredBadges.length === 0" class="manus-dashboard-empty" role="status">
+          <p v-if="filterText">No badges match your search.</p>
+          <p v-else>You haven't issued any badges yet.</p>
+          <button class="manus-button manus-button-primary" @click="setActiveTab('issue')">
             Issue Your First Badge
           </button>
         </div>
