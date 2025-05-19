@@ -78,6 +78,58 @@ function onReset() {
         @reset="onReset"
       />
     </Variant>
+
+    <template #docs>
+      <div class="histoire-docs">
+        <h1>BadgeIssuerForm</h1>
+        <p>
+          The <code>BadgeIssuerForm</code> component provides a form for creating and issuing new badges. It supports validation, prefilled values, and accessibility features for all users.
+        </p>
+        <h2>When To Use</h2>
+        <ul>
+          <li>To allow issuers to create and issue badges to recipients</li>
+          <li>To provide a user-friendly, accessible badge issuance workflow</li>
+        </ul>
+        <h2>Examples</h2>
+        <p>Use the controls and variants to see different form states.</p>
+        <h3>Basic Usage</h3>
+        <pre><code>&lt;BadgeIssuerForm @badge-issued="handleBadgeIssued" /&gt;</code></pre>
+        <h3>Prefilled Form</h3>
+        <pre><code>&lt;BadgeIssuerForm :initial-badge-class="myBadgeClass" :initial-recipient-email="email" /&gt;</code></pre>
+        <h2>Props</h2>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>initial-badge-class</code></td><td><code>object</code></td><td><code>{}</code></td><td>Initial badge class data</td></tr>
+            <tr><td><code>initial-recipient-email</code></td><td><code>string</code></td><td><code>''</code></td><td>Initial recipient email</td></tr>
+          </tbody>
+        </table>
+        <h2>Events</h2>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Payload</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>badge-issued</code></td><td><code>object</code></td><td>Emitted when a badge is successfully issued</td></tr>
+            <tr><td><code>reset</code></td><td><code>-</code></td><td>Emitted when the form is reset</td></tr>
+          </tbody>
+        </table>
+        <h2>Accessibility</h2>
+        <ul>
+          <li>Form fields have associated labels and ARIA attributes</li>
+          <li>Validation errors are announced to screen readers</li>
+          <li>Keyboard navigation is fully supported</li>
+          <li>Works with high contrast and accessible themes</li>
+        </ul>
+        <h2>Theme Example</h2>
+        <pre><code>// To apply a theme:
+import { AccessibilityService } from 'openbadges-ui';
+AccessibilityService.applyTheme('high-contrast');
+</code></pre>
+      </div>
+    </template>
   </Story>
 </template>
 
