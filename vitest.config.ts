@@ -8,9 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     include: ['tests/**/*.{test,spec}.{js,ts,vue}'],
-    setupFiles: [
-      'tests/integration/setup.ts',
-    ],
+    setupFiles: ['tests/integration/setup.ts'],
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'json', 'html'],
