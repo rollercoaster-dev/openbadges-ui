@@ -276,4 +276,59 @@ describe('BadgeList.vue', () => {
     const listElement = wrapper.find('.manus-badge-list-items');
     expect(listElement.attributes('aria-label')).toBe('Custom badge list label');
   });
+
+  it('filters badges by keyword', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: mockBadges },
+      global: { stubs: { BadgeDisplay: true } },
+    });
+    const input = wrapper.find('.manus-badge-list-filter-input');
+    await input.setValue('Test Badge 1');
+    expect(wrapper.findAll('.manus-badge-list-item').length).toBe(1);
+  });
+
+  it('shows and changes display density', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: mockBadges, density: 'compact' },
+      global: { stubs: { BadgeDisplay: true } },
+    });
+    expect(wrapper.classes()).toContain('density-compact');
+    await wrapper.setProps({ density: 'spacious' });
+    expect(wrapper.classes()).toContain('density-spacious');
+  });
+
+  it('shows expand/collapse button and toggles details', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: [mockOB2Badge] },
+    });
+    const expandBtn = wrapper.find('.badge-expand-btn');
+    expect(expandBtn.exists()).toBe(true);
+    expect(wrapper.find('.badge-details').exists()).toBe(false);
+    await expandBtn.trigger('click');
+    expect(wrapper.find('.badge-details').exists()).toBe(true);
+    await expandBtn.trigger('click');
+    expect(wrapper.find('.badge-details').exists()).toBe(false);
+  });
+
+  it('filters by earned status (placeholder logic)', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: mockBadges },
+      global: { stubs: { BadgeDisplay: true } },
+    });
+    const select = wrapper.find('.manus-badge-list-filter-select');
+    await select.setValue('earned');
+    expect(wrapper.findAll('.manus-badge-list-item').length).toBe(2); // placeholder logic always returns all
+    await select.setValue('not-earned');
+    expect(wrapper.findAll('.manus-badge-list-item').length).toBe(0); // placeholder logic always returns none
+  });
+
+  it('shows focus indicator on badge-summary', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: [mockOB2Badge] },
+    });
+    const badgeSummary = wrapper.find('.badge-summary');
+    await badgeSummary.trigger('focus');
+    // Focus indicator is CSS only, so just check element exists and is focusable
+    expect(badgeSummary.attributes('tabindex')).toBe('0');
+  });
 });

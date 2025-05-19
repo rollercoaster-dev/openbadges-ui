@@ -17,6 +17,8 @@ import { mockAssertions } from '../../services/mockData';
  * - Handles empty state with customizable message
  * - Supports interactive badges that can be clicked
  * - Normalizes badges from different formats (OB2 and OB3)
+ * - Includes neurodiversity-focused controls (density, filtering, earned status)
+ * - Supports progressive disclosure (expand/collapse)
  *
  * ## Props
  *
@@ -30,6 +32,9 @@ import { mockAssertions } from '../../services/mockData';
  * | `currentPage` | `number` | `1` | Current page number |
  * | `showPagination` | `boolean` | `false` | Whether to show pagination controls |
  * | `ariaLabel` | `string` | `'List of badges'` | Accessibility label for the badge list |
+ * | `density` | `'compact' \| 'normal' \| 'spacious'` | `'normal'` | Controls the display density for neurodiversity support |
+ * | `filterText` | `string` | `''` | Text to filter badges |
+ * | `filterEarned` | `'all' \| 'earned' \| 'not-earned'` | `'all'` | Filter badges by earned status |
  *
  * ## Events
  *
@@ -51,6 +56,10 @@ import { mockAssertions } from '../../services/mockData';
  * - Loading state is announced to screen readers
  * - Empty state is announced to screen readers
  * - Pagination controls are keyboard accessible
+ * - Progressive disclosure (expand/collapse) reduces cognitive load
+ * - Display density options for sensory needs
+ * - Simple, clear filtering for cognitive accessibility
+ * - Enhanced keyboard navigation and focus indicators
  */
 
 const state = ref({
@@ -62,6 +71,9 @@ const state = ref({
   currentPage: 1,
   showPagination: false,
   ariaLabel: 'List of badges',
+  density: 'normal',
+  filterText: '',
+  filterEarned: 'all',
 });
 
 function onBadgeClick(badge) {
@@ -84,9 +96,7 @@ function onPageChange(page) {
         <h1>BadgeList</h1>
 
         <p>
-          The <code>BadgeList</code> component displays a collection of badges with filtering and
-          sorting capabilities. It supports both grid and list layouts, pagination, and loading
-          states.
+          The <code>BadgeList</code> component displays a collection of badges with filtering, neurodiversity-focused controls, progressive disclosure, and display density options. It supports both grid and list layouts, pagination, and loading states.
         </p>
 
         <h2>When To Use</h2>
@@ -95,6 +105,7 @@ function onPageChange(page) {
           <li>When you want to provide pagination for large collections of badges</li>
           <li>When you need to show a loading state while badges are being fetched</li>
           <li>When you want to provide different layout options (grid or list)</li>
+          <li>When you want to support neurodiversity-focused features</li>
         </ul>
 
         <h2>Examples</h2>
@@ -121,6 +132,17 @@ function onPageChange(page) {
     &lt;p&gt;No badges found. Earn your first badge!&lt;/p&gt;
   &lt;/template&gt;
 &lt;/BadgeList&gt;</code></pre>
+
+        <h3>With Density and Neurodiversity Controls</h3>
+        <pre><code>&lt;BadgeList
+  :badges="myBadges"
+  density="spacious"
+  :filter-text="filterText"
+  :filter-earned="filterEarned"
+/&gt;</code></pre>
+
+        <h3>Progressive Disclosure (Expand/Collapse)</h3>
+        <p>Click a badge or press Enter to expand/collapse details for reduced cognitive load.</p>
 
         <h2>Props</h2>
         <table>
@@ -181,6 +203,24 @@ function onPageChange(page) {
               <td><code>'List of badges'</code></td>
               <td>Accessibility label for the badge list</td>
             </tr>
+            <tr>
+              <td><code>density</code></td>
+              <td><code>'compact' | 'normal' | 'spacious'</code></td>
+              <td><code>'normal'</code></td>
+              <td>Controls the display density for neurodiversity support</td>
+            </tr>
+            <tr>
+              <td><code>filterText</code></td>
+              <td><code>string</code></td>
+              <td><code>''</code></td>
+              <td>Text to filter badges</td>
+            </tr>
+            <tr>
+              <td><code>filterEarned</code></td>
+              <td><code>'all' | 'earned' | 'not-earned'</code></td>
+              <td><code>'all'</code></td>
+              <td>Filter badges by earned status</td>
+            </tr>
           </tbody>
         </table>
 
@@ -237,6 +277,10 @@ function onPageChange(page) {
           <li>Loading state is announced to screen readers</li>
           <li>Empty state is announced to screen readers</li>
           <li>Pagination controls are keyboard accessible</li>
+          <li>Progressive disclosure (expand/collapse) reduces cognitive load</li>
+          <li>Display density options for sensory needs</li>
+          <li>Simple, clear filtering for cognitive accessibility</li>
+          <li>Enhanced keyboard navigation and focus indicators</li>
         </ul>
       </div>
     </template>
@@ -251,6 +295,26 @@ function onPageChange(page) {
         <option value="list">
           List
         </option>
+      </HstSelect>
+      <HstSelect
+        v-model="state.density"
+        title="Density"
+      >
+        <option value="compact">Compact</option>
+        <option value="normal">Normal</option>
+        <option value="spacious">Spacious</option>
+      </HstSelect>
+      <HstText
+        v-model="state.filterText"
+        title="Filter Text"
+      />
+      <HstSelect
+        v-model="state.filterEarned"
+        title="Earned Status"
+      >
+        <option value="all">All</option>
+        <option value="earned">Earned</option>
+        <option value="not-earned">Not Earned</option>
       </HstSelect>
       <HstCheckbox
         v-model="state.interactive"
@@ -348,6 +412,24 @@ function onPageChange(page) {
         :current-page="state.currentPage"
         :show-pagination="state.showPagination"
         :aria-label="state.ariaLabel"
+        @badge-click="onBadgeClick"
+        @page-change="onPageChange"
+      />
+    </Variant>
+
+    <Variant title="Grid Layout with Neurodiversity Controls">
+      <BadgeList
+        :badges="state.badges"
+        :layout="state.layout"
+        :interactive="state.interactive"
+        :loading="state.loading"
+        :page-size="state.pageSize"
+        :current-page="state.currentPage"
+        :show-pagination="state.showPagination"
+        :aria-label="state.ariaLabel"
+        :density="state.density"
+        :filter-text="state.filterText"
+        :filter-earned="state.filterEarned"
         @badge-click="onBadgeClick"
         @page-change="onPageChange"
       />

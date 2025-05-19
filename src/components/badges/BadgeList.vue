@@ -13,6 +13,7 @@ interface Props {
   currentPage?: number;
   showPagination?: boolean;
   ariaLabel?: string;
+  density?: 'compact' | 'normal' | 'spacious';
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   currentPage: 1,
   showPagination: false,
   ariaLabel: 'List of badges',
+  density: 'normal',
 });
 
 const emit = defineEmits<{
@@ -41,20 +43,45 @@ watch(
   }
 );
 
-// Compute total pages based on badges length and page size
+// Neurodiversity-focused filter state
+const filterText = ref('');
+const filterEarned = ref('all'); // 'all' | 'earned' | 'not-earned'
+const expandedBadges = ref<Set<string>>(new Set());
+
+// Filtering logic
+const filteredBadges = computed(() => {
+  let filtered = props.badges;
+  if (filterText.value) {
+    filtered = filtered.filter(badge => {
+      const name = (badge as any).badge?.name || (badge as any).name || '';
+      return name.toLowerCase().includes(filterText.value.toLowerCase());
+    });
+  }
+  if (filterEarned.value !== 'all') {
+    filtered = filtered.filter(badge => {
+      // Assume OB2/OB3 badges have a 'recipient' or 'status' property for demo
+      if (filterEarned.value === 'earned') return true; // Placeholder logic
+      if (filterEarned.value === 'not-earned') return false; // Placeholder logic
+      return true;
+    });
+  }
+  return filtered;
+});
+
+// Compute total pages based on filtered badges
 const totalPages = computed(() => {
-  return Math.ceil(props.badges.length / props.pageSize);
+  return Math.ceil(filteredBadges.value.length / props.pageSize);
 });
 
 // Get current page of badges
 const paginatedBadges = computed(() => {
   if (!props.showPagination) {
-    return props.badges;
+    return filteredBadges.value;
   }
 
   const start = (internalCurrentPage.value - 1) * props.pageSize;
   const end = start + props.pageSize;
-  return props.badges.slice(start, end);
+  return filteredBadges.value.slice(start, end);
 });
 
 // Normalize badges for display
@@ -84,8 +111,29 @@ const handlePageChange = (page: number) => {
 <template>
   <div
     class="manus-badge-list"
-    :class="{ 'grid-layout': layout === 'grid' }"
+    :class="[`density-${density}`, { 'grid-layout': layout === 'grid' }]"
   >
+    <!-- Neurodiversity filter and density controls -->
+    <div class="manus-badge-list-controls" role="region" aria-label="Badge list controls">
+      <input
+        v-model="filterText"
+        class="manus-badge-list-filter-input"
+        type="search"
+        :placeholder="'Filter badges by keyword'"
+        aria-label="Filter badges by keyword"
+      />
+      <select v-model="filterEarned" class="manus-badge-list-filter-select" aria-label="Filter by earned status">
+        <option value="all">All</option>
+        <option value="earned">Earned</option>
+        <option value="not-earned">Not Earned</option>
+      </select>
+      <select v-model="props.density" class="manus-badge-list-density-select" aria-label="Display density">
+        <option value="compact">Compact</option>
+        <option value="normal">Normal</option>
+        <option value="spacious">Spacious</option>
+      </select>
+    </div>
+
     <div
       v-if="loading"
       class="manus-badge-list-loading"
@@ -114,30 +162,45 @@ const handlePageChange = (page: number) => {
         v-for="badge in normalizedBadges"
         :key="badge.id"
         class="manus-badge-list-item"
+        tabindex="0"
+        :class="{ 'is-expanded': expandedBadges.has(badge.id) }"
+        @keydown.enter="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)"
       >
-        <slot
-          name="badge"
-          :badge="badge.original"
-          :normalized="badge"
-        >
-          <BadgeDisplay
+        <div class="badge-summary" @click="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0">
+          <slot
+            name="badge"
             :badge="badge.original"
-            :interactive="interactive"
-            @click="handleBadgeClick(badge.original)"
-          />
-        </slot>
+            :normalized="badge"
+          >
+            <BadgeDisplay
+              :badge="badge.original"
+              :interactive="interactive"
+              @click="handleBadgeClick(badge.original)"
+            />
+          </slot>
+          <button class="badge-expand-btn" :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'">
+            {{ expandedBadges.has(badge.id) ? 'Show Less' : 'Show More' }}
+          </button>
+        </div>
+        <div v-if="expandedBadges.has(badge.id)" class="badge-details" tabindex="0">
+          <!-- Progressive disclosure: show more badge details here -->
+          <pre>{{ badge }}</pre>
+        </div>
       </li>
     </ul>
 
     <div
       v-if="showPagination && totalPages > 1"
       class="manus-badge-list-pagination"
+      role="navigation"
+      aria-label="Pagination"
     >
       <button
         class="manus-pagination-button"
         :disabled="currentPage === 1"
         aria-label="Previous page"
         @click="handlePageChange(currentPage - 1)"
+        tabindex="0"
       >
         Previous
       </button>
@@ -149,6 +212,7 @@ const handlePageChange = (page: number) => {
         :disabled="currentPage === totalPages"
         aria-label="Next page"
         @click="handlePageChange(currentPage + 1)"
+        tabindex="0"
       >
         Next
       </button>
@@ -170,6 +234,34 @@ const handlePageChange = (page: number) => {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.manus-badge-list.density-compact {
+  --badge-list-gap: 4px;
+}
+
+.manus-badge-list.density-normal {
+  --badge-list-gap: 16px;
+}
+
+.manus-badge-list.density-spacious {
+  --badge-list-gap: 32px;
+}
+
+.manus-badge-list-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.manus-badge-list-filter-input,
+.manus-badge-list-filter-select,
+.manus-badge-list-density-select {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .manus-badge-list-loading,
@@ -225,6 +317,45 @@ const handlePageChange = (page: number) => {
 .manus-pagination-info {
   font-size: 0.875rem;
   color: var(--badge-list-button-color);
+}
+
+.badge-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  outline: none;
+}
+
+.badge-expand-btn {
+  margin-left: 16px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  background: var(--badge-list-button-bg);
+  color: var(--badge-list-button-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.badge-summary:focus-visible,
+.manus-badge-list-item:focus-visible {
+  outline: 3px solid #3182ce;
+  outline-offset: 2px;
+}
+
+.badge-details {
+  background: #f7fafc;
+  border-radius: 4px;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 0.95em;
+  color: #2d3748;
+}
+
+.manus-badge-list-item.is-expanded {
+  background: #f0f4f8;
+  border-radius: 6px;
 }
 
 /* Responsive adjustments */

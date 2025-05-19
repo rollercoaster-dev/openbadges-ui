@@ -211,4 +211,36 @@ describe('BadgeList and BadgeDisplay Integration', () => {
     const badgeDisplays = wrapper.findAllComponents(BadgeDisplay);
     expect(badgeDisplays.length).toBe(0);
   });
+
+  it('should filter badges by keyword', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: mockBadges },
+    });
+    const input = wrapper.find('.manus-badge-list-filter-input');
+    await input.setValue('Test Badge');
+    expect(wrapper.findAllComponents(BadgeDisplay).length).toBeGreaterThan(0);
+    await input.setValue('Nonexistent');
+    expect(wrapper.findAllComponents(BadgeDisplay).length).toBe(0);
+  });
+
+  it('should change display density and update class', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: mockBadges, density: 'compact' },
+    });
+    expect(wrapper.classes()).toContain('density-compact');
+    await wrapper.setProps({ density: 'spacious' });
+    expect(wrapper.classes()).toContain('density-spacious');
+  });
+
+  it('should expand and collapse badge details', async () => {
+    const wrapper = mount(BadgeList, {
+      props: { badges: [mockOB2Badge] },
+    });
+    const expandBtn = wrapper.find('.badge-expand-btn');
+    expect(wrapper.find('.badge-details').exists()).toBe(false);
+    await expandBtn.trigger('click');
+    expect(wrapper.find('.badge-details').exists()).toBe(true);
+    await expandBtn.trigger('click');
+    expect(wrapper.find('.badge-details').exists()).toBe(false);
+  });
 });
