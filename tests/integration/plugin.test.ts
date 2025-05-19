@@ -20,6 +20,7 @@ vi.mock('primevue/config', () => ({
 describe('OpenBadgesUIPlugin', () => {
   let app: ReturnType<typeof createApp>;
   // Use any type for the spy to avoid TypeScript errors
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let componentSpy: any;
 
   beforeEach(() => {

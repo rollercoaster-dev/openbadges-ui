@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useBadgeIssuer } from '@composables/useBadgeIssuer';
 import type { OB2 } from '@/types';
+import { createIRI } from '@/utils/type-helpers';
 
 interface Props {
   initialBadgeClass?: Partial<OB2.BadgeClass>;
@@ -40,8 +41,12 @@ const badgeImageUrl = ref('');
 if (state.badgeClass.tags && state.badgeClass.tags.length > 0) {
   tagsInput.value = state.badgeClass.tags.join(', ');
 }
-if (state.badgeClass.criteria && state.badgeClass.criteria.narrative) {
-  criteriaText.value = state.badgeClass.criteria.narrative;
+if (
+  state.badgeClass.criteria &&
+  typeof state.badgeClass.criteria === 'object' &&
+  'narrative' in state.badgeClass.criteria
+) {
+  criteriaText.value = state.badgeClass.criteria.narrative as string;
 }
 if (typeof state.badgeClass.issuer === 'object') {
   issuerName.value = state.badgeClass.issuer.name || '';
@@ -74,23 +79,32 @@ watch(tagsInput, (newValue) => {
 
 watch(criteriaText, (newValue) => {
   if (!state.badgeClass.criteria) {
-    state.badgeClass.criteria = {};
+    state.badgeClass.criteria = { narrative: '' };
   }
-  state.badgeClass.criteria.narrative = newValue;
+
+  if (typeof state.badgeClass.criteria === 'object') {
+    (state.badgeClass.criteria as OB2.Criteria).narrative = newValue;
+  } else {
+    // If criteria is an IRI, replace it with an object
+    state.badgeClass.criteria = { narrative: newValue };
+  }
 });
 
 watch([issuerName, issuerUrl], ([newName, newUrl]) => {
   if (typeof state.badgeClass.issuer !== 'object') {
     state.badgeClass.issuer = {
-      id: state.badgeClass.id.replace(/\/badge\/.*$/, '/issuer'),
+      id: createIRI(state.badgeClass.id.replace(/\/badge\/.*$/, '/issuer')),
       type: 'Profile',
       name: '',
     };
   }
 
-  state.badgeClass.issuer.name = newName;
-  if (newUrl) {
-    state.badgeClass.issuer.url = newUrl;
+  // Ensure issuer is an object before setting properties
+  if (typeof state.badgeClass.issuer === 'object') {
+    (state.badgeClass.issuer as OB2.Profile).name = newName;
+    if (newUrl) {
+      (state.badgeClass.issuer as OB2.Profile).url = createIRI(newUrl);
+    }
   }
 });
 
@@ -99,11 +113,15 @@ watch(badgeImageUrl, (newValue) => {
   if (newValue) {
     // Create an Image object with the URL as the id
     state.badgeClass.image = {
-      id: newValue,
+      id: createIRI(newValue),
       type: 'Image',
     };
   } else {
-    state.badgeClass.image = undefined;
+    // If image is required, provide a default empty image instead of undefined
+    state.badgeClass.image = {
+      id: createIRI(''),
+      type: 'Image',
+    };
   }
 });
 

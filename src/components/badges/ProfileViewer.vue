@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import type { OB2, OB3 } from '@/types';
 import BadgeList from '@components/badges/BadgeList.vue';
-import type { Profile } from '@composables/useProfile';
+import type { Profile } from '@/types';
 
 interface Props {
   profile: Profile;

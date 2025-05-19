@@ -12,16 +12,18 @@ import { createIRI, createDateTime } from '../../src/utils/type-helpers';
  * @param options Additional mount options
  * @returns The mounted wrapper
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createWrapper<T extends Component>(
   component: T,
   props: Record<string, unknown> = {},
   options: Record<string, unknown> = {}
-): any {
-  // Use any type to avoid TypeScript errors with mount
+) {
+  // Use type assertion to handle the props type mismatch
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
   return mount(component as any, {
-    props: props as any,
+    props,
     ...options,
-  }) as any;
+  });
 }
 
 /**

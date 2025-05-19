@@ -206,7 +206,7 @@ const resetSettings = () => {
   <div class="ob-accessibility-settings">
     <button
       class="ob-accessibility-toggle"
-      aria-expanded="isOpen"
+      :aria-expanded="isOpen"
       :aria-label="isOpen ? 'Close accessibility settings' : 'Open accessibility settings'"
       @click="toggleOpen"
     >
@@ -222,11 +222,7 @@ const resetSettings = () => {
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-          />
+          <circle cx="12" cy="12" r="10" />
           <path d="M12 8v4" />
           <path d="M12 16h.01" />
         </svg>
@@ -234,10 +230,7 @@ const resetSettings = () => {
       <span class="ob-accessibility-toggle-text">Accessibility</span>
     </button>
 
-    <div
-      v-if="isOpen"
-      class="ob-accessibility-panel"
-    >
+    <div v-if="isOpen" class="ob-accessibility-panel">
       <div class="ob-accessibility-panel-header">
         <h2 class="ob-accessibility-panel-title">
           {{ title }}
@@ -258,27 +251,14 @@ const resetSettings = () => {
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <line
-              x1="18"
-              y1="6"
-              x2="6"
-              y2="18"
-            />
-            <line
-              x1="6"
-              y1="6"
-              x2="18"
-              y2="18"
-            />
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
       </div>
 
       <div class="ob-accessibility-panel-content">
-        <ThemeSelector
-          v-model="selectedTheme"
-          @update:model-value="handleThemeChange"
-        />
+        <ThemeSelector v-model="selectedTheme" @update:model-value="handleThemeChange" />
 
         <FontSelector
           v-model="selectedFont"
@@ -287,18 +267,10 @@ const resetSettings = () => {
           @text-spacing-change="handleTextSpacingChange"
         />
 
-        <div
-          v-if="showMotionReduction || showFocusMode"
-          class="ob-accessibility-options"
-        >
-          <h3 class="ob-accessibility-options-title">
-            Additional Options
-          </h3>
+        <div v-if="showMotionReduction || showFocusMode" class="ob-accessibility-options">
+          <h3 class="ob-accessibility-options-title">Additional Options</h3>
 
-          <div
-            v-if="showMotionReduction"
-            class="ob-accessibility-option"
-          >
+          <div v-if="showMotionReduction" class="ob-accessibility-option">
             <div class="ob-accessibility-checkbox-group">
               <input
                 id="ob-reduce-motion"
@@ -306,11 +278,8 @@ const resetSettings = () => {
                 class="ob-accessibility-checkbox"
                 :checked="reduceMotion"
                 @change="handleMotionReductionChange"
-              >
-              <label
-                for="ob-reduce-motion"
-                class="ob-accessibility-checkbox-label"
-              >
+              />
+              <label for="ob-reduce-motion" class="ob-accessibility-checkbox-label">
                 Reduce Motion
               </label>
             </div>
@@ -319,10 +288,7 @@ const resetSettings = () => {
             </p>
           </div>
 
-          <div
-            v-if="showFocusMode"
-            class="ob-accessibility-option"
-          >
+          <div v-if="showFocusMode" class="ob-accessibility-option">
             <div class="ob-accessibility-checkbox-group">
               <input
                 id="ob-focus-mode"
@@ -330,11 +296,8 @@ const resetSettings = () => {
                 class="ob-accessibility-checkbox"
                 :checked="focusMode"
                 @change="handleFocusModeChange"
-              >
-              <label
-                for="ob-focus-mode"
-                class="ob-accessibility-checkbox-label"
-              >
+              />
+              <label for="ob-focus-mode" class="ob-accessibility-checkbox-label">
                 Focus Mode
               </label>
             </div>
@@ -345,10 +308,7 @@ const resetSettings = () => {
         </div>
 
         <div class="ob-accessibility-panel-footer">
-          <button
-            class="ob-accessibility-reset-button"
-            @click="resetSettings"
-          >
+          <button class="ob-accessibility-reset-button" @click="resetSettings">
             Reset to Defaults
           </button>
         </div>

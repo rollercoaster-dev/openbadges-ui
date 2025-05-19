@@ -3,6 +3,7 @@
 import type { OB2, OB3 } from '@/types';
 import { createIRI, createDateTime } from '@/utils/type-helpers';
 import { vi } from 'vitest';
+import type { VerificationResult } from '@/services/BadgeVerificationService';
 
 /**
  * Helper function for tests to create a properly typed OB2 Assertion with branded types
@@ -96,7 +97,10 @@ export function createTestOB3Credential(
 /**
  * Helper function for tests to mock BadgeVerificationService
  */
-export function mockBadgeVerificationService() {
+export function mockBadgeVerificationService(): {
+  mockVerifyBadge: ReturnType<typeof vi.fn>;
+  mockVerificationResult: (result: Partial<VerificationResult>) => ReturnType<typeof vi.fn>;
+} {
   // Create a mock version of BadgeVerificationService
   const mockVerifyBadge = vi.fn();
 
@@ -109,9 +113,7 @@ export function mockBadgeVerificationService() {
   // Return the mocked function and helper to set mock responses
   return {
     mockVerifyBadge,
-    mockVerificationResult: (
-      result: Partial<import('@/services/BadgeVerificationService').VerificationResult>
-    ) => {
+    mockVerificationResult: (result: Partial<VerificationResult>) => {
       const defaultResult = {
         isValid: true,
         errors: [],

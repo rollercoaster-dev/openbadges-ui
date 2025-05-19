@@ -9,6 +9,7 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'prettier', // Add this to make ESLint respect Prettier's formatting
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -19,23 +20,29 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_', 'varsIgnorePattern': '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     '@typescript-eslint/explicit-module-boundary-types': 'warn',
     '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
     '@typescript-eslint/no-inferrable-types': 'warn',
-    'eqeqeq': 'error',
+    eqeqeq: 'error',
     'no-var': 'error',
     'prefer-const': 'error',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'curly': 'error',
+    curly: 'error',
     'object-shorthand': 'error',
     'vue/no-mutating-props': 'error',
     'vue/require-default-prop': 'warn',
     'vue/require-prop-types': 'error',
     'vue/no-unused-components': 'error',
     'vue/no-v-html': 'warn',
-    'vue/component-tags-order': ['error', { order: ['script', 'scriptSetup', 'template', 'style'] }],
+    'vue/component-tags-order': [
+      'error',
+      { order: ['script', 'scriptSetup', 'template', 'style'] },
+    ],
   },
 };

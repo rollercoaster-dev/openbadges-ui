@@ -71,19 +71,18 @@ const filteredBadges = computed(() => {
   // Apply sort
   result.sort((a, b) => {
     if (sortOption.value === 'newest' || sortOption.value === 'oldest') {
-      const dateA =
-        'issuedOn' in a
-          ? new Date(a.issuedOn).getTime()
-          : 'issuanceDate' in a
-          ? new Date(a.issuanceDate).getTime()
-          : 0;
+      // Handle OB2 Assertion
+      const getDateValue = (badge: OB2.Assertion | OB3.VerifiableCredential): number => {
+        if ('issuedOn' in badge && badge.issuedOn) {
+          return new Date(badge.issuedOn as string).getTime();
+        } else if ('issuanceDate' in badge && badge.issuanceDate) {
+          return new Date(badge.issuanceDate as string).getTime();
+        }
+        return 0;
+      };
 
-      const dateB =
-        'issuedOn' in b
-          ? new Date(b.issuedOn).getTime()
-          : 'issuanceDate' in b
-          ? new Date(b.issuanceDate).getTime()
-          : 0;
+      const dateA = getDateValue(a);
+      const dateB = getDateValue(b);
 
       return sortOption.value === 'newest' ? dateB - dateA : dateA - dateB;
     } else {
@@ -145,9 +144,7 @@ onMounted(() => {
   <div class="manus-issuer-dashboard">
     <!-- Dashboard Header -->
     <header class="manus-dashboard-header">
-      <h1 class="manus-dashboard-title">
-        Badge Issuer Dashboard
-      </h1>
+      <h1 class="manus-dashboard-title">Badge Issuer Dashboard</h1>
 
       <div class="manus-dashboard-tabs">
         <button
@@ -204,69 +201,35 @@ onMounted(() => {
       >
         <div class="manus-dashboard-controls">
           <div class="manus-dashboard-filter">
-            <label
-              for="badge-filter"
-              class="manus-filter-label"
-            >Filter:</label>
+            <label for="badge-filter" class="manus-filter-label">Filter:</label>
             <input
               id="badge-filter"
               v-model="filterText"
               type="text"
               class="manus-filter-input"
               placeholder="Search badges..."
-            >
+            />
           </div>
 
           <div class="manus-dashboard-sort">
-            <label
-              for="badge-sort"
-              class="manus-sort-label"
-            >Sort by:</label>
-            <select
-              id="badge-sort"
-              v-model="sortOption"
-              class="manus-sort-select"
-            >
-              <option value="newest">
-                Newest first
-              </option>
-              <option value="oldest">
-                Oldest first
-              </option>
-              <option value="name-asc">
-                Name (A-Z)
-              </option>
-              <option value="name-desc">
-                Name (Z-A)
-              </option>
+            <label for="badge-sort" class="manus-sort-label">Sort by:</label>
+            <select id="badge-sort" v-model="sortOption" class="manus-sort-select">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
             </select>
           </div>
         </div>
 
-        <div
-          v-if="loading"
-          class="manus-dashboard-loading"
-          role="status"
-          aria-live="polite"
-        >
+        <div v-if="loading" class="manus-dashboard-loading" role="status" aria-live="polite">
           <span>Loading badges...</span>
         </div>
 
-        <div
-          v-else-if="filteredBadges.length === 0"
-          class="manus-dashboard-empty"
-          role="status"
-        >
-          <p v-if="filterText">
-            No badges match your search.
-          </p>
-          <p v-else>
-            You haven't issued any badges yet.
-          </p>
-          <button
-            class="manus-button manus-button-primary"
-            @click="setActiveTab('issue')"
-          >
+        <div v-else-if="filteredBadges.length === 0" class="manus-dashboard-empty" role="status">
+          <p v-if="filterText">No badges match your search.</p>
+          <p v-else>You haven't issued any badges yet.</p>
+          <button class="manus-button manus-button-primary" @click="setActiveTab('issue')">
             Issue Your First Badge
           </button>
         </div>
