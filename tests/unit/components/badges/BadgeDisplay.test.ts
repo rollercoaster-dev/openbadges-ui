@@ -12,7 +12,7 @@ describe('BadgeDisplay.vue', () => {
     recipient: {
       identity: 'test@example.org',
       type: 'email',
-      hashed: false
+      hashed: false,
     },
     badge: {
       type: 'BadgeClass',
@@ -23,21 +23,21 @@ describe('BadgeDisplay.vue', () => {
       issuer: {
         type: 'Profile',
         id: 'http://example.org/issuer',
-        name: 'Test Issuer'
-      }
+        name: 'Test Issuer',
+      },
     },
     issuedOn: '2023-01-01T00:00:00Z',
     expires: '2024-01-01T00:00:00Z',
     verification: {
-      type: 'hosted'
-    }
+      type: 'hosted',
+    },
   };
 
   it('renders badge information correctly', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
-        badge: mockBadge
-      }
+        badge: mockBadge,
+      },
     });
 
     // Check if badge name is displayed
@@ -62,8 +62,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        showDescription: false
-      }
+        showDescription: false,
+      },
     });
 
     // Description should not be displayed
@@ -74,8 +74,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        showIssuedDate: false
-      }
+        showIssuedDate: false,
+      },
     });
 
     // Issue date should not be displayed
@@ -86,8 +86,8 @@ describe('BadgeDisplay.vue', () => {
     // First check that expiry is not shown by default
     const wrapper1 = mount(BadgeDisplay, {
       props: {
-        badge: mockBadge
-      }
+        badge: mockBadge,
+      },
     });
     expect(wrapper1.find('.manus-badge-expiry').exists()).toBe(false);
 
@@ -95,8 +95,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper2 = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        showExpiryDate: true
-      }
+        showExpiryDate: true,
+      },
     });
     expect(wrapper2.find('.manus-badge-expiry').exists()).toBe(true);
     expect(wrapper2.find('.manus-badge-expiry').text()).toContain('Jan 1, 2024');
@@ -106,8 +106,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        interactive: true
-      }
+        interactive: true,
+      },
     });
 
     await wrapper.trigger('click');
@@ -121,8 +121,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        interactive: false
-      }
+        interactive: false,
+      },
     });
 
     await wrapper.trigger('click');
@@ -135,8 +135,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        interactive: true
-      }
+        interactive: true,
+      },
     });
 
     const badgeElement = wrapper.find('.manus-badge-display');
@@ -148,8 +148,8 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        interactive: false
-      }
+        interactive: false,
+      },
     });
 
     const badgeElement = wrapper.find('.manus-badge-display');
@@ -161,13 +161,13 @@ describe('BadgeDisplay.vue', () => {
     const wrapper = mount(BadgeDisplay, {
       props: {
         badge: mockBadge,
-        showVerification: true
+        showVerification: true,
       },
       global: {
         stubs: {
-          BadgeVerification: true
-        }
-      }
+          BadgeVerification: true,
+        },
+      },
     });
 
     // Initially, the toggle button should be visible but not the verification component
@@ -187,7 +187,7 @@ describe('BadgeDisplay.vue', () => {
       props: {
         badge: mockBadge,
         showVerification: true,
-        autoVerify: true
+        autoVerify: true,
       },
       global: {
         stubs: {
@@ -195,10 +195,10 @@ describe('BadgeDisplay.vue', () => {
             template: '<div class="badge-verification-stub"></div>',
             mounted() {
               this.$emit('verified', true);
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     });
 
     // Toggle verification details to show the verification component

@@ -17,7 +17,7 @@
     /* For declaration files */
     "declaration": true,
     "declarationDir": "dist/types",
-//    "emitDeclarationOnly": true,
+    //    "emitDeclarationOnly": true,
     "outDir": "dist",
 
     /* Linting */
