@@ -61,6 +61,9 @@ const state = ref({
   interactive: false,
   showVerification: false,
   autoVerify: false,
+  // Neurodiversity enhancements
+  contentDensity: 'normal',
+  simplifiedView: false,
 });
 
 const badgeWithExpiry = {
@@ -296,6 +299,19 @@ function onVerified(isValid) {
         v-model="state.autoVerify"
         title="Auto Verify"
       />
+      <HstSelect
+        v-model="state.contentDensity"
+        title="Content Density"
+        :options="[
+          { label: 'Normal', value: 'normal' },
+          { label: 'Compact', value: 'compact' },
+          { label: 'Spacious', value: 'spacious' }
+        ]"
+      />
+      <HstCheckbox
+        v-model="state.simplifiedView"
+        title="Simplified View"
+      />
     </template>
 
     <Variant title="Default">
@@ -307,6 +323,8 @@ function onVerified(isValid) {
         :interactive="state.interactive"
         :show-verification="state.showVerification"
         :auto-verify="state.autoVerify"
+        :content-density="state.contentDensity"
+        :simplified-view="state.simplifiedView"
         @click="onBadgeClick"
         @verified="onVerified"
       />
@@ -321,6 +339,8 @@ function onVerified(isValid) {
         interactive
         :show-verification="state.showVerification"
         :auto-verify="state.autoVerify"
+        :content-density="state.contentDensity"
+        :simplified-view="state.simplifiedView"
         @click="onBadgeClick"
         @verified="onVerified"
       />
@@ -335,6 +355,8 @@ function onVerified(isValid) {
         :interactive="state.interactive"
         :show-verification="state.showVerification"
         :auto-verify="state.autoVerify"
+        :content-density="state.contentDensity"
+        :simplified-view="state.simplifiedView"
         @click="onBadgeClick"
         @verified="onVerified"
       />
@@ -349,6 +371,8 @@ function onVerified(isValid) {
         :interactive="state.interactive"
         :show-verification="state.showVerification"
         :auto-verify="state.autoVerify"
+        :content-density="state.contentDensity"
+        :simplified-view="state.simplifiedView"
         @click="onBadgeClick"
         @verified="onVerified"
       />
@@ -363,6 +387,8 @@ function onVerified(isValid) {
         :interactive="state.interactive"
         :show-verification="state.showVerification"
         :auto-verify="state.autoVerify"
+        :content-density="state.contentDensity"
+        :simplified-view="state.simplifiedView"
         @click="onBadgeClick"
         @verified="onVerified"
       />

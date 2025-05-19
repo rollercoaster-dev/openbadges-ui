@@ -12,6 +12,9 @@ interface Props {
   interactive?: boolean;
   showVerification?: boolean;
   autoVerify?: boolean;
+  // Neurodiversity enhancements
+  contentDensity?: 'compact' | 'normal' | 'spacious';
+  simplifiedView?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,6 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
   interactive: false,
   showVerification: false,
   autoVerify: false,
+  contentDensity: 'normal',
+  simplifiedView: false,
 });
 
 const emit = defineEmits<{
@@ -71,15 +76,28 @@ const showVerificationDetails = ref(false);
 const toggleVerificationDetails = () => {
   showVerificationDetails.value = !showVerificationDetails.value;
 };
+
+// Focus state for accessibility
+const isFocused = ref(false);
+const onFocus = () => { isFocused.value = true; };
+const onBlur = () => { isFocused.value = false; };
+
+// Computed classes for content density
+const densityClass = computed(() => {
+  return `density-${props.contentDensity}`;
+});
 </script>
 
 <template>
   <div
     class="manus-badge-display"
-    :class="{ 'is-interactive': interactive }"
+    :class="[densityClass, { 'is-interactive': interactive }]"
     :tabindex="interactive ? 0 : undefined"
     @click="handleClick"
     @keydown.enter="handleClick"
+    @keydown.space.prevent="handleClick"
+    @focus="onFocus"
+    @blur="onBlur"
   >
     <div class="manus-badge-image">
       <img
@@ -93,41 +111,42 @@ const toggleVerificationDetails = () => {
         {{ normalizedBadge.name }}
       </h3>
       <p
-        v-if="showDescription"
+        v-if="showDescription && !simplifiedView"
         class="manus-badge-description"
       >
         {{ normalizedBadge.description }}
       </p>
-      <div class="manus-badge-issuer">
+      <div v-if="!simplifiedView" class="manus-badge-issuer">
         <span>Issued by: {{ normalizedBadge.issuer.name }}</span>
       </div>
       <div
-        v-if="showIssuedDate"
+        v-if="showIssuedDate && !simplifiedView"
         class="manus-badge-date"
       >
         <span>Issued: {{ formatDate(normalizedBadge.issuedOn) }}</span>
       </div>
       <div
-        v-if="showExpiryDate && normalizedBadge.expires"
+        v-if="showExpiryDate && normalizedBadge.expires && !simplifiedView"
         class="manus-badge-expiry"
       >
         <span>Expires: {{ formatDate(normalizedBadge.expires) }}</span>
       </div>
       <div
-        v-if="showVerification"
+        v-if="showVerification && !simplifiedView"
         class="manus-badge-verification-toggle"
       >
         <button
           class="manus-badge-verification-toggle-button"
           type="button"
           @click="toggleVerificationDetails"
+          @keydown.enter.prevent="toggleVerificationDetails"
+          @keydown.space.prevent="toggleVerificationDetails"
         >
           {{ showVerificationDetails ? 'Hide Verification Details' : 'Show Verification Details' }}
         </button>
       </div>
-
       <div
-        v-if="showVerification && showVerificationDetails"
+        v-if="showVerification && showVerificationDetails && !simplifiedView"
         class="manus-badge-verification-container"
       >
         <BadgeVerification
@@ -136,7 +155,6 @@ const toggleVerificationDetails = () => {
           @verified="handleVerified"
         />
       </div>
-
       <slot name="badge-actions" />
     </div>
   </div>
@@ -255,5 +273,36 @@ const toggleVerificationDetails = () => {
   .manus-badge-content {
     flex: 1;
   }
+}
+
+/* Content density styles */
+.manus-badge-display.density-compact {
+  padding: 8px;
+  gap: 4px;
+}
+.manus-badge-display.density-normal {
+  padding: 16px;
+  gap: 8px;
+}
+.manus-badge-display.density-spacious {
+  padding: 28px;
+  gap: 16px;
+}
+
+.manus-badge-display:focus-visible,
+.manus-badge-display.is-interactive:focus-visible {
+  outline: 3px solid #ff9800;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px #ffe0b2;
+}
+
+.manus-badge-verification-toggle-button:focus-visible,
+.manus-badge-verification-toggle-button:active {
+  outline: 2px solid #ff9800;
+  background: #fff3e0;
+}
+
+.manus-badge-verification-toggle-button {
+  transition: background 0.2s, color 0.2s;
 }
 </style>

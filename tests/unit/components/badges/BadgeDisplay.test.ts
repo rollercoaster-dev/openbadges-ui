@@ -116,8 +116,11 @@ describe('BadgeDisplay.vue', () => {
     await wrapper.trigger('click');
 
     // Check if click event was emitted with the badge
-    expect(wrapper.emitted('click')).toBeTruthy();
-    expect(wrapper.emitted('click')![0][0]).toEqual(mockBadge);
+    const clickEvents = wrapper.emitted('click');
+    expect(clickEvents).toBeTruthy();
+    if (clickEvents) {
+      expect(clickEvents[0][0]).toEqual(mockBadge);
+    }
   });
 
   it('does not emit click event when not interactive', async () => {
@@ -208,7 +211,74 @@ describe('BadgeDisplay.vue', () => {
     await wrapper.find('.manus-badge-verification-toggle-button').trigger('click');
 
     // Check if the verified event was emitted
-    expect(wrapper.emitted('verified')).toBeTruthy();
-    expect(wrapper.emitted('verified')![0]).toEqual([true]);
+    const verifiedEvents = wrapper.emitted('verified');
+    expect(verifiedEvents).toBeTruthy();
+    if (verifiedEvents) {
+      expect(verifiedEvents[0]).toEqual([true]);
+    }
+  });
+
+  it('does not emit verified event when verification fails', async () => {
+    // Mock the BadgeVerification component
+    const wrapper = mount(BadgeDisplay, {
+      props: {
+        badge: mockBadge,
+        showVerification: true,
+        autoVerify: true,
+      },
+      global: {
+        stubs: {
+          BadgeVerification: {
+            template: '<div class="badge-verification-stub"></div>',
+            mounted() {
+              this.$emit('verified', false);
+            },
+          },
+        },
+      },
+    });
+
+    // Toggle verification details to show the verification component
+    await wrapper.find('.manus-badge-verification-toggle-button').trigger('click');
+
+    // Check that the verified event was emitted with false
+    const verifiedEventsFail = wrapper.emitted('verified');
+    expect(verifiedEventsFail).toBeTruthy();
+    if (verifiedEventsFail) {
+      expect(verifiedEventsFail[0]).toEqual([false]);
+    }
+  });
+
+  it('applies contentDensity prop and class', () => {
+    const wrapper = mount(BadgeDisplay, {
+      props: {
+        badge: mockBadge,
+        contentDensity: 'compact',
+      },
+    });
+    expect(wrapper.find('.manus-badge-display').classes()).toContain('density-compact');
+    wrapper.setProps({ contentDensity: 'spacious' });
+    return wrapper.vm.$nextTick().then(() => {
+      expect(wrapper.find('.manus-badge-display').classes()).toContain('density-spacious');
+    });
+  });
+
+  it('hides non-essential info in simplifiedView', () => {
+    const wrapper = mount(BadgeDisplay, {
+      props: {
+        badge: mockBadge,
+        simplifiedView: true,
+        showDescription: true,
+        showIssuedDate: true,
+        showExpiryDate: true,
+        showVerification: true,
+      },
+    });
+    // Description, issuer, dates, and verification should be hidden
+    expect(wrapper.find('.manus-badge-description').exists()).toBe(false);
+    expect(wrapper.find('.manus-badge-issuer').exists()).toBe(false);
+    expect(wrapper.find('.manus-badge-date').exists()).toBe(false);
+    expect(wrapper.find('.manus-badge-expiry').exists()).toBe(false);
+    expect(wrapper.find('.manus-badge-verification-toggle').exists()).toBe(false);
   });
 });
