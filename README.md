@@ -1,5 +1,9 @@
 # OpenBadges UI
 
+[![npm version](https://img.shields.io/npm/v/openbadges-ui.svg)](https://www.npmjs.com/package/openbadges-ui)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/openbadges-ui.svg)](https://nodejs.org)
+
 A Vue 3 component library for implementing Open Badges functionality, with a focus on accessibility and customization. This library supports both Open Badges 2.0 and 3.0 specifications.
 
 ## Features
@@ -20,19 +24,19 @@ npm install openbadges-ui
 ## Quick Start
 
 ```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import { OpenBadgesUIPlugin } from 'openbadges-ui'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { OpenBadgesUIPlugin } from 'openbadges-ui';
 
 // Import styles
-import 'openbadges-ui/dist/style.css'
+import 'openbadges-ui/dist/style.css';
 
-const app = createApp(App)
+const app = createApp(App);
 
 // Use the plugin (configures PrimeVue in unstyled mode)
-app.use(OpenBadgesUIPlugin)
+app.use(OpenBadgesUIPlugin);
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 ## Components
@@ -71,10 +75,10 @@ The library includes several built-in themes:
 To apply a theme:
 
 ```javascript
-import { AccessibilityService } from 'openbadges-ui'
+import { AccessibilityService } from 'openbadges-ui';
 
 // Apply dark theme
-AccessibilityService.applyTheme('dark')
+AccessibilityService.applyTheme('dark');
 ```
 
 Or use CSS classes directly:
@@ -134,3 +138,34 @@ npm run test:coverage
 ## Examples
 
 Check out the [examples directory](./examples) for sample applications demonstrating how to use the OpenBadges UI components.
+
+## Contributing
+
+### Release Process
+
+This project uses [semantic-release](https://semantic-release.gitbook.io/) for automated versioning and publishing. The release process is triggered automatically when changes are pushed to the `main` branch.
+
+For more details about the release process, see [RELEASING.md](./RELEASING.md).
+
+### Commit Message Format
+
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification. Your commit messages should be structured as follows:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Common types:
+
+- `feat`: A new feature (triggers a minor version bump)
+- `fix`: A bug fix (triggers a patch version bump)
+- `docs`: Documentation changes
+- `style`: Changes that don't affect the code's meaning
+- `refactor`: Code changes that neither fix a bug nor add a feature
+- `perf`: Performance improvements
+- `test`: Adding or correcting tests
+- `chore`: Changes to the build process or auxiliary tools
