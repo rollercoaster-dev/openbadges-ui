@@ -57,6 +57,8 @@ On every push to `main`, the release workflow is triggered:
 5. A GitHub release is created with release notes and assets
 6. The CHANGELOG.md file is updated
 
+**Note:** Before the first release, ensure that an empty `CHANGELOG.md` file is created and committed to the repository. This file is required for the changelog plugin to function correctly.
+
 ## Manual Release
 
 To run a release locally, ensure the following environment variables are set:
