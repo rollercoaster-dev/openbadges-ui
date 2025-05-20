@@ -3,7 +3,7 @@
 import { mount } from '@vue/test-utils';
 import type { Component } from 'vue';
 import type { OB2, OB3, Shared } from 'openbadges-types';
-import { createIRI, createDateTime } from '../../src/utils/type-helpers';
+import { createIRI, createDateTime } from '@/utils/type-helpers';
 
 /**
  * Creates a test wrapper with the specified component and props

@@ -7,34 +7,17 @@ import BadgeVerification from '@/components/badges/BadgeVerification.vue';
 import { createMockOB2Badge } from '../utils';
 
 // Mock the BadgeVerificationService
-vi.mock('@/services/BadgeVerificationService', () => {
-  const mockService = {
-    verifyBadge: vi.fn().mockResolvedValue({
-      isValid: true,
-      errors: [],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'valid',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    }),
-  };
-  return {
-    BadgeVerificationService: mockService,
-  };
-});
+vi.mock('@/services/BadgeVerificationService');
 
 // Import the mocked service after the mock is defined
 import { BadgeVerificationService } from '@/services/BadgeVerificationService';
+import type { VerificationResult } from '@/services/BadgeVerificationService';
+
+// Define interface for the mocked service
+interface MockedVerifyBadge {
+  mockResolvedValueOnce: (result: VerificationResult) => unknown;
+  mockRejectedValueOnce: (error: Error) => unknown;
+}
 
 describe('BadgeDisplay and BadgeVerification Integration', () => {
   const mockBadge = createMockOB2Badge();
@@ -108,7 +91,9 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
     // Check that BadgeDisplay propagated the event
     expect(wrapper.emitted('verified')).toBeTruthy();
-    expect(wrapper.emitted('verified')[0]).toEqual([true]);
+    const emitted = wrapper.emitted('verified');
+    expect(emitted).not.toBeUndefined();
+    expect(emitted?.[0]).toEqual([true]);
   });
 
   it('should auto-verify badge when autoVerify is true', async () => {
@@ -117,6 +102,26 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
         badge: mockBadge,
         showVerification: true,
         autoVerify: true,
+      },
+    });
+
+    // Setup mock to return a valid result
+    (BadgeVerificationService.verifyBadge as unknown as MockedVerifyBadge).mockResolvedValueOnce({
+      isValid: true,
+      errors: [],
+      warnings: [],
+      verificationMethod: 'hosted' as const,
+      expirationStatus: 'valid',
+      revocationStatus: 'valid',
+      structureValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+      contentValidation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
       },
     });
 
@@ -135,11 +140,11 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should show verification status correctly', async () => {
     // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    (BadgeVerificationService.verifyBadge as unknown as MockedVerifyBadge).mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: [],
-      verificationMethod: 'hosted',
+      verificationMethod: 'hosted' as const,
       expirationStatus: 'valid',
       revocationStatus: 'valid',
       structureValidation: {
@@ -180,11 +185,11 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should show verification details when verification is complete', async () => {
     // Mock a successful verification with some warnings
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    (BadgeVerificationService.verifyBadge as unknown as MockedVerifyBadge).mockResolvedValueOnce({
       isValid: true,
       errors: [],
       warnings: ['This is a test warning'],
-      verificationMethod: 'hosted',
+      verificationMethod: 'hosted' as const,
       expirationStatus: 'valid',
       revocationStatus: 'valid',
       structureValidation: {
@@ -231,11 +236,11 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
   it('should handle verification failure correctly', async () => {
     // Mock a failed verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
+    (BadgeVerificationService.verifyBadge as unknown as MockedVerifyBadge).mockResolvedValueOnce({
       isValid: false,
       errors: ['Invalid badge format'],
       warnings: [],
-      verificationMethod: 'hosted',
+      verificationMethod: 'hosted' as const,
       expirationStatus: 'valid',
       revocationStatus: 'valid',
       structureValidation: {
@@ -283,6 +288,8 @@ describe('BadgeDisplay and BadgeVerification Integration', () => {
 
     // Check that the verified event was emitted with false
     expect(wrapper.emitted('verified')).toBeTruthy();
-    expect(wrapper.emitted('verified')[0]).toEqual([false]);
+    const emitted = wrapper.emitted('verified');
+    expect(emitted).not.toBeUndefined();
+    expect(emitted?.[0]).toEqual([false]);
   });
 });

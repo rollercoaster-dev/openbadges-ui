@@ -1,11 +1,12 @@
 // tests/integration/components/ProfileViewerIntegration.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ProfileViewer from '../../../src/components/badges/ProfileViewer.vue';
-import BadgeList from '../../../src/components/badges/BadgeList.vue';
-import BadgeDisplay from '../../../src/components/badges/BadgeDisplay.vue';
+import ProfileViewer from '@/components/badges/ProfileViewer.vue';
+import BadgeList from '@/components/badges/BadgeList.vue';
+import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
 import { createMockOB2Badge } from '../utils';
 import { createIRI } from 'openbadges-types';
+import type { Profile } from '@/types';
 
 describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
   // Create mock profile and badges
@@ -32,24 +33,24 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     }),
   ];
 
-  const mockRecipientProfile = {
+  const mockRecipientProfile: Profile = {
     id: 'profile123',
     name: 'Jane Doe',
     email: 'jane.doe@example.org',
     image: 'http://example.org/profile.jpg',
     description: 'Software developer and open badges enthusiast',
     url: 'http://example.org/jane',
-    type: 'Recipient',
+    type: 'Recipient' as const,
   };
 
-  const mockIssuerProfile = {
+  const mockIssuerProfile: Profile = {
     id: 'issuer123',
     name: 'Test Organization',
     email: 'info@example.org',
     image: 'http://example.org/org.jpg',
     description: 'An organization that issues badges',
     url: 'http://example.org/org',
-    type: 'Issuer',
+    type: 'Issuer' as const,
   };
 
   beforeEach(() => {
@@ -162,8 +163,9 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     await badgeList.vm.$emit('badge-click', mockBadges[0]);
 
     // Check that ProfileViewer propagated the event
-    expect(wrapper.emitted('badge-click')).toBeTruthy();
-    expect(wrapper.emitted('badge-click')![0][0]).toEqual(mockBadges[0]);
+    const badgeClickEvents = wrapper.emitted('badge-click');
+    expect(badgeClickEvents).toBeTruthy();
+    expect(badgeClickEvents && badgeClickEvents[0][0]).toEqual(mockBadges[0]);
   });
 
   it('should handle badge click through the entire component chain', async () => {
@@ -182,8 +184,9 @@ describe('ProfileViewer Integration with BadgeList and BadgeDisplay', () => {
     await badgeDisplay.trigger('click');
 
     // Check that the click event propagated through BadgeList to ProfileViewer
-    expect(wrapper.emitted('badge-click')).toBeTruthy();
-    expect(wrapper.emitted('badge-click')![0][0]).toEqual(mockBadges[0]);
+    const badgeClickEvents2 = wrapper.emitted('badge-click');
+    expect(badgeClickEvents2).toBeTruthy();
+    expect(badgeClickEvents2 && badgeClickEvents2[0][0]).toEqual(mockBadges[0]);
   });
 
   it('should handle pagination correctly', async () => {

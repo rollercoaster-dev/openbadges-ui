@@ -1,7 +1,7 @@
 import { describe, it, expect, vi as _vi } from 'vitest'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { mount } from '@vue/test-utils';
-import BadgeList from '../../../../src/components/badges/BadgeList.vue';
-import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
+import BadgeList from '@/components/badges/BadgeList.vue';
+import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
 import { createDateTime, createIRI, type OB2, type OB3 } from 'openbadges-types';
 
 describe('BadgeList.vue', () => {
@@ -152,9 +152,10 @@ describe('BadgeList.vue', () => {
     const badgeDisplay = wrapper.findComponent(BadgeDisplay);
     await badgeDisplay.trigger('click');
 
-    // Check if badge-click event was emitted with the correct badge
-    expect(wrapper.emitted('badge-click')).toBeTruthy();
-    expect(wrapper.emitted('badge-click')![0][0]).toEqual(mockOB2Badge);
+    // Check that badge-click event is emitted with the correct badge
+    const badgeClickEvents = wrapper.emitted('badge-click');
+    expect(badgeClickEvents).toBeTruthy();
+    expect(badgeClickEvents && badgeClickEvents[0][0]).toEqual(mockOB2Badge);
   });
 
   it('shows pagination when showPagination is true and there are multiple pages', () => {
@@ -218,9 +219,10 @@ describe('BadgeList.vue', () => {
     // Click the next page button
     await wrapper.find('.manus-pagination-button:last-child').trigger('click');
 
-    // Check if page-change event was emitted with the correct page number
-    expect(wrapper.emitted('page-change')).toBeTruthy();
-    expect(wrapper.emitted('page-change')![0][0]).toBe(2);
+    // Check that page-change event is emitted with the correct page number
+    const pageChangeEvents = wrapper.emitted('page-change');
+    expect(pageChangeEvents).toBeTruthy();
+    expect(pageChangeEvents && pageChangeEvents[0][0]).toBe(2);
   });
 
   it('respects the pageSize prop for pagination', () => {

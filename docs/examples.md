@@ -10,11 +10,7 @@ This example shows how to display a single badge:
 <template>
   <div class="badge-example">
     <h2>Badge Display Example</h2>
-    <BadgeDisplay 
-      :badge="exampleBadge" 
-      :interactive="true"
-      @click="showBadgeDetails"
-    />
+    <BadgeDisplay :badge="exampleBadge" :interactive="true" @click="showBadgeDetails" />
   </div>
 </template>
 
@@ -30,24 +26,25 @@ const exampleBadge = ref({
   recipient: {
     identity: 'recipient@example.org',
     type: 'email',
-    hashed: false
+    hashed: false,
   },
   badge: {
     id: 'https://example.org/badges/1',
     type: 'BadgeClass',
     name: 'AI Ethics Fundamentals',
-    description: 'Awarded for demonstrating understanding of core AI ethics principles and their application.',
+    description:
+      'Awarded for demonstrating understanding of core AI ethics principles and their application.',
     image: 'https://ui-avatars.com/api/?name=AI+Ethics&background=2A9D8F&color=fff',
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Academy'
-    }
+      name: 'Academy',
+    },
   },
   issuedOn: '2025-01-15T12:00:00Z',
   verification: {
-    type: 'hosted'
-  }
+    type: 'hosted',
+  },
 });
 
 const showBadgeDetails = (badge) => {
@@ -73,14 +70,10 @@ This example shows how to display a collection of badges with filtering and sort
 <template>
   <div class="badges-collection">
     <h2>My Badges</h2>
-    
+
     <div class="filter-controls">
-      <input 
-        v-model="filterText" 
-        placeholder="Search badges..." 
-        class="filter-input"
-      />
-      
+      <input v-model="filterText" placeholder="Search badges..." class="filter-input" />
+
       <div class="sort-controls">
         <label for="sort-select">Sort by:</label>
         <select id="sort-select" v-model="sortOption" class="sort-select">
@@ -91,9 +84,9 @@ This example shows how to display a collection of badges with filtering and sort
         </select>
       </div>
     </div>
-    
-    <BadgeList 
-      :badges="badges" 
+
+    <BadgeList
+      :badges="badges"
       layout="grid"
       :interactive="true"
       :show-pagination="true"
@@ -129,11 +122,11 @@ const currentPage = ref(1);
 // Filter and sort badges when criteria change
 watch([filterText, sortOption], () => {
   let filtered = [...allBadges];
-  
+
   // Apply filter
   if (filterText.value) {
     const search = filterText.value.toLowerCase();
-    filtered = filtered.filter(badge => {
+    filtered = filtered.filter((badge) => {
       const badgeClass = badge.badge;
       return (
         badgeClass.name.toLowerCase().includes(search) ||
@@ -141,7 +134,7 @@ watch([filterText, sortOption], () => {
       );
     });
   }
-  
+
   // Apply sort
   filtered.sort((a, b) => {
     if (sortOption.value === 'newest') {
@@ -155,7 +148,7 @@ watch([filterText, sortOption], () => {
     }
     return 0;
   });
-  
+
   badges.value = filtered;
   currentPage.value = 1; // Reset to first page when filters change
 });
@@ -238,15 +231,15 @@ This example shows how to display a user profile with their earned badges:
 <template>
   <div class="profile-page">
     <div v-if="loading" class="loading">Loading profile...</div>
-    
+
     <div v-else-if="error" class="error">
       {{ error }}
       <button @click="loadUserProfile" class="retry-button">Retry</button>
     </div>
-    
-    <ProfileViewer 
+
+    <ProfileViewer
       v-else
-      :profile="userProfile" 
+      :profile="userProfile"
       :badges="userBadges"
       badges-layout="grid"
       :show-pagination="true"
@@ -269,11 +262,11 @@ const error = ref(null);
 const loadUserProfile = async () => {
   loading.value = true;
   error.value = null;
-  
+
   try {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Mock data
     userProfile.value = {
       id: 'user-123',
@@ -281,9 +274,9 @@ const loadUserProfile = async () => {
       image: 'https://ui-avatars.com/api/?name=Alice+J&background=553C9A&color=fff',
       description: 'AI researcher and machine learning enthusiast',
       email: 'alice@example.org',
-      type: 'Recipient'
+      type: 'Recipient',
     };
-    
+
     userBadges.value = [
       // Example badges would go here
       // ...
@@ -313,7 +306,8 @@ onMounted(() => {
   padding: 20px;
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 40px;
 }
@@ -342,9 +336,9 @@ This example shows how to implement a badge issuer dashboard:
 <template>
   <div class="issuer-dashboard-page">
     <h1>Badge Issuer Dashboard</h1>
-    
-    <IssuerDashboard 
-      :issuer-profile="issuerProfile" 
+
+    <IssuerDashboard
+      :issuer-profile="issuerProfile"
       :initial-badges="issuedBadges"
       @badge-issued="handleBadgeIssued"
       @badge-click="handleBadgeClick"
@@ -362,7 +356,7 @@ const issuerProfile = ref({
   image: 'https://ui-avatars.com/api/?name=Manus+AI&background=0D8ABC&color=fff',
   description: 'An organization dedicated to advancing AI education and certification.',
   url: 'https://example.org',
-  email: 'badges@example.org'
+  email: 'badges@example.org',
 });
 
 const issuedBadges = ref([]);
@@ -370,14 +364,14 @@ const issuedBadges = ref([]);
 // In a real app, this would send to an API
 const handleBadgeIssued = async (assertion) => {
   console.log('Badge issued:', assertion);
-  
+
   try {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Add the new badge to the list
     issuedBadges.value = [assertion, ...issuedBadges.value];
-    
+
     alert('Badge successfully issued!');
   } catch (err) {
     console.error('Failed to save badge:', err);
@@ -394,8 +388,8 @@ const handleBadgeClick = (badge) => {
 const loadIssuedBadges = async () => {
   try {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Mock data
     issuedBadges.value = [
       // Example badges would go here
@@ -430,8 +424,8 @@ This example shows how to implement theme switching:
     <div class="theme-controls">
       <h2>Theme Selection</h2>
       <div class="theme-buttons">
-        <button 
-          v-for="theme in themes" 
+        <button
+          v-for="theme in themes"
           :key="theme.value"
           @click="applyTheme(theme.value)"
           class="theme-button"
@@ -441,7 +435,7 @@ This example shows how to implement theme switching:
         </button>
       </div>
     </div>
-    
+
     <div class="theme-preview">
       <h3>Theme Preview</h3>
       <BadgeDisplay :badge="exampleBadge" :interactive="true" />
@@ -458,7 +452,7 @@ const themes = [
   { label: 'Dark', value: 'dark' },
   { label: 'High Contrast', value: 'high-contrast' },
   { label: 'Large Text', value: 'large-text' },
-  { label: 'Dyslexia Friendly', value: 'dyslexia-friendly' }
+  { label: 'Dyslexia Friendly', value: 'dyslexia-friendly' },
 ];
 
 const currentTheme = ref('default');
@@ -476,24 +470,25 @@ const exampleBadge = ref({
   recipient: {
     identity: 'recipient@example.org',
     type: 'email',
-    hashed: false
+    hashed: false,
   },
   badge: {
     id: 'https://example.org/badges/1',
     type: 'BadgeClass',
     name: 'Theme Example Badge',
-    description: 'This badge demonstrates how different themes affect the appearance of components.',
+    description:
+      'This badge demonstrates how different themes affect the appearance of components.',
     image: 'https://ui-avatars.com/api/?name=Theme+Example&background=3182CE&color=fff',
     issuer: {
       id: 'https://example.org/issuer',
       type: 'Profile',
-      name: 'Academy'
-    }
+      name: 'Academy',
+    },
   },
   issuedOn: '2025-04-15T12:00:00Z',
   verification: {
-    type: 'hosted'
-  }
+    type: 'hosted',
+  },
 });
 </script>
 
@@ -549,13 +544,13 @@ This example demonstrates how to use the accessibility features:
 <template>
   <div class="accessibility-demo">
     <h2>Accessibility Features</h2>
-    
+
     <div class="feature-section">
       <h3>Skip Link</h3>
       <p>Press Tab to see the skip link appear at the top of the page.</p>
       <a href="#main-content" class="manus-skip-link">Skip to main content</a>
     </div>
-    
+
     <div class="feature-section">
       <h3>Screen Reader Text</h3>
       <p>
@@ -566,7 +561,7 @@ This example demonstrates how to use the accessibility features:
         </a>
       </p>
     </div>
-    
+
     <div class="feature-section">
       <h3>Focus Styles</h3>
       <p>Tab through these buttons to see enhanced focus styles:</p>
@@ -576,17 +571,17 @@ This example demonstrates how to use the accessibility features:
         <button class="manus-focus-visible">Button 3</button>
       </div>
     </div>
-    
+
     <div class="feature-section">
       <h3>Status Messages</h3>
       <div class="manus-status" role="status">This is a status message</div>
       <div class="manus-status" role="alert">This is an alert message</div>
     </div>
-    
+
     <div id="main-content" class="feature-section">
       <h3>Reduced Motion Detection</h3>
       <p>
-        Reduced motion preference: 
+        Reduced motion preference:
         <strong>{{ prefersReducedMotion ? 'Enabled' : 'Disabled' }}</strong>
       </p>
       <p>When enabled, animations will be minimized or disabled.</p>
@@ -602,7 +597,7 @@ const prefersReducedMotion = ref(false);
 
 onMounted(() => {
   prefersReducedMotion.value = AccessibilityService.prefersReducedMotion();
-  
+
   // Listen for changes to the prefers-reduced-motion media query
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   mediaQuery.addEventListener('change', () => {
@@ -641,7 +636,7 @@ onMounted(() => {
 }
 
 /* Import the accessibility styles */
-@import '../src/styles/accessibility.css';
+@import '@/styles/accessibility.css';
 </style>
 ```
 

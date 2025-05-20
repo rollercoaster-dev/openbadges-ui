@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import BadgeDisplay from '../../../../src/components/badges/BadgeDisplay.vue';
-import _BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
+import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
 import { typedAssertion } from '../../../test-utils';
 
 describe('BadgeDisplay.vue', () => {

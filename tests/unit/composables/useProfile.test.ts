@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { useProfile } from '../../../src/composables/useProfile';
-import type { Profile } from '../../../src/types';
-import { BadgeService } from '../../../src/services/BadgeService';
+import { useProfile } from '@/composables/useProfile';
+import type { Profile } from '@/types';
+import { BadgeService } from '@/services/BadgeService';
 
 describe('useProfile', () => {
   it('initial profile is null if none provided', () => {

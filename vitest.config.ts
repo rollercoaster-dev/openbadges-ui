@@ -19,6 +19,10 @@ export default defineConfig({
     globals: true,
     include: ['tests/**/*.{test,spec}.{js,ts,vue}'],
     setupFiles: ['tests/integration/setup.ts'],
+    typecheck: {
+      tsconfig: './tsconfig.test.json',
+      enableSyntheticDefaultImports: true,
+    },
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'json', 'html'],

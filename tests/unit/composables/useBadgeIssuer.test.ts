@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { useBadgeIssuer } from '../../../src/composables/useBadgeIssuer';
-import { BadgeService } from '../../../src/services/BadgeService';
+import { useBadgeIssuer } from '@/composables/useBadgeIssuer';
+import { BadgeService } from '@/services/BadgeService';
 
 describe('useBadgeIssuer', () => {
   it('initial state is invalid and has default values', () => {

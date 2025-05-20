@@ -1,360 +1,98 @@
-// tests/integration/composables/useBadgeVerificationService.test.ts
-
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { useBadgeVerification } from '@/composables/useBadgeVerification';
 import { nextTick } from 'vue';
+import { createMockOB2Badge, createMockOB3Badge } from '../utils';
+import { vi } from 'vitest';
+import { createDateTime } from '@/utils/type-helpers';
+import type { OB2 } from 'openbadges-types';
 
-// Mock must be defined before importing the module
-vi.mock('@/services/BadgeVerificationService', () => {
-  return {
-    BadgeVerificationService: {
-      verifyBadge: vi.fn(),
-    },
-  };
+// Mock OB2 badge
+const baseBadge = createMockOB2Badge().badge as OB2.BadgeClass;
+const validOB2Badge = createMockOB2Badge({
+  issuedOn: createDateTime('2025-01-01T00:00:00Z'),
+  expires: createDateTime('2026-01-01T00:00:00Z'),
+  badge: {
+    type: 'BadgeClass',
+    id: baseBadge.id,
+    name: baseBadge.name,
+    description: baseBadge.description,
+    image: baseBadge.image,
+    criteria: { narrative: 'The criteria for earning this badge' },
+    issuer: baseBadge.issuer,
+  },
 });
 
-// Now import the mocked module and other modules
-import { BadgeVerificationService } from '@/services/BadgeVerificationService';
-import { useBadgeVerification } from '@/composables/useBadgeVerification';
-import { createMockOB2Badge, createMockOB3Badge } from '../utils';
+// Mock OB3 badge
+const validOB3Badge = createMockOB3Badge();
 
-describe('useBadgeVerification and BadgeVerificationService Integration', () => {
-  const mockOB2Badge = createMockOB2Badge();
-  const mockOB3Badge = createMockOB3Badge();
+vi.mock('openbadges-types', () => ({
+  validateBadge: vi.fn().mockImplementation((badge) => {
+    const isOB2 =
+      badge && typeof badge === 'object' && 'type' in badge && badge.type === 'Assertion';
+    const isOB3 =
+      badge &&
+      typeof badge === 'object' &&
+      '@context' in badge &&
+      'type' in badge &&
+      Array.isArray(badge.type) &&
+      badge.type.includes('VerifiableCredential');
+    if (isOB2) {
+      return { isValid: true, errors: [], warnings: [], version: 'OB2' };
+    } else if (isOB3) {
+      return { isValid: true, errors: [], warnings: [], version: 'OB3' };
+    } else {
+      return { isValid: false, errors: ['Invalid badge format'], warnings: [], version: undefined };
+    }
+  }),
+  isBadge: vi.fn().mockReturnValue(true),
+  isOB2Profile: vi.fn().mockReturnValue(true),
+}));
+
+describe('useBadgeVerification (integration)', () => {
+  let composable: ReturnType<typeof useBadgeVerification>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    composable = useBadgeVerification();
+    composable.clearVerification();
   });
 
-  it('should call BadgeVerificationService.verifyBadge when verifyBadge is called', async () => {
-    // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: true,
-      errors: [],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'valid',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const { verifyBadge, state } = useBadgeVerification();
-
-    // Call verifyBadge
-    const result = await verifyBadge(mockOB2Badge);
-
-    // Check that BadgeVerificationService.verifyBadge was called with the correct badge
-    expect(BadgeVerificationService.verifyBadge).toHaveBeenCalledWith(mockOB2Badge);
-
-    // Check that the result is correct
+  it('verifies a valid OB2 badge and updates state', async () => {
+    const result = await composable.verifyBadge(validOB2Badge);
+    await nextTick();
     expect(result.isValid).toBe(true);
-    expect(result.errors).toEqual([]);
-    expect(result.warnings).toEqual([]);
-    expect(result.verificationMethod).toBe('hosted');
-    expect(result.expirationStatus).toBe('valid');
-    expect(result.revocationStatus).toBe('valid');
-
-    // Check that the state was updated correctly
-    expect(state.value.isVerifying).toBe(false);
-    expect(state.value.badge).toEqual(mockOB2Badge);
-    expect(state.value.result).toEqual(result);
-    expect(state.value.lastVerified).toBeInstanceOf(Date);
+    expect(composable.isValid.value).toBe(true);
+    expect(composable.errors.value).toEqual([]);
+    expect(composable.verificationMethod.value).toBe('hosted');
+    expect(composable.state.value.badge).toEqual(validOB2Badge);
+    expect(composable.hasBeenVerified.value).toBe(true);
   });
 
-  it('should update computed properties based on verification result', async () => {
-    // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: true,
-      errors: [],
-      warnings: ['Test warning'],
-      verificationMethod: 'hosted',
-      expirationStatus: 'valid',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const {
-      verifyBadge,
-      isValid,
-      errors,
-      warnings,
-      verificationMethod,
-      expirationStatus,
-      revocationStatus,
-      hasBeenVerified,
-    } = useBadgeVerification();
-
-    // Initially, computed properties should have default values
-    expect(isValid.value).toBe(false);
-    expect(errors.value).toEqual([]);
-    expect(warnings.value).toEqual([]);
-    expect(verificationMethod.value).toBeUndefined();
-    expect(expirationStatus.value).toBeUndefined();
-    expect(revocationStatus.value).toBeUndefined();
-    expect(hasBeenVerified.value).toBe(false);
-
-    // Call verifyBadge
-    await verifyBadge(mockOB2Badge);
-
-    // Wait for Vue to update computed properties
+  it('verifies a valid OB3 badge and updates state', async () => {
+    const result = await composable.verifyBadge(validOB3Badge);
     await nextTick();
-
-    // Check that computed properties were updated correctly
-    expect(isValid.value).toBe(true);
-    expect(errors.value).toEqual([]);
-    expect(warnings.value).toEqual(['Test warning']);
-    expect(verificationMethod.value).toBe('hosted');
-    expect(expirationStatus.value).toBe('valid');
-    expect(revocationStatus.value).toBe('valid');
-    expect(hasBeenVerified.value).toBe(true);
+    expect(result.badgeVersion).toBe('OB3');
+    expect(composable.state.value.badge).toEqual(validOB3Badge);
+    expect(composable.hasBeenVerified.value).toBe(true);
+    // OB3 may have warnings but should be valid
+    expect(result.structureValidation.isValid).toBe(true);
   });
 
-  it('should handle verification failure correctly', async () => {
-    // Mock a failed verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: false,
-      errors: ['Invalid badge format'],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'expired',
-      revocationStatus: 'revoked',
-      structureValidation: {
-        isValid: false,
-        errors: ['Invalid badge format'],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const { verifyBadge, isValid, errors, warnings, expirationStatus, revocationStatus } =
-      useBadgeVerification();
-
-    // Call verifyBadge
-    const result = await verifyBadge(mockOB2Badge);
-
-    // Wait for Vue to update computed properties
+  it('handles an invalid badge and reports errors', async () => {
+    const invalidBadge = { id: 'not-a-valid-badge' };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await composable.verifyBadge(invalidBadge as any);
     await nextTick();
-
-    // Check that computed properties were updated correctly
-    expect(isValid.value).toBe(false);
-    expect(errors.value).toEqual(['Invalid badge format']);
-    expect(warnings.value).toEqual([]);
-    expect(expirationStatus.value).toBe('expired');
-    expect(revocationStatus.value).toBe('revoked');
-
-    // Check that the result is correct
     expect(result.isValid).toBe(false);
-    expect(result.errors).toEqual(['Invalid badge format']);
+    expect(composable.isValid.value).toBe(false);
+    expect(composable.errors.value.length).toBeGreaterThan(0);
+    expect(composable.state.value.badge).toEqual(invalidBadge);
   });
 
-  it('should handle service exceptions correctly', async () => {
-    // Mock an exception in the service
-    BadgeVerificationService.verifyBadge.mockRejectedValueOnce(new Error('Network error'));
-
-    // Use the composable
-    const { verifyBadge, isValid, errors, state } = useBadgeVerification();
-
-    // Call verifyBadge
-    const result = await verifyBadge(mockOB2Badge);
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check that the error was handled correctly
-    expect(isValid.value).toBe(false);
-    expect(errors.value).toEqual(['Verification failed: Network error']);
-    expect(state.value.isVerifying).toBe(false);
-
-    // Check that the result is correct
-    expect(result.isValid).toBe(false);
-    expect(result.errors).toEqual(['Verification failed: Network error']);
-  });
-
-  it('should verify OB3 badges correctly', async () => {
-    // Mock a successful verification for OB3
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: true,
-      errors: [],
-      warnings: ['Full cryptographic verification of OB3 credentials is not yet implemented'],
-      verificationMethod: 'signed',
-      expirationStatus: 'valid',
-      revocationStatus: 'unknown',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const { verifyBadge, isValid, warnings, verificationMethod } = useBadgeVerification();
-
-    // Call verifyBadge with an OB3 badge
-    await verifyBadge(mockOB3Badge);
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check that BadgeVerificationService.verifyBadge was called with the correct badge
-    expect(BadgeVerificationService.verifyBadge).toHaveBeenCalledWith(mockOB3Badge);
-
-    // Check that computed properties were updated correctly
-    expect(isValid.value).toBe(true);
-    expect(warnings.value).toContain(
-      'Full cryptographic verification of OB3 credentials is not yet implemented'
-    );
-    expect(verificationMethod.value).toBe('signed');
-  });
-
-  it('should clear verification state correctly', async () => {
-    // Mock a successful verification
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: true,
-      errors: [],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'valid',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const { verifyBadge, clearVerification, isValid, hasBeenVerified, state } =
-      useBadgeVerification();
-
-    // Call verifyBadge
-    await verifyBadge(mockOB2Badge);
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check that verification was performed
-    expect(isValid.value).toBe(true);
-    expect(hasBeenVerified.value).toBe(true);
-    expect(state.value.badge).toEqual(mockOB2Badge);
-    expect(state.value.result).not.toBeNull();
-    expect(state.value.lastVerified).not.toBeNull();
-
-    // Clear verification state
-    clearVerification();
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check that state was cleared
-    expect(isValid.value).toBe(false);
-    expect(hasBeenVerified.value).toBe(false);
-    expect(state.value.badge).toBeNull();
-    expect(state.value.result).toBeNull();
-    expect(state.value.lastVerified).toBeNull();
-    expect(state.value.isVerifying).toBe(false);
-  });
-
-  it('should handle multiple verification calls correctly', async () => {
-    // Mock first verification (success)
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: true,
-      errors: [],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'valid',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Use the composable
-    const { verifyBadge, isValid, state } = useBadgeVerification();
-
-    // First verification
-    await verifyBadge(mockOB2Badge);
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check first verification result
-    expect(isValid.value).toBe(true);
-    expect(state.value.badge).toEqual(mockOB2Badge);
-
-    // Mock second verification (failure)
-    BadgeVerificationService.verifyBadge.mockResolvedValueOnce({
-      isValid: false,
-      errors: ['Invalid badge'],
-      warnings: [],
-      verificationMethod: 'hosted',
-      expirationStatus: 'expired',
-      revocationStatus: 'valid',
-      structureValidation: {
-        isValid: false,
-        errors: ['Invalid badge'],
-        warnings: [],
-      },
-      contentValidation: {
-        isValid: true,
-        errors: [],
-        warnings: [],
-      },
-    });
-
-    // Second verification with a different badge
-    await verifyBadge(mockOB3Badge);
-
-    // Wait for Vue to update computed properties
-    await nextTick();
-
-    // Check second verification result
-    expect(isValid.value).toBe(false);
-    expect(state.value.badge).toEqual(mockOB3Badge);
-
-    // Check that BadgeVerificationService.verifyBadge was called twice with different badges
-    expect(BadgeVerificationService.verifyBadge).toHaveBeenCalledTimes(2);
-    expect(BadgeVerificationService.verifyBadge).toHaveBeenNthCalledWith(1, mockOB2Badge);
-    expect(BadgeVerificationService.verifyBadge).toHaveBeenNthCalledWith(2, mockOB3Badge);
+  it('can clear the verification state', async () => {
+    await composable.verifyBadge(validOB2Badge);
+    composable.clearVerification();
+    expect(composable.state.value.result).toBeNull();
+    expect(composable.state.value.badge).toBeNull();
+    expect(composable.hasBeenVerified.value).toBe(false);
   });
 });

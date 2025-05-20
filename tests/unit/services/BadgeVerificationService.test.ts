@@ -1,9 +1,9 @@
 // tests/unit/services/BadgeVerificationService.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { BadgeVerificationService } from '../../../src/services/BadgeVerificationService';
+import { BadgeVerificationService } from '@/services/BadgeVerificationService';
 import { type OB2, type OB3 } from 'openbadges-types';
 import type { Shared } from 'openbadges-types';
-import { createIRI, createDateTime } from '../../../src/utils/type-helpers';
+import { createIRI, createDateTime } from '@/utils/type-helpers';
 type DateTime = Shared.DateTime;
 
 // Mock the validateBadge function from openbadges-types

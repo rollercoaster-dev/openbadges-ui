@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import BadgeVerification from '../../../../src/components/badges/BadgeVerification.vue';
-import { BadgeVerificationService } from '../../../../src/services/BadgeVerificationService';
+import BadgeVerification from '@/components/badges/BadgeVerification.vue';
+import { BadgeVerificationService } from '@/services/BadgeVerificationService';
 import { createDateTime, createIRI, type OB2 } from 'openbadges-types';
 
 // Mock the BadgeVerificationService
-vi.mock('../../../../src/services/BadgeVerificationService', () => ({
+vi.mock('@/services/BadgeVerificationService', () => ({
   BadgeVerificationService: {
     verifyBadge: vi.fn().mockResolvedValue({
       isValid: true,

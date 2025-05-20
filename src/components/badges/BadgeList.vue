@@ -30,16 +30,28 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'badge-click', badge: OB2.Assertion | OB3.VerifiableCredential): void;
   (e: 'page-change', page: number): void;
+  (e: 'update:density', density: 'compact' | 'normal' | 'spacious'): void;
 }>();
 
 // Internal state for pagination
 const internalCurrentPage = ref(props.currentPage);
+
+// Internal state for density
+const internalDensity = ref<'compact' | 'normal' | 'spacious'>(props.density);
 
 // Watch for external currentPage changes
 watch(
   () => props.currentPage,
   (newPage) => {
     internalCurrentPage.value = newPage;
+  }
+);
+
+// Watch for external density changes
+watch(
+  () => props.density,
+  (newValue) => {
+    internalDensity.value = newValue;
   }
 );
 
@@ -53,15 +65,18 @@ const filteredBadges = computed(() => {
   let filtered = props.badges;
   if (filterText.value) {
     filtered = filtered.filter(badge => {
-      const name = (badge as any).badge?.name || (badge as any).name || '';
+      // Use type guards to check the badge structure
+      const name = 'badge' in badge && badge.badge && typeof badge.badge === 'object' && 'name' in badge.badge 
+        ? String(badge.badge.name) 
+        : 'name' in badge ? String(badge.name) : '';
       return name.toLowerCase().includes(filterText.value.toLowerCase());
     });
   }
   if (filterEarned.value !== 'all') {
-    filtered = filtered.filter(badge => {
+    filtered = filtered.filter(() => {
       // Assume OB2/OB3 badges have a 'recipient' or 'status' property for demo
-      if (filterEarned.value === 'earned') return true; // Placeholder logic
-      if (filterEarned.value === 'not-earned') return false; // Placeholder logic
+      if (filterEarned.value === 'earned') {return true;} // Placeholder logic
+      if (filterEarned.value === 'not-earned') {return false;} // Placeholder logic
       return true;
     });
   }
@@ -106,12 +121,20 @@ const handlePageChange = (page: number) => {
   internalCurrentPage.value = page;
   emit('page-change', page);
 };
+
+// Handle density change
+const handleDensityChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement;
+  const value = target.value as 'compact' | 'normal' | 'spacious';
+  internalDensity.value = value;
+  emit('update:density', value);
+};
 </script>
 
 <template>
   <div
     class="manus-badge-list"
-    :class="[`density-${density}`, { 'grid-layout': layout === 'grid' }]"
+    :class="[`density-${internalDensity}`, { 'grid-layout': layout === 'grid' }]"
   >
     <!-- Neurodiversity filter and density controls -->
     <div class="manus-badge-list-controls" role="region" aria-label="Badge list controls">
@@ -127,7 +150,7 @@ const handlePageChange = (page: number) => {
         <option value="earned">Earned</option>
         <option value="not-earned">Not Earned</option>
       </select>
-      <select v-model="props.density" class="manus-badge-list-density-select" aria-label="Display density">
+      <select :value="internalDensity" class="manus-badge-list-density-select" aria-label="Display density" @change="handleDensityChange">
         <option value="compact">Compact</option>
         <option value="normal">Normal</option>
         <option value="spacious">Spacious</option>
@@ -166,7 +189,7 @@ const handlePageChange = (page: number) => {
         :class="{ 'is-expanded': expandedBadges.has(badge.id) }"
         @keydown.enter="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)"
       >
-        <div class="badge-summary" @click="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0">
+        <div class="badge-summary" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0" @click="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)">
           <slot
             name="badge"
             :badge="badge.original"
@@ -197,22 +220,22 @@ const handlePageChange = (page: number) => {
     >
       <button
         class="manus-pagination-button"
-        :disabled="currentPage === 1"
+        :disabled="internalCurrentPage === 1"
         aria-label="Previous page"
-        @click="handlePageChange(currentPage - 1)"
         tabindex="0"
+        @click="handlePageChange(internalCurrentPage - 1)"
       >
         Previous
       </button>
 
-      <span class="manus-pagination-info"> Page {{ currentPage }} of {{ totalPages }} </span>
+      <span class="manus-pagination-info"> Page {{ internalCurrentPage }} of {{ totalPages }} </span>
 
       <button
         class="manus-pagination-button"
-        :disabled="currentPage === totalPages"
+        :disabled="internalCurrentPage === totalPages"
         aria-label="Next page"
-        @click="handlePageChange(currentPage + 1)"
         tabindex="0"
+        @click="handlePageChange(internalCurrentPage + 1)"
       >
         Next
       </button>

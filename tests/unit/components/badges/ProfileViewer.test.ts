@@ -2,19 +2,22 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import ProfileViewer from '@/components/badges/ProfileViewer.vue';
 import BadgeList from '@/components/badges/BadgeList.vue';
-import type { OB2 } from 'openbadges-types';
+import type { Profile } from '@/types';
+import type { OB2, OB3 } from '@/types';
+import { typedAssertion } from '@/../tests/test-utils';
 
 describe('ProfileViewer.vue', () => {
   // Mock profile data
-  const mockProfile = {
+  const mockProfile: Profile & { badges: (OB2.Assertion | OB3.VerifiableCredential)[] } = {
     id: 'profile123',
     name: 'Jane Doe',
     email: 'jane.doe@example.org',
     image: 'http://example.org/profile.jpg',
     description: 'Software developer and open badges enthusiast',
     url: 'http://example.org/jane',
+    type: 'Recipient',
     badges: [
-      {
+      typedAssertion({
         '@context': 'https://w3id.org/openbadges/v2',
         type: 'Assertion',
         id: 'http://example.org/badge1',
@@ -39,8 +42,8 @@ describe('ProfileViewer.vue', () => {
         verification: {
           type: 'hosted',
         },
-      } as OB2.Assertion,
-      {
+      }),
+      typedAssertion({
         '@context': 'https://w3id.org/openbadges/v2',
         type: 'Assertion',
         id: 'http://example.org/badge2',
@@ -65,7 +68,7 @@ describe('ProfileViewer.vue', () => {
         verification: {
           type: 'hosted',
         },
-      } as OB2.Assertion,
+      }),
     ],
   };
 
@@ -191,8 +194,9 @@ describe('ProfileViewer.vue', () => {
     await badgeList.vm.$emit('badge-click', mockProfile.badges[0]);
 
     // Check if badge-click event was emitted with the correct badge
-    expect(wrapper.emitted('badge-click')).toBeTruthy();
-    expect(wrapper.emitted('badge-click')![0][0]).toEqual(mockProfile.badges[0]);
+    const badgeClickEvents = wrapper.emitted('badge-click');
+    expect(badgeClickEvents).toBeTruthy();
+    expect(badgeClickEvents && badgeClickEvents[0][0]).toEqual(mockProfile.badges[0]);
   });
 
   it('displays loading state when loading prop is true', () => {
@@ -224,7 +228,7 @@ describe('ProfileViewer.vue', () => {
 
   it('displays badges section title based on profile type', () => {
     // Test with Issuer profile
-    const issuerProfile = { ...mockProfile, type: 'Issuer' };
+    const issuerProfile = { ...mockProfile, type: 'Issuer' as const };
     const wrapper1 = mount(ProfileViewer, {
       props: {
         profile: issuerProfile,
@@ -241,7 +245,7 @@ describe('ProfileViewer.vue', () => {
     expect(wrapper1.find('.manus-section-title').text()).toBe('Badges Offered');
 
     // Test with Recipient profile
-    const recipientProfile = { ...mockProfile, type: 'Recipient' };
+    const recipientProfile = { ...mockProfile, type: 'Recipient' as const };
     const wrapper2 = mount(ProfileViewer, {
       props: {
         profile: recipientProfile,

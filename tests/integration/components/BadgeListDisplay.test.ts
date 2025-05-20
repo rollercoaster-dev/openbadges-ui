@@ -1,8 +1,8 @@
 // tests/integration/components/BadgeListDisplay.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import BadgeList from '../../../src/components/badges/BadgeList.vue';
-import BadgeDisplay from '../../../src/components/badges/BadgeDisplay.vue';
+import BadgeList from '@/components/badges/BadgeList.vue';
+import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
 import { createMockOB2Badge, createMockOB3Badge } from '../utils';
 import { createIRI } from 'openbadges-types';
 
@@ -87,9 +87,10 @@ describe('BadgeList and BadgeDisplay Integration', () => {
     // Trigger a click on the BadgeDisplay
     await badgeDisplay.trigger('click');
 
-    // Check that BadgeList emitted the badge-click event with the correct badge
-    expect(wrapper.emitted('badge-click')).toBeTruthy();
-    expect(wrapper.emitted('badge-click')![0][0]).toEqual(mockOB2Badge);
+    // Check that badge-click event is emitted with the correct badge
+    const badgeClickEvents = wrapper.emitted('badge-click');
+    expect(badgeClickEvents).toBeTruthy();
+    expect(badgeClickEvents && badgeClickEvents[0][0]).toEqual(mockOB2Badge);
   });
 
   it('should handle pagination correctly', async () => {
@@ -119,8 +120,9 @@ describe('BadgeList and BadgeDisplay Integration', () => {
     await wrapper.find('.manus-pagination-button:last-child').trigger('click');
 
     // Check that the page-change event was emitted
-    expect(wrapper.emitted('page-change')).toBeTruthy();
-    expect(wrapper.emitted('page-change')![0][0]).toBe(2);
+    const pageChangeEvents = wrapper.emitted('page-change');
+    expect(pageChangeEvents).toBeTruthy();
+    expect(pageChangeEvents && pageChangeEvents[0][0]).toBe(2);
 
     // Update the currentPage prop to simulate the parent component responding to the event
     await wrapper.setProps({ currentPage: 2 });
