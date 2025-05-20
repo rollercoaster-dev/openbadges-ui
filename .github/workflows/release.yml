@@ -13,7 +13,17 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
+      - name: Test npm authentication
+        run: |
+          echo "Token length: $(echo -n $NODE_AUTH_TOKEN | wc -c)"
+          npm whoami || true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
