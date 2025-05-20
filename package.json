@@ -47,6 +47,9 @@
   "bugs": {
     "url": "https://github.com/rollercoaster-dev/openbadges-ui/issues"
   },
+  "engines": {
+    "node": ">=20.8.1"
+  },
   "peerDependencies": {
     "primevue": "^3.0.0",
     "vue": "^3.0.0"
