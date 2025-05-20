@@ -20,8 +20,12 @@
       {
         "assets": [
           {
-            "path": "dist/**/*.*",
-            "label": "Distribution"
+            "path": "dist/**/*.js",
+            "label": "JavaScript distribution"
+          },
+          {
+            "path": "dist/**/*.css",
+            "label": "CSS distribution"
           }
         ],
         "successComment": false,
