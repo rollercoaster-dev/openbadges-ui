@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: 20.8.1
           registry-url: 'https://registry.npmjs.org/'
+          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -47,16 +48,6 @@ jobs:
 
       - name: Build library
         run: pnpm build
-
-      - name: Debug NPM Auth
-        env:
-          NPM_TOKEN_TEST: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "Attempting npm whoami with the provided token..."
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN_TEST}" > ./.npmrc-test
-          npm whoami --userconfig ./.npmrc-test
-          echo "npm whoami command completed."
-          rm ./.npmrc-test
 
       - name: Semantic Release
         env:
