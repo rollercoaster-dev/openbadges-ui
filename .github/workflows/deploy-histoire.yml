@@ -63,6 +63,9 @@ jobs:
       - name: Build Histoire
         run: pnpm run story:build
 
+      - name: Ensure 404.html for client-side routing
+        run: cp histoire-dist/index.html histoire-dist/404.html
+
       - name: Check generated HTML
         run: cat histoire-dist/index.html
 
@@ -88,6 +91,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Ensure 404.html for client-side routing
-        run: cp histoire-dist/index.html histoire-dist/404.html
