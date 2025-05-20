@@ -25,7 +25,9 @@
             "path": "dist/**/*",
             "label": "Distribution"
           }
-        ]
+        ],
+        "successComment": false,
+        "failComment": false
       }
     ],
     [

@@ -9,8 +9,6 @@ on:
 permissions:
   contents: write # Needed for creating releases
   packages: write # Needed for publishing packages
-  issues: write # Needed for commenting on issues
-  pull-requests: write # Needed for commenting on PRs
 
 jobs:
   release:
