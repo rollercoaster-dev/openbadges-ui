@@ -8,7 +8,7 @@ This project uses [semantic-release](https://semantic-release.gitbook.io/) for a
 ## Manual Release
 To run a release locally, ensure the following environment variables are set:
 - `NPM_TOKEN`: An npm authentication token with publish access to the package.
-- `GH_TOKEN`: A GitHub personal access token with `repo` scope for creating releases.
+- `GITHUB_TOKEN`: A GitHub token provided by GitHub Actions for creating releases.
 
 Once these are configured, you can run:
 
