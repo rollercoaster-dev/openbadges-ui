@@ -19,10 +19,10 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for accurate versioning
 
-      - name: Use Node.js 20
+      - name: Use Node.js 20.8.1
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.8.1
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Setup pnpm
@@ -52,4 +52,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          DEBUG: semantic-release:*
         run: pnpm release
