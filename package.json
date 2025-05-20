@@ -25,7 +25,8 @@
     "test:integration": "vitest run tests/integration",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
-    "story:preview": "histoire preview"
+    "story:preview": "histoire preview",
+    "release": "semantic-release"
   },
   "keywords": [
     "vue",
@@ -56,6 +57,10 @@
   },
   "devDependencies": {
     "@histoire/plugin-vue": "^0.17.6",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.2",
+    "@semantic-release/npm": "^12.0.1",
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
@@ -69,6 +74,7 @@
     "prettier": "^2.0.0",
     "primeicons": "^6.0.0",
     "primevue": "^3.0.0",
+    "semantic-release": "^24.2.4",
     "terser": "^5.39.0",
     "typescript": "^5.8.3",
     "vite": "^4.5.14",
