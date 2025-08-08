@@ -58,6 +58,10 @@
     "openbadges-types": "^3.2.3",
     "uuid": "^9.0.0"
   },
+  "sideEffects": [
+    "src/styles/index.ts",
+    "src/styles/*.css"
+  ],
   "devDependencies": {
     "@histoire/plugin-vue": "^0.17.6",
     "@semantic-release/changelog": "^6.0.3",

@@ -60,10 +60,10 @@ const handleVerify = async () => {
 // Auto-verify reactively when badge or flag changes
 watch(
   [() => props.badge, () => props.autoVerify],
-  ([newBadge, auto]) => {
-    if (auto && newBadge) {
-      handleVerify();
-    }
+  async ([newBadge, auto]) => {
+    // Avoid overlapping requests if verification is in progress
+    if (!auto || !newBadge || isVerifying.value) return;
+    await handleVerify();
   },
   { immediate: true }
 );

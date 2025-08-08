@@ -197,9 +197,8 @@ const handleDensityChange = (event: Event) => {
         class="manus-badge-list-item"
         tabindex="0"
         :class="{ 'is-expanded': expandedBadges.has(badge.id) }"
-        @keydown.enter="toggleExpanded(badge.id)"
       >
-        <div class="badge-summary" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0" @click="toggleExpanded(badge.id)">
+        <div class="badge-summary" tabindex="0">
           <slot
             name="badge"
             :badge="badge.original"
@@ -211,12 +210,23 @@ const handleDensityChange = (event: Event) => {
               @click="handleBadgeClick(badge.original)"
             />
           </slot>
-          <button class="badge-expand-btn" :aria-expanded="expandedBadges.has(badge.id)" :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'">
+          <button
+            class="badge-expand-btn"
+            type="button"
+            :aria-expanded="expandedBadges.has(badge.id)"
+            :aria-controls="`badge-details-${badge.id}`"
+            :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'"
+            @click="toggleExpanded(badge.id)"
+          >
             {{ expandedBadges.has(badge.id) ? 'Show Less' : 'Show More' }}
           </button>
         </div>
-        <div v-if="expandedBadges.has(badge.id)" class="badge-details" tabindex="0">
-          <!-- Progressive disclosure: show more badge details here -->
+        <div
+          v-if="expandedBadges.has(badge.id)"
+          class="badge-details"
+          tabindex="0"
+          :id="`badge-details-${badge.id}`"
+>
           <pre>{{ badge }}</pre>
         </div>
       </li>
