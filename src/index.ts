@@ -1,6 +1,9 @@
 // src/index.ts
 // Main entry point for the library
 
+// Import core styles (themes and accessibility) so consumers get defaults
+import './styles/index.ts';
+
 // Export types
 export * from '@/types';
 

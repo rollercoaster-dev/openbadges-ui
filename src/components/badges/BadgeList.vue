@@ -60,6 +60,16 @@ const filterText = ref('');
 const filterEarned = ref('all'); // 'all' | 'earned' | 'not-earned'
 const expandedBadges = ref<Set<string>>(new Set());
 
+const toggleExpanded = (id: string) => {
+  const next = new Set(expandedBadges.value);
+  if (next.has(id)) {
+    next.delete(id);
+  } else {
+    next.add(id);
+  }
+  expandedBadges.value = next;
+};
+
 // Filtering logic
 const filteredBadges = computed(() => {
   let filtered = props.badges;
@@ -187,9 +197,9 @@ const handleDensityChange = (event: Event) => {
         class="manus-badge-list-item"
         tabindex="0"
         :class="{ 'is-expanded': expandedBadges.has(badge.id) }"
-        @keydown.enter="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)"
+        @keydown.enter="toggleExpanded(badge.id)"
       >
-        <div class="badge-summary" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0" @click="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)">
+        <div class="badge-summary" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0" @click="toggleExpanded(badge.id)">
           <slot
             name="badge"
             :badge="badge.original"
@@ -201,7 +211,7 @@ const handleDensityChange = (event: Event) => {
               @click="handleBadgeClick(badge.original)"
             />
           </slot>
-          <button class="badge-expand-btn" :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'">
+          <button class="badge-expand-btn" :aria-expanded="expandedBadges.has(badge.id)" :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'">
             {{ expandedBadges.has(badge.id) ? 'Show Less' : 'Show More' }}
           </button>
         </div>

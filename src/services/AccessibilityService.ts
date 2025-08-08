@@ -89,7 +89,6 @@ export class AccessibilityService {
       | 'high-contrast'
       | 'large-text'
       | 'dyslexia-friendly'
-      | 'adhd-friendly'
       | 'autism-friendly'
   ): void {
     // Remove any existing theme classes
@@ -98,7 +97,6 @@ export class AccessibilityService {
       'ob-high-contrast-theme',
       'ob-large-text-theme',
       'ob-dyslexia-friendly-theme',
-      'ob-adhd-friendly-theme',
       'ob-autism-friendly-theme'
     );
 

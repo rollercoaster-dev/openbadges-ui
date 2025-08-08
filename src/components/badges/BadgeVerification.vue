@@ -57,10 +57,16 @@ const handleVerify = async () => {
   emit('verified', result.isValid);
 };
 
-// Auto-verify if enabled
-if (props.autoVerify) {
-  handleVerify();
-}
+// Auto-verify reactively when badge or flag changes
+watch(
+  [() => props.badge, () => props.autoVerify],
+  ([newBadge, auto]) => {
+    if (auto && newBadge) {
+      handleVerify();
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
