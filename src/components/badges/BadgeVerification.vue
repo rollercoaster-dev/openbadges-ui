@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import type { OB2, OB3 } from '@/types';
 import { useBadgeVerification } from '@composables/useBadgeVerification';
 import { AccessibilityService } from '@services/AccessibilityService';
