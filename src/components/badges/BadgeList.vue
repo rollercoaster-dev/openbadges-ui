@@ -60,6 +60,16 @@ const filterText = ref('');
 const filterEarned = ref('all'); // 'all' | 'earned' | 'not-earned'
 const expandedBadges = ref<Set<string>>(new Set());
 
+const toggleExpanded = (id: string) => {
+  const next = new Set(expandedBadges.value);
+  if (next.has(id)) {
+    next.delete(id);
+  } else {
+    next.add(id);
+  }
+  expandedBadges.value = next;
+};
+
 // Filtering logic
 const filteredBadges = computed(() => {
   let filtered = props.badges;
@@ -187,9 +197,8 @@ const handleDensityChange = (event: Event) => {
         class="manus-badge-list-item"
         tabindex="0"
         :class="{ 'is-expanded': expandedBadges.has(badge.id) }"
-        @keydown.enter="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)"
       >
-        <div class="badge-summary" :aria-expanded="expandedBadges.has(badge.id)" tabindex="0" @click="expandedBadges.has(badge.id) ? expandedBadges.delete(badge.id) : expandedBadges.add(badge.id)">
+        <div class="badge-summary" tabindex="0">
           <slot
             name="badge"
             :badge="badge.original"
@@ -201,12 +210,23 @@ const handleDensityChange = (event: Event) => {
               @click="handleBadgeClick(badge.original)"
             />
           </slot>
-          <button class="badge-expand-btn" :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'">
+          <button
+            class="badge-expand-btn"
+            type="button"
+            :aria-expanded="expandedBadges.has(badge.id)"
+            :aria-controls="`badge-details-${badge.id}`"
+            :aria-label="expandedBadges.has(badge.id) ? 'Collapse details' : 'Expand details'"
+            @click="toggleExpanded(badge.id)"
+          >
             {{ expandedBadges.has(badge.id) ? 'Show Less' : 'Show More' }}
           </button>
         </div>
-        <div v-if="expandedBadges.has(badge.id)" class="badge-details" tabindex="0">
-          <!-- Progressive disclosure: show more badge details here -->
+        <div
+          v-if="expandedBadges.has(badge.id)"
+          class="badge-details"
+          tabindex="0"
+          :id="`badge-details-${badge.id}`"
+>
           <pre>{{ badge }}</pre>
         </div>
       </li>
@@ -276,6 +296,7 @@ const handleDensityChange = (event: Event) => {
   gap: 12px;
   align-items: center;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .manus-badge-list-filter-input,
@@ -305,8 +326,19 @@ const handleDensityChange = (event: Event) => {
 
 .manus-badge-list.grid-layout .manus-badge-list-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--badge-list-gap);
+  align-items: stretch;
+}
+
+/* Make grid items look like cards and avoid content squashing */
+.manus-badge-list.grid-layout .manus-badge-list-item {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
 }
 
 .manus-badge-list-pagination {
@@ -315,6 +347,7 @@ const handleDensityChange = (event: Event) => {
   justify-content: center;
   gap: var(--badge-list-pagination-gap);
   margin-top: 16px;
+  flex-wrap: wrap;
 }
 
 .manus-pagination-button {
@@ -350,6 +383,13 @@ const handleDensityChange = (event: Event) => {
   outline: none;
 }
 
+/* In grid layout, stack summary content to keep expand button from squashing */
+.manus-badge-list.grid-layout .badge-summary {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
 .badge-expand-btn {
   margin-left: 16px;
   padding: 4px 12px;
@@ -359,6 +399,7 @@ const handleDensityChange = (event: Event) => {
   color: var(--badge-list-button-color);
   font-size: 0.9rem;
   cursor: pointer;
+  align-self: flex-end;
 }
 
 .badge-summary:focus-visible,
@@ -386,8 +427,16 @@ const handleDensityChange = (event: Event) => {
   .manus-badge-list.grid-layout .manus-badge-list-items {
     grid-template-columns: 1fr;
   }
+
+  /* On small screens, make summary row-friendly again if needed */
+  .manus-badge-list.grid-layout .badge-summary {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
 }
 
+/* Medium screens: slightly smaller min card width to fit more columns */
 @media (min-width: 640px) and (max-width: 1023px) {
   .manus-badge-list.grid-layout .manus-badge-list-items {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

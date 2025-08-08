@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import type { OB2, OB3 } from '@/types';
 import { useBadgeVerification } from '@composables/useBadgeVerification';
 import { AccessibilityService } from '@services/AccessibilityService';
@@ -57,10 +57,16 @@ const handleVerify = async () => {
   emit('verified', result.isValid);
 };
 
-// Auto-verify if enabled
-if (props.autoVerify) {
-  handleVerify();
-}
+// Auto-verify reactively when badge or flag changes
+watch(
+  [() => props.badge, () => props.autoVerify],
+  async ([newBadge, auto]) => {
+    // Avoid overlapping requests if verification is in progress
+    if (!auto || !newBadge || isVerifying.value) return;
+    await handleVerify();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
