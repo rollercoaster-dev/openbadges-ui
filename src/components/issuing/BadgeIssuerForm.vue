@@ -35,20 +35,20 @@ if (props.initialRecipientEmail) {
 }
 
 // Debounced update emission for live preview
-let updateTimer: ReturnType<typeof setTimeout> | undefined;
+const updateTimer = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 const emitUpdate = () => {
   emit('update', { badge: { ...state.badgeClass } });
 };
 const scheduleEmitUpdate = () => {
-  if (updateTimer) {
-    clearTimeout(updateTimer);
+  if (updateTimer.value) {
+    clearTimeout(updateTimer.value);
   }
-  updateTimer = setTimeout(emitUpdate, props.updateDebounceMs);
+  updateTimer.value = setTimeout(emitUpdate, props.updateDebounceMs);
 };
 onBeforeUnmount(() => {
-  if (updateTimer) {
-    clearTimeout(updateTimer);
-    updateTimer = undefined;
+  if (updateTimer.value) {
+    clearTimeout(updateTimer.value);
+    updateTimer.value = undefined;
   }
 });
 

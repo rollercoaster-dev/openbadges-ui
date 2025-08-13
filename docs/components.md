@@ -243,26 +243,7 @@ function handleFormUpdate(payload: { badge: Partial<OB2.BadgeClass> }) {
 }
 </script>
 ```
-<script setup>
-import { BadgeIssuerForm } from 'manus-ai-components';
-import { ref } from 'vue';
 
-const initialBadge = ref({
-  name: 'Programming Excellence',
-  description: 'Awarded for demonstrating exceptional programming skills',
-  issuer: {
-    id: 'https://example.org/issuer',
-    type: 'Profile',
-    name: 'Academy'
-  }
-});
-
-const handleBadgeIssued = (assertion) => {
-  console.log('Badge issued:', assertion);
-  // Here you would typically send the assertion to your backend
-};
-</script>
-```
 
 ### IssuerDashboard
 
