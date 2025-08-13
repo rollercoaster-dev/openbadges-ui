@@ -62,7 +62,9 @@ watch(
   [() => props.badge, () => props.autoVerify],
   async ([newBadge, auto]) => {
     // Avoid overlapping requests if verification is in progress
-    if (!auto || !newBadge || isVerifying.value) return;
+    if (!auto || !newBadge || isVerifying.value) {
+      return;
+    }
     await handleVerify();
   },
   { immediate: true }

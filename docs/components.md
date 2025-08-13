@@ -214,6 +214,7 @@ The `BadgeIssuerForm` component provides a form for creating and issuing badges.
 |------|------|---------|-------------|
 | initialBadgeClass | `Partial<OB2.BadgeClass>` | `{}` | Initial badge class data |
 | initialRecipientEmail | `string` | `''` | Initial recipient email |
+| updateDebounceMs | `number` | `300` | Debounce duration (ms) for the `update` event |
 
 #### Events
 
@@ -221,6 +222,7 @@ The `BadgeIssuerForm` component provides a form for creating and issuing badges.
 |------|---------|-------------|
 | badge-issued | `OB2.Assertion` | Emitted when a badge is successfully issued |
 | reset | None | Emitted when the form is reset |
+| update | `{ badge: Partial<OB2.BadgeClass> }` | Emitted on form field changes for live previews (debounced) |
 
 #### Example
 
@@ -229,6 +231,16 @@ The `BadgeIssuerForm` component provides a form for creating and issuing badges.
   <BadgeIssuerForm
     :initial-badge-class="initialBadge"
     @badge-issued="handleBadgeIssued"
+</template>
+
+<script setup lang="ts">
+import type { OB2 } from 'openbadges-types';
+
+function handleFormUpdate(payload: { badge: Partial<OB2.BadgeClass> }) {
+  // Update local preview data
+}
+</script>
+```
   />
 </template>
 
