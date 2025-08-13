@@ -48,6 +48,7 @@ const scheduleEmitUpdate = () => {
 onBeforeUnmount(() => {
   if (updateTimer) {
     clearTimeout(updateTimer);
+    updateTimer = undefined;
   }
 });
 
