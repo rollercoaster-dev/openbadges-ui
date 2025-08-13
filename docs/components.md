@@ -231,6 +231,8 @@ The `BadgeIssuerForm` component provides a form for creating and issuing badges.
   <BadgeIssuerForm
     :initial-badge-class="initialBadge"
     @badge-issued="handleBadgeIssued"
+    @update="handleFormUpdate"
+  />
 </template>
 
 <script setup lang="ts">
@@ -241,9 +243,6 @@ function handleFormUpdate(payload: { badge: Partial<OB2.BadgeClass> }) {
 }
 </script>
 ```
-  />
-</template>
-
 <script setup>
 import { BadgeIssuerForm } from 'manus-ai-components';
 import { ref } from 'vue';

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onBeforeUnmount } from 'vue';
 import { useBadgeIssuer } from '@composables/useBadgeIssuer';
 import type { OB2 } from '@/types';
 import { createIRI } from '@/utils/type-helpers';
@@ -45,6 +45,12 @@ const scheduleEmitUpdate = () => {
   }
   updateTimer = setTimeout(emitUpdate, props.updateDebounceMs);
 };
+onBeforeUnmount(() => {
+  if (updateTimer) {
+    clearTimeout(updateTimer);
+  }
+});
+
 
 // Helper refs for form fields that need special handling
 const tagsInput = ref('');
