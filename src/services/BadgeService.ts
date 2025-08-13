@@ -1,7 +1,7 @@
 // src/services/BadgeService.ts
-import type { OB2, OB3, Shared } from '@/types';
+import type { OB2, OB3, Shared, BadgeDisplayData } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
-import { createIRI, isOB2Assertion, isOB3VerifiableCredential } from '@utils/type-helpers';
+import { createIRI, isOB2Assertion, isOB2BadgeClass, isOB3VerifiableCredential, isBadgeDisplayData } from '@utils/type-helpers';
 
 /**
  * Utility service for badge-related operations
@@ -111,9 +111,9 @@ export class BadgeService {
   }
 
   /**
-   * Normalizes a badge object (either OB2 or OB3) to a common format for display
+   * Normalizes a badge object (OB2, OB3, BadgeClass, or flexible BadgeDisplayData) to a common format for display
    */
-  static normalizeBadge(badge: OB2.Assertion | OB3.VerifiableCredential): {
+  static normalizeBadge(badge: OB2.Assertion | OB3.VerifiableCredential | OB2.BadgeClass | BadgeDisplayData): {
     id: string;
     name: string;
     description: string;
@@ -126,6 +126,64 @@ export class BadgeService {
     issuedOn: string;
     expires?: string;
   } {
+    // Handle flexible BadgeDisplayData first (most permissive)
+    if (isBadgeDisplayData(badge)) {
+      return {
+        id: badge.id || 'badge-preview',
+        name: badge.name,
+        description: badge.description || '',
+        image: badge.image || '',
+        issuer: badge.issuer || { name: 'Unknown Issuer' },
+        issuedOn: badge.issuedDate || new Date().toISOString(),
+        expires: badge.expiryDate,
+      };
+    }
+
+    // Handle OB2 BadgeClass
+    if (isOB2BadgeClass(badge)) {
+      // Handle issuer which could be a string or Profile object
+      let issuerName = 'Unknown Issuer';
+      let issuerUrl: string | undefined;
+      let issuerImage: string | undefined;
+
+      if (typeof badge.issuer === 'string') {
+        issuerName = 'Unknown Issuer';
+      } else if (typeof badge.issuer === 'object') {
+        issuerName = badge.issuer.name;
+        issuerUrl = typeof badge.issuer.url === 'string' ? badge.issuer.url : undefined;
+
+        if (badge.issuer.image) {
+          if (typeof badge.issuer.image === 'string') {
+            issuerImage = badge.issuer.image;
+          } else if (typeof badge.issuer.image === 'object' && 'id' in badge.issuer.image) {
+            issuerImage = badge.issuer.image.id as string;
+          }
+        }
+      }
+
+      // Handle image which could be a string or Image object
+      let badgeImage = '';
+      if (typeof badge.image === 'string') {
+        badgeImage = badge.image;
+      } else if (typeof badge.image === 'object' && 'id' in badge.image) {
+        badgeImage = badge.image.id as string;
+      }
+
+      return {
+        id: badge.id as string,
+        name: badge.name,
+        description: badge.description,
+        image: badgeImage,
+        issuer: {
+          name: issuerName,
+          url: issuerUrl,
+          image: issuerImage,
+        },
+        issuedOn: new Date().toISOString(), // BadgeClass doesn't have issuedOn, use current date
+        expires: undefined, // BadgeClass doesn't have expiry
+      };
+    }
+
     if (isOB2Assertion(badge)) {
       // Handle OB2 Assertion
       const badgeClass =

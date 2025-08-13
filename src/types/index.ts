@@ -16,3 +16,19 @@ export interface Profile {
   email?: string;
   type: ProfileType;
 }
+
+// Flexible interface for badge display - supports any badge data structure
+export interface BadgeDisplayData {
+  id?: string;
+  name: string;
+  description?: string;
+  image?: string;
+  issuer?: {
+    name: string;
+    url?: string;
+    image?: string;
+  };
+  issuedDate?: string;
+  expiryDate?: string;
+  tags?: string[];
+}

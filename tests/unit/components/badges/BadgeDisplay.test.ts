@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import BadgeDisplay from '@/components/badges/BadgeDisplay.vue';
 import { typedAssertion } from '../../../test-utils';
+import { createIRI } from '@utils/type-helpers';
+import type { BadgeDisplayData, OB2 } from '@/types';
 
 describe('BadgeDisplay.vue', () => {
   const mockBadge = typedAssertion({
@@ -279,5 +281,110 @@ describe('BadgeDisplay.vue', () => {
     expect(wrapper.find('.manus-badge-date').exists()).toBe(false);
     expect(wrapper.find('.manus-badge-expiry').exists()).toBe(false);
     expect(wrapper.find('.manus-badge-verification-toggle').exists()).toBe(false);
+  });
+
+  // New tests for flexible badge types
+  describe('BadgeDisplayData support', () => {
+    const mockBadgeDisplayData: BadgeDisplayData = {
+      id: 'preview-badge',
+      name: 'Preview Badge',
+      description: 'This is a preview badge',
+      image: 'https://example.com/preview.png',
+      issuer: {
+        name: 'Preview Issuer',
+        url: 'https://example.com',
+        image: 'https://example.com/issuer.png',
+      },
+      issuedDate: '2023-06-01T00:00:00Z',
+      expiryDate: '2024-06-01T00:00:00Z',
+      tags: ['test', 'preview'],
+    };
+
+    it('renders BadgeDisplayData correctly', () => {
+      const wrapper = mount(BadgeDisplay, {
+        props: {
+          badge: mockBadgeDisplayData,
+        },
+      });
+
+      expect(wrapper.find('.manus-badge-title').text()).toBe('Preview Badge');
+      expect(wrapper.find('.manus-badge-description').text()).toBe('This is a preview badge');
+      expect(wrapper.find('.manus-badge-issuer').text()).toContain('Preview Issuer');
+      expect(wrapper.find('.manus-badge-date').text()).toContain('Jun 1, 2023');
+
+      const img = wrapper.find('.manus-badge-img');
+      expect(img.attributes('src')).toBe('https://example.com/preview.png');
+    });
+
+    it('handles minimal BadgeDisplayData with only required fields', () => {
+      const minimalBadge: BadgeDisplayData = {
+        name: 'Minimal Badge',
+      };
+
+      const wrapper = mount(BadgeDisplay, {
+        props: {
+          badge: minimalBadge,
+        },
+      });
+
+      expect(wrapper.find('.manus-badge-title').text()).toBe('Minimal Badge');
+      expect(wrapper.find('.manus-badge-issuer').text()).toContain('Unknown Issuer');
+    });
+
+    it('does not show verification toggle for BadgeDisplayData', () => {
+      const wrapper = mount(BadgeDisplay, {
+        props: {
+          badge: mockBadgeDisplayData,
+          showVerification: true,
+        },
+      });
+
+      expect(wrapper.find('.manus-badge-verification-toggle').exists()).toBe(false);
+    });
+  });
+
+  describe('OB2 BadgeClass support', () => {
+    const mockBadgeClass: OB2.BadgeClass = {
+      '@context': 'https://w3id.org/openbadges/v2',
+      type: 'BadgeClass',
+      id: createIRI('http://example.org/badgeclass1'),
+      name: 'Test Badge Class',
+      description: 'A test badge class description',
+      image: createIRI('http://example.org/badge-class.png'),
+      criteria: {
+        narrative: 'Test criteria for badge class',
+      },
+      issuer: {
+        type: 'Profile',
+        id: createIRI('http://example.org/issuer'),
+        name: 'Test Badge Issuer',
+      },
+    };
+
+    it('renders OB2 BadgeClass correctly', () => {
+      const wrapper = mount(BadgeDisplay, {
+        props: {
+          badge: mockBadgeClass,
+        },
+      });
+
+      expect(wrapper.find('.manus-badge-title').text()).toBe('Test Badge Class');
+      expect(wrapper.find('.manus-badge-description').text()).toBe('A test badge class description');
+      expect(wrapper.find('.manus-badge-issuer').text()).toContain('Test Badge Issuer');
+
+      const img = wrapper.find('.manus-badge-img');
+      expect(img.attributes('src')).toBe('http://example.org/badge-class.png');
+    });
+
+    it('does not show verification toggle for BadgeClass', () => {
+      const wrapper = mount(BadgeDisplay, {
+        props: {
+          badge: mockBadgeClass,
+          showVerification: true,
+        },
+      });
+
+      expect(wrapper.find('.manus-badge-verification-toggle').exists()).toBe(false);
+    });
   });
 });

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { OB2, OB3 } from '@/types';
+import type { OB2, OB3, BadgeDisplayData } from '@/types';
 import { BadgeService } from '@services/BadgeService';
+import { isOB2Assertion, isOB3VerifiableCredential } from '@utils/type-helpers';
 import BadgeVerification from '@components/badges/BadgeVerification.vue';
 
 interface Props {
-  badge: OB2.Assertion | OB3.VerifiableCredential;
+  badge: OB2.Assertion | OB3.VerifiableCredential | OB2.BadgeClass | BadgeDisplayData;
   showDescription?: boolean;
   showIssuedDate?: boolean;
   showExpiryDate?: boolean;
@@ -29,13 +30,18 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (e: 'click', badge: OB2.Assertion | OB3.VerifiableCredential): void;
+  (e: 'click', badge: OB2.Assertion | OB3.VerifiableCredential | OB2.BadgeClass | BadgeDisplayData): void;
   (e: 'verified', isValid: boolean): void;
 }>();
 
 // Normalize the badge for display
 const normalizedBadge = computed(() => {
   return BadgeService.normalizeBadge(props.badge);
+});
+
+// Check if the badge supports verification (only Assertions and VerifiableCredentials)
+const supportsVerification = computed(() => {
+  return isOB2Assertion(props.badge) || isOB3VerifiableCredential(props.badge);
 });
 
 // Format date for display
@@ -132,7 +138,7 @@ const densityClass = computed(() => {
         <span>Expires: {{ formatDate(normalizedBadge.expires) }}</span>
       </div>
       <div
-        v-if="showVerification && !simplifiedView"
+        v-if="showVerification && supportsVerification && !simplifiedView"
         class="manus-badge-verification-toggle"
       >
         <button
@@ -146,11 +152,11 @@ const densityClass = computed(() => {
         </button>
       </div>
       <div
-        v-if="showVerification && showVerificationDetails && !simplifiedView"
+        v-if="showVerification && showVerificationDetails && supportsVerification && !simplifiedView"
         class="manus-badge-verification-container"
       >
         <BadgeVerification
-          :badge="badge"
+          :badge="badge as OB2.Assertion | OB3.VerifiableCredential"
           :auto-verify="autoVerify"
           @verified="handleVerified"
         />
