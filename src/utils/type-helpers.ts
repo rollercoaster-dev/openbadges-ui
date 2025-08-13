@@ -1,5 +1,5 @@
 // src/utils/type-helpers.ts
-import type { OB2, OB3, Shared } from '@/types';
+import type { OB2, OB3, Shared, BadgeDisplayData } from '@/types';
 
 // Helper function to convert string to IRI branded type
 export function createIRI(url: string): Shared.IRI {
@@ -122,6 +122,20 @@ export function isOB2Assertion(badge: unknown): badge is OB2.Assertion {
   );
 }
 
+export function isOB2BadgeClass(badge: unknown): badge is OB2.BadgeClass {
+  if (typeof badge !== 'object' || badge === null) {return false;}
+  const obj = badge as Record<string, unknown>;
+
+  return (
+    'type' in obj &&
+    obj.type === 'BadgeClass' &&
+    'name' in obj &&
+    'description' in obj &&
+    'image' in obj &&
+    'issuer' in obj
+  );
+}
+
 export function isOB3VerifiableCredential(badge: unknown): badge is OB3.VerifiableCredential {
   if (typeof badge !== 'object' || badge === null) {return false;}
   const obj = badge as Record<string, unknown>;
@@ -135,6 +149,61 @@ export function isOB3VerifiableCredential(badge: unknown): badge is OB3.Verifiab
     'issuanceDate' in obj &&
     'credentialSubject' in obj
   );
+}
+
+export function isBadgeDisplayData(badge: unknown): badge is BadgeDisplayData {
+  if (typeof badge !== 'object' || badge === null) {return false;}
+  const obj = badge as Record<string, unknown>;
+
+  // Must have a name (required field)
+  if (!('name' in obj) || typeof obj.name !== 'string') {
+    return false;
+  }
+
+  // Optional id must be a string if present
+  if ('id' in obj && typeof obj.id !== 'string') {
+    return false;
+  }
+
+  // If it has an OpenBadges type field, it's not a BadgeDisplayData
+  if ('type' in obj && (obj.type === 'Assertion' || obj.type === 'BadgeClass' || Array.isArray(obj.type))) {
+    return false;
+  }
+
+  // Optional fields should have correct types if present
+  if ('description' in obj && typeof obj.description !== 'string') {
+    return false;
+  }
+  if ('image' in obj && typeof obj.image !== 'string') {
+    return false;
+  }
+  if ('issuedDate' in obj && typeof obj.issuedDate !== 'string') {
+    return false;
+  }
+  if ('expiryDate' in obj && typeof obj.expiryDate !== 'string') {
+    return false;
+  }
+  if ('tags' in obj && (!Array.isArray(obj.tags) || !obj.tags.every((t) => typeof t === 'string'))) {
+    return false;
+  }
+  if ('issuer' in obj) {
+    const issuer = obj.issuer;
+    if (typeof issuer !== 'object' || issuer === null) {
+      return false;
+    }
+    const issuerObj = issuer as Record<string, unknown>;
+    if (!('name' in issuerObj) || typeof issuerObj.name !== 'string') {
+      return false;
+    }
+    if ('url' in issuerObj && typeof issuerObj.url !== 'string') {
+      return false;
+    }
+    if ('image' in issuerObj && typeof issuerObj.image !== 'string') {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // Export a dummy value to make the module recognized
