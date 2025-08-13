@@ -88,8 +88,14 @@ describe('BadgeIssuerForm @update event', () => {
     const payload = updates[updates.length - 1]?.[0] as UpdatePayload;
 
     expect(payload.badge.tags).toEqual(['one', 'two', 'three']);
-    if (typeof payload.badge.criteria === 'object') {
-      expect((payload.badge.criteria as OB2.Criteria).narrative).toBe('Some criteria');
+    const c = payload.badge.criteria as unknown;
+    if (
+      c !== null &&
+      typeof c === 'object' &&
+      'narrative' in (c as Record<string, unknown>) &&
+      typeof (c as { narrative?: unknown }).narrative === 'string'
+    ) {
+      expect((c as { narrative: string }).narrative).toBe('Some criteria');
     }
     if (typeof payload.badge.issuer === 'object') {
       expect(payload.badge.issuer?.name).toBe('Issuer Inc');
