@@ -17,7 +17,12 @@ export interface Profile {
   type: ProfileType;
 }
 
-// Flexible interface for badge display - supports any badge data structure
+/**
+ * Minimal, framework-agnostic badge shape consumed by UI components (e.g., BadgeDisplay).
+ * - Only `name` is required; all other fields are optional.
+ * - Dates (`issuedDate`, `expiryDate`) should be ISO 8601 strings.
+ * - `image`/`issuer.image`/`issuer.url` are expected to be valid URLs/IRIs.
+ */
 export interface BadgeDisplayData {
   id?: string;
   name: string;

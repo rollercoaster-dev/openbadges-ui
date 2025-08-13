@@ -31,7 +31,7 @@ describe('BadgeDisplay.vue', () => {
       },
     },
     issuedOn: '2023-01-01T00:00:00Z',
-    expires: '2024-01-01T00:00:00Z',
+    expirationDate: '2024-01-01T00:00:00Z',
     verification: {
       type: 'hosted',
     },
@@ -310,7 +310,13 @@ describe('BadgeDisplay.vue', () => {
       expect(wrapper.find('.manus-badge-title').text()).toBe('Preview Badge');
       expect(wrapper.find('.manus-badge-description').text()).toBe('This is a preview badge');
       expect(wrapper.find('.manus-badge-issuer').text()).toContain('Preview Issuer');
-      expect(wrapper.find('.manus-badge-date').text()).toContain('Jun 1, 2023');
+      const expectedIssued = new Date('2023-06-01T00:00:00Z').toLocaleDateString('en-US', {
+        timeZone: 'UTC',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+      expect(wrapper.find('.manus-badge-date').text()).toContain(expectedIssued);
 
       const img = wrapper.find('.manus-badge-img');
       expect(img.attributes('src')).toBe('https://example.com/preview.png');

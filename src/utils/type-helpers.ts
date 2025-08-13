@@ -160,6 +160,11 @@ export function isBadgeDisplayData(badge: unknown): badge is BadgeDisplayData {
     return false;
   }
 
+  // Optional id must be a string if present
+  if ('id' in obj && typeof obj.id !== 'string') {
+    return false;
+  }
+
   // If it has an OpenBadges type field, it's not a BadgeDisplayData
   if ('type' in obj && (obj.type === 'Assertion' || obj.type === 'BadgeClass' || Array.isArray(obj.type))) {
     return false;
@@ -178,7 +183,7 @@ export function isBadgeDisplayData(badge: unknown): badge is BadgeDisplayData {
   if ('expiryDate' in obj && typeof obj.expiryDate !== 'string') {
     return false;
   }
-  if ('tags' in obj && !Array.isArray(obj.tags)) {
+  if ('tags' in obj && (!Array.isArray(obj.tags) || !obj.tags.every((t) => typeof t === 'string'))) {
     return false;
   }
   if ('issuer' in obj) {
@@ -188,6 +193,12 @@ export function isBadgeDisplayData(badge: unknown): badge is BadgeDisplayData {
     }
     const issuerObj = issuer as Record<string, unknown>;
     if (!('name' in issuerObj) || typeof issuerObj.name !== 'string') {
+      return false;
+    }
+    if ('url' in issuerObj && typeof issuerObj.url !== 'string') {
+      return false;
+    }
+    if ('image' in issuerObj && typeof issuerObj.image !== 'string') {
       return false;
     }
   }

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { BadgeService } from '@services/BadgeService';
 import type { OB2, OB3, BadgeDisplayData } from '@/types';
-import { createIRI } from '@utils/type-helpers';
+import { createIRI, createDateTime } from '@utils/type-helpers';
 import { isOB2Assertion, isOB3VerifiableCredential } from '@utils/type-helpers';
 
 describe('BadgeService', () => {
@@ -154,7 +154,7 @@ describe('BadgeService', () => {
       const ob2Assertion = {
         '@context': 'https://w3id.org/openbadges/v2',
         type: 'Assertion',
-        id: 'http://example.org/badge1',
+        id: createIRI('http://example.org/badge1'),
         recipient: {
           identity: 'test@example.org',
           type: 'email',
@@ -162,19 +162,22 @@ describe('BadgeService', () => {
         },
         badge: {
           type: 'BadgeClass',
-          id: 'http://example.org/badgeclass1',
+          id: createIRI('http://example.org/badgeclass1'),
           name: 'Test Badge',
           description: 'A test badge',
-          image: 'http://example.org/badge.png',
+          image: createIRI('http://example.org/badge.png'),
+          criteria: {
+            narrative: 'Test criteria'
+          },
           issuer: {
             type: 'Profile',
-            id: 'http://example.org/issuer',
+            id: createIRI('http://example.org/issuer'),
             name: 'Test Issuer',
-            url: 'http://example.org',
+            url: createIRI('http://example.org'),
           },
         },
-        issuedOn: '2023-01-01T00:00:00Z',
-        expires: '2024-01-01T00:00:00Z',
+        issuedOn: createDateTime('2023-01-01T00:00:00Z'),
+        expirationDate: createDateTime('2024-01-01T00:00:00Z'),
         verification: {
           type: 'hosted',
         },
@@ -257,6 +260,11 @@ describe('BadgeService', () => {
     });
 
     it('should handle minimal BadgeDisplayData', () => {
+      // Freeze time to make issuedOn deterministic
+      const fixedNow = new Date('2024-02-03T04:05:06Z');
+      vi.useFakeTimers();
+      vi.setSystemTime(fixedNow);
+      
       const minimalData: BadgeDisplayData = {
         name: 'Minimal Badge',
       };
@@ -269,9 +277,17 @@ describe('BadgeService', () => {
       expect(normalized).toHaveProperty('image', '');
       expect(normalized).toHaveProperty('issuer');
       expect(normalized.issuer).toHaveProperty('name', 'Unknown Issuer');
+      expect(normalized).toHaveProperty('issuedOn', fixedNow.toISOString());
+      
+      vi.useRealTimers();
     });
 
     it('should normalize OB2 BadgeClass correctly', () => {
+      // Freeze time to make issuedOn deterministic 
+      const fixedNow = new Date('2024-02-03T04:05:06Z');
+      vi.useFakeTimers();
+      vi.setSystemTime(fixedNow);
+      
       const badgeClass: OB2.BadgeClass = {
         '@context': 'https://w3id.org/openbadges/v2',
         type: 'BadgeClass',
@@ -299,7 +315,10 @@ describe('BadgeService', () => {
       expect(normalized).toHaveProperty('issuer');
       expect(normalized.issuer).toHaveProperty('name', 'Test Issuer');
       expect(normalized.issuer).toHaveProperty('url', 'http://example.org');
+      expect(normalized).toHaveProperty('issuedOn', fixedNow.toISOString());
       expect(normalized).toHaveProperty('expires', undefined);
+      
+      vi.useRealTimers();
     });
 
     it('should handle unknown badge formats', () => {

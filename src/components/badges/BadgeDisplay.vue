@@ -155,6 +155,7 @@ const densityClass = computed(() => {
         v-if="showVerification && showVerificationDetails && supportsVerification && !simplifiedView"
         class="manus-badge-verification-container"
       >
+        <!-- Type assertion safe due to supportsVerification check -->
         <BadgeVerification
           :badge="badge as OB2.Assertion | OB3.VerifiableCredential"
           :auto-verify="autoVerify"

@@ -245,7 +245,7 @@ export class BadgeService {
           image: issuerImage,
         },
         issuedOn: badge.issuedOn as string,
-        expires: badge.expires as string | undefined,
+        expires: badge.expirationDate as string | undefined,
       };
     } else if (isOB3VerifiableCredential(badge)) {
       // Handle OB3 VerifiableCredential

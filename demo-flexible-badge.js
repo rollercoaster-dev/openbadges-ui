@@ -48,8 +48,8 @@ const badgeClass = {
   }
 };
 
-// Note: In actual use, we'd use proper typed functions, but this demonstrates the concept
-console.log('BadgeClass would normalize to show preview information');
+const normalized3 = BadgeService.normalizeBadge(badgeClass);
+console.log('Normalized:', normalized3);
 console.log('✅ BadgeClass support implemented!\n');
 
 console.log('🎉 All flexible badge types now supported by BadgeDisplay component!');
