@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onBeforeUnmount } from 'vue';
 import { useBadgeIssuer } from '@composables/useBadgeIssuer';
 import type { OB2 } from '@/types';
 import { createIRI } from '@/utils/type-helpers';
@@ -7,16 +7,20 @@ import { createIRI } from '@/utils/type-helpers';
 interface Props {
   initialBadgeClass?: Partial<OB2.BadgeClass>;
   initialRecipientEmail?: string;
+  /** Debounce duration (ms) for update event emissions */
+  updateDebounceMs?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   initialBadgeClass: () => ({}),
   initialRecipientEmail: '',
+  updateDebounceMs: 300,
 });
 
 const emit = defineEmits<{
   (e: 'badge-issued', assertion: OB2.Assertion): void;
   (e: 'reset'): void;
+  (e: 'update', payload: { badge: Partial<OB2.BadgeClass> }): void;
 }>();
 
 // Use the badge issuer composable
@@ -29,6 +33,25 @@ if (props.initialBadgeClass) {
 if (props.initialRecipientEmail) {
   state.recipientEmail = props.initialRecipientEmail;
 }
+
+// Debounced update emission for live preview
+let updateTimer: ReturnType<typeof setTimeout> | undefined;
+const emitUpdate = () => {
+  emit('update', { badge: { ...state.badgeClass } });
+};
+const scheduleEmitUpdate = () => {
+  if (updateTimer) {
+    clearTimeout(updateTimer);
+  }
+  updateTimer = setTimeout(emitUpdate, props.updateDebounceMs);
+};
+onBeforeUnmount(() => {
+  if (updateTimer) {
+    clearTimeout(updateTimer);
+    updateTimer = undefined;
+  }
+});
+
 
 // Helper refs for form fields that need special handling
 const tagsInput = ref('');
@@ -75,6 +98,7 @@ watch(tagsInput, (newValue) => {
   } else {
     state.badgeClass.tags = [];
   }
+  scheduleEmitUpdate();
 });
 
 watch(criteriaText, (newValue) => {
@@ -88,6 +112,7 @@ watch(criteriaText, (newValue) => {
     // If criteria is an IRI, replace it with an object
     state.badgeClass.criteria = { narrative: newValue };
   }
+  scheduleEmitUpdate();
 });
 
 watch([issuerName, issuerUrl], ([newName, newUrl]) => {
@@ -106,6 +131,7 @@ watch([issuerName, issuerUrl], ([newName, newUrl]) => {
       (state.badgeClass.issuer as OB2.Profile).url = createIRI(newUrl);
     }
   }
+  scheduleEmitUpdate();
 });
 
 // Watch for changes in the badge image URL and update the badge class
@@ -123,7 +149,19 @@ watch(badgeImageUrl, (newValue) => {
       type: 'Image',
     };
   }
+  scheduleEmitUpdate();
 });
+// Watch name and description changes to emit updates
+watch(
+  () => state.badgeClass.name,
+  () => scheduleEmitUpdate()
+);
+
+watch(
+  () => state.badgeClass.description,
+  () => scheduleEmitUpdate()
+);
+
 
 // Check if a specific field has an error
 const hasError = (field: string): boolean => {

@@ -2,11 +2,14 @@
 import { ref } from 'vue';
 import BadgeIssuerForm from './BadgeIssuerForm.vue';
 import { mockBadgeClasses } from '../../services/mockData';
+import type { OB2 } from '@/types';
 
 const state = ref({
   initialBadgeClass: {},
   initialRecipientEmail: '',
 });
+
+const livePreview = ref<Partial<OB2.BadgeClass>>({});
 
 const prefilledState = {
   initialBadgeClass: {
@@ -50,12 +53,23 @@ function onReset() {
     :layout="{ type: 'single', iframe: true }"
   >
     <Variant title="Empty">
-      <BadgeIssuerForm
-        :initial-badge-class="state.initialBadgeClass"
-        :initial-recipient-email="state.initialRecipientEmail"
-        @badge-issued="onBadgeIssued"
-        @reset="onReset"
-      />
+      <div style="display:flex; gap: 1rem; align-items:flex-start;">
+        <BadgeIssuerForm
+          :initial-badge-class="state.initialBadgeClass"
+          :initial-recipient-email="state.initialRecipientEmail"
+          @badge-issued="onBadgeIssued"
+          @reset="onReset"
+          @update="(p) => (livePreview = p.badge)"
+        />
+        <div style="flex:1; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">
+          <h4 style="margin-top:0;">Live Preview</h4>
+          <div><strong>Name:</strong> {{ livePreview.name || '—' }}</div>
+          <div><strong>Description:</strong> {{ livePreview.description || '—' }}</div>
+          <div><strong>Issuer:</strong> {{ typeof livePreview.issuer === 'object' ? livePreview.issuer?.name : '—' }}</div>
+          <div><strong>Image URL:</strong> {{ typeof livePreview.image === 'object' ? livePreview.image?.id : (typeof livePreview.image === 'string' ? livePreview.image : '—') }}</div>
+          <div><strong>Tags:</strong> {{ (livePreview.tags || []).join(', ') }}</div>
+        </div>
+      </div>
     </Variant>
 
     <Variant title="Prefilled">
@@ -64,6 +78,7 @@ function onReset() {
         :initial-recipient-email="prefilledState.initialRecipientEmail"
         @badge-issued="onBadgeIssued"
         @reset="onReset"
+        @update="(p) => (livePreview = p.badge)"
       />
     </Variant>
 
@@ -76,6 +91,7 @@ function onReset() {
         :initial-recipient-email="validationErrorState.initialRecipientEmail"
         @badge-issued="onBadgeIssued"
         @reset="onReset"
+        @update="(p) => (livePreview = p.badge)"
       />
     </Variant>
 
